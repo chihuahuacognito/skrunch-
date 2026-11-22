@@ -33,7 +33,7 @@ export function logged(
     intervals: opts.intervals ?? false,
     exercises: items.map(([exerciseId, sets]) => ({
       exerciseId, targetMin: 8, targetMax: reps, chip: null,
-      sets: Array.from({ length: sets }, () => ({ weight, reps })),
+      sets: Array.from({ length: sets }, () => ({ weight, reps, seconds: null })),
     })),
   };
 }

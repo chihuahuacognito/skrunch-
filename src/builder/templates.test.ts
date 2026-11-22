@@ -1,4 +1,5 @@
 import { buildSession } from './session';
+import { logAsPlanned } from './test-utils/simulate';
 import { byId, emptyHistory, lib } from './test-utils/fixtures';
 import type { BlockKind, BuilderInput, CheckIn, FocusId, PlannedSession, SessionDose } from './types';
 
@@ -79,4 +80,18 @@ test('the Mobility Zone 2 block never uses a purpose-tagged machine', () => {
       const s = buildSession(input({ library: [...lib, ...tagged], today: date, checkIn }), { focus: 'mobility', dose: 'full' });
       expect(s.blocks.filter(b => b.kind === 'zone2').flatMap(b => b.items.map(i => i.exerciseId)).filter(id => id.startsWith('ig-'))).toEqual([]);
     }
+});
+
+test('holds and timed work are logged in seconds, not as fake reps', () => {
+  const s = buildSession(input(), { focus: 'conditioning', dose: 'full' });
+  const log = logAsPlanned(s);
+  for (const x of log.exercises) {
+    const dose = byId(x.exerciseId).dose;
+    const planned = s.blocks.flatMap(b => b.items).find(i => i.exerciseId === x.exerciseId)!;
+    for (const set of x.sets) {
+      if (planned.dose.format === 'reps') expect(set).toMatchObject({ reps: planned.dose.max, seconds: null });
+      else expect(set).toMatchObject({ reps: null, seconds: planned.dose.format === 'hold' ? planned.dose.seconds : planned.dose.minutes * 60 });
+    }
+    expect(dose).toBeDefined();
+  }
 });

@@ -8,7 +8,8 @@ export type SessionDose = 'full' | 'reduced' | 'minimum';
 export type Chip = 'easy' | 'right' | 'hard';
 export type Feedback = 'more' | 'less' | 'never';
 
-export interface LoggedSet { weight: number | null; reps: number }
+/** One done set, shaped by the dose: reps for rep work, seconds for holds and timed work (minutes x 60). */
+export interface LoggedSet { weight: number | null; reps: number | null; seconds: number | null }
 export interface LoggedExercise {
   exerciseId: string;
   targetMin: number | null;

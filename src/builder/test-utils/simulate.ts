@@ -12,13 +12,14 @@ export function logAsPlanned(s: PlannedSession): SessionLog {
     focus: s.focus,
     intervals: s.intervals,
     exercises: s.blocks.flatMap(b => b.items).map(i => {
-      const reps = i.dose.format === 'reps' ? i.dose.max : 1;
+      const reps = i.dose.format === 'reps' ? i.dose.max : null;
+      const seconds = i.dose.format === 'hold' ? i.dose.seconds : i.dose.format === 'duration' ? i.dose.minutes * 60 : null;
       return {
         exerciseId: i.exerciseId,
         targetMin: i.dose.format === 'reps' ? i.dose.min : null,
         targetMax: i.dose.format === 'reps' ? i.dose.max : null,
         chip: null,
-        sets: Array.from({ length: i.sets }, () => ({ weight: i.weight ?? 20, reps })),
+        sets: Array.from({ length: i.sets }, () => ({ weight: i.weight ?? 20, reps, seconds })),
       };
     }),
   };

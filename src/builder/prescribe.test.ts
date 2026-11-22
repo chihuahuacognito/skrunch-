@@ -9,7 +9,7 @@ const legPress = byId('Leg_Press');
 type Log = { reps: number; targetMax: number; weight: number | null; chip: Chip | null };
 const entry = (e: Exercise, date: string, l: Log) => ({
   date, focus: 'chest-back' as const, intervals: false,
-  exercises: [{ exerciseId: e.id, targetMin: 6, targetMax: l.targetMax, chip: l.chip, sets: [1, 2, 3].map(() => ({ weight: l.weight, reps: l.reps })) }],
+  exercises: [{ exerciseId: e.id, targetMin: 6, targetMax: l.targetMax, chip: l.chip, sets: [1, 2, 3].map(() => ({ weight: l.weight, reps: l.reps as number | null, seconds: null as number | null })) }],
 });
 const histWith = (e: Exercise, l: Log): History => hist([entry(e, '2026-11-20', l)]);
 const twoEasy = (e: Exercise, l: Omit<Log, 'chip'>): History =>
@@ -53,3 +53,14 @@ test('machines step by 5 kg', () =>
 
 test('bodyweight logs keep a blank weight', () =>
   expect(nextLoad(bench, histWith(bench, { reps: 10, targetMax: 10, weight: null, chip: null }), true)).toEqual({ weight: null, progressed: false }));
+
+test('bodyweight lifts logged at 0 kg progress by reps, never by adding kilograms', () => {
+  const pullUp = byId('Pullups');
+  expect(nextLoad(pullUp, histWith(pullUp, { reps: 10, targetMax: 10, weight: 0, chip: null }), true)).toEqual({ weight: 0, progressed: false });
+});
+
+test('a set logged in seconds never counts as reaching a rep target', () => {
+  const h = histWith(bench, { reps: 10, targetMax: 10, weight: 60, chip: null });
+  h.sessions[0].exercises[0].sets = h.sessions[0].exercises[0].sets.map(s => ({ ...s, reps: null, seconds: 30 }));
+  expect(nextLoad(bench, h, true)).toEqual({ weight: 60, progressed: false });
+});

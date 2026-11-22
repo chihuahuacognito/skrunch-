@@ -36,14 +36,18 @@ function logsOf(id: string, history: History): LoggedExercise[] {
 
 /**
  * Double progression. Every set at the top of the range (and the last-set chip not "hard") adds the smallest step;
- * "easy" on the last two sessions also progresses. Otherwise last time's working weight. Blank on first appearance.
+ * "easy" on the last two sessions also progresses. Otherwise last time's working weight. Blank on first appearance;
+ * 0 kg (bodyweight) never gains kilograms.
  */
 export function nextLoad(e: Exercise, history: History, allowProgression: boolean): { weight: number | null; progressed: boolean } {
   const [last, prev] = logsOf(e.id, history);
   const weight = last?.sets[0].weight ?? null;
   if (!last || weight === null) return { weight: null, progressed: false };
+  // Bodyweight work (logged at 0 kg) progresses by reps within the range, never by adding kilograms.
+  if (weight === 0) return { weight: 0, progressed: false };
 
-  const topOfRange = last.targetMax !== null && last.sets.every(s => s.reps >= last.targetMax!) && last.chip !== 'hard';
+  const target = last.targetMax;
+  const topOfRange = target !== null && last.sets.every(s => s.reps !== null && s.reps >= target) && last.chip !== 'hard';
   const easyTwice = last.chip === 'easy' && prev?.chip === 'easy';
   if (allowProgression && (topOfRange || easyTwice)) {
     return { weight: weight + INCREMENT_KG[e.equipment[0] ?? 'other'], progressed: true };
