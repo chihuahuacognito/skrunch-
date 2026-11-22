@@ -1,4 +1,5 @@
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useOnceUntilFocus } from '../ui/useOnceUntilFocus';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,17 +28,24 @@ export default function CheckInScreen() {
   const today = useToday();
   const saved = useLoad(() => checkInFor(db, today), [db, today]);
   const [place, setPlace] = useState<Place | null>(null);
+  const once = useOnceUntilFocus();
 
   if (saved === undefined) return <View style={styles.root} />;
   if (saved && redo !== '1') return <Redirect href="/menu" />;
   const current: Place = place ?? saved?.place ?? 'gym';
 
   const onSelect = async (id: string) => {
+    if (!once.claim()) return;
     if (id === 'desk-reset') {
       router.push('/desk');
       return;
     }
-    await saveCheckIn(db, today, id as CheckIn, current);
+    try {
+      await saveCheckIn(db, today, id as CheckIn, current);
+    } catch (e) {
+      once.release();
+      throw e;
+    }
     router.replace('/menu');
   };
 

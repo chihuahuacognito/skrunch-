@@ -6,6 +6,11 @@ import { migrate } from '../../store/schema';
 import type { SqlDb } from '../../store/sql';
 import { nodeDb } from '../../store/test-utils/nodeDb';
 import { renderApp } from '../../test-utils/renderApp';
+import { testRouter } from 'expo-router/testing-library';
+import { State } from 'react-native-gesture-handler';
+import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
+import { arcLayout } from '../../features/arc/geometry';
+import { tokens } from '../../theme/tokens';
 import { LIBRARY } from '../../ui/library';
 import MenuScreen, { menuItems } from '../../app/menu';
 
@@ -93,5 +98,31 @@ describe('screen', () => {
     await act(async () => listeners.forEach(fn => fn('active')));
     expect(await screen.findByText('Check-in stub')).toBeTruthy();
     jest.restoreAllMocks();
+  });
+
+  test('two selections before navigation lands open one preview', async () => {
+    await saveCheckIn(db, TODAY, 'good', 'gym');
+    const app = await renderApp(routes, { db, initialUrl: '/menu' });
+    await screen.findByText('Tonight');
+    await fireEvent(screen.getByTestId('thumb-arc'), 'layout', { nativeEvent: { layout: { x: 0, y: 0, width: 400, height: 800 } } });
+    const y = arcLayout(menuItems(input('good')).length, 800, tokens.arc).centers[0];
+    const sweep = () =>
+      fireGestureHandler(getByGestureTestId('thumb-arc-pan'), [
+        { state: State.BEGAN, x: 380, y }, { state: State.ACTIVE, x: 380, y }, { state: State.END, x: 380, y },
+      ]);
+    // Two selections in the same frame: neither has navigated yet when the other fires.
+    await act(async () => {
+      sweep();
+      sweep();
+    });
+    await screen.findByText('Preview stub');
+    // The app's stack is nested under expo-router's root navigator.
+    const stack = app.getRouterState()?.routes[0]?.state as { routes: { name: string }[] } | undefined;
+    const routesOpen = (stack?.routes ?? []).map(r => r.name);
+    expect(routesOpen.filter(n => n === 'preview')).toHaveLength(1);
+    // Back on the menu, the next selection works again.
+    await testRouter.back('/menu');
+    await fireEvent.press(screen.getByLabelText(menuItems(input('good'))[0].label));
+    expect(screen).toHavePathname('/preview');
   });
 });

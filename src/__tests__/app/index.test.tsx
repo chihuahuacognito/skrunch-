@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react-native';
+import { act, fireEvent, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { checkInFor, saveCheckIn } from '../../store/history';
 import { migrate } from '../../store/schema';
@@ -58,4 +58,17 @@ test('desk reset opens without a check-in', async () => {
   await fireEvent.press(await screen.findByLabelText('Desk reset'));
   expect(await screen.findByText('Desk stub')).toBeTruthy();
   expect(await checkInFor(db, TODAY)).toBeNull();
+});
+
+test('a second tap while the first check-in is still saving is ignored', async () => {
+  // Saves wait on a gate, so the screen is still showing when the second tap lands.
+  let release!: () => void;
+  const gate = new Promise<void>(r => (release = r));
+  const slow: SqlDb = { ...db, runAsync: async (...a) => { await gate; return db.runAsync(...a); } };
+  await renderApp(routes, { db: slow });
+  await fireEvent.press(await screen.findByLabelText('OK'));
+  await fireEvent.press(screen.getByLabelText('Good'));
+  await act(async () => release());
+  await screen.findByText('Menu stub');
+  expect(await checkInFor(db, TODAY)).toEqual({ value: 'ok', place: 'gym' });
 });

@@ -1,4 +1,5 @@
 import { Redirect, useRouter } from 'expo-router';
+import { useOnceUntilFocus } from '../ui/useOnceUntilFocus';
 import { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,6 +29,7 @@ export default function MenuScreen() {
   const db = useDb();
   const router = useRouter();
   const today = useToday();
+  const once = useOnceUntilFocus();
   const data = useLoad(async () => ({ checkIn: await checkInFor(db, today), history: await loadHistory(db) }), [db, today]);
 
   const items = useMemo(() => {
@@ -40,6 +42,7 @@ export default function MenuScreen() {
   const { value, place } = data.checkIn;
 
   const onSelect = (id: string) => {
+    if (!once.claim()) return;
     if (id === 'desk-reset') {
       router.push('/desk');
       return;
