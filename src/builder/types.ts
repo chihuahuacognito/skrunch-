@@ -1,0 +1,51 @@
+import type { Dose, Exercise } from '../library/types';
+
+export type CheckIn = 'good' | 'ok' | 'wrecked';
+export type Place = 'gym' | 'home';
+export type FocusId = 'chest-back' | 'lower' | 'shoulders-arms' | 'full-body' | 'conditioning' | 'mobility' | 'rest';
+export type SessionKind = FocusId | 'desk-reset';
+export type SessionDose = 'full' | 'reduced' | 'minimum';
+export type Chip = 'easy' | 'right' | 'hard';
+export type Feedback = 'more' | 'less' | 'never';
+
+export interface LoggedSet { weight: number | null; reps: number }
+export interface LoggedExercise {
+  exerciseId: string;
+  targetMin: number | null;
+  targetMax: number | null;
+  chip: Chip | null;
+  sets: LoggedSet[];
+}
+export interface SessionLog { date: string; focus: FocusId; intervals: boolean; exercises: LoggedExercise[] }
+export interface History {
+  sessions: SessionLog[];
+  checkIns: { date: string; value: CheckIn }[];
+  feedback: Partial<Record<string, Feedback>>;
+}
+
+export interface BuilderInput { library: Exercise[]; history: History; today: string; checkIn: CheckIn; place: Place }
+export interface FocusOption { focus: FocusId; dose: SessionDose }
+
+export type BlockKind =
+  | 'warmup' | 'main' | 'superset' | 'finisher' | 'intervals' | 'zone2' | 'core' | 'mobility' | 'stability' | 'cooldown';
+export interface PlannedExercise {
+  exerciseId: string;
+  sets: number;
+  dose: Dose;
+  rir: [number, number] | null;
+  restSeconds: number;
+  weight: number | null;
+  progressed: boolean;
+}
+export interface Block { kind: BlockKind; items: PlannedExercise[] }
+export interface PlannedSession {
+  focus: SessionKind;
+  dose: SessionDose;
+  date: string;
+  place: Place;
+  deload: boolean;
+  calibration: boolean;
+  intervals: boolean;
+  blocks: Block[];
+  estimatedMinutes: number;
+}
