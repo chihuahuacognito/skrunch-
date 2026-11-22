@@ -3,7 +3,27 @@ import {
   BUDGET_MUSCLES, EQUIPMENT, EXERCISE_TYPES, LOCATIONS, PATTERNS, POSITIONS, PURPOSES, TAG_MUSCLES,
 } from './vocab';
 
-const EM_DASH = '—';
+const EM_DASH = '\u2014';
+
+const FIELDS: readonly (keyof Exercise)[] = [
+  'id', 'name', 'source', 'type', 'pattern', 'muscles', 'primary', 'secondary', 'equipment', 'location',
+  'position', 'dose', 'impact', 'mechanic', 'purposes', 'instructions', 'images', 'sourceUrl',
+];
+const SOURCES = ['fedb', 'custom', 'instagram'];
+const DOSE_FORMATS = ['reps', 'hold', 'duration'];
+
+/** Every field present, nothing extra, and the tagged values known. Content rules are checked only after this passes. */
+function shapeProblems(e: Exercise): string[] {
+  const out: string[] = [];
+  const record = e as unknown as Record<string, unknown>;
+  for (const f of FIELDS) if (!(f in record)) out.push(`missing field "${f}"`);
+  for (const k of Object.keys(record)) if (!(FIELDS as readonly string[]).includes(k)) out.push(`unknown field "${k}"`);
+  if (out.length) return out;
+  if (!SOURCES.includes(e.source)) out.push(`unknown source "${e.source}"`);
+  const format = (e.dose as { format?: unknown } | null)?.format;
+  if (!DOSE_FORMATS.includes(String(format))) out.push(`unknown dose format "${String(format)}"`);
+  return out;
+}
 
 /** Returns human-readable problems; an empty array means the library is valid. */
 export function validateLibrary(list: Exercise[]): string[] {
@@ -18,6 +38,9 @@ export function validateLibrary(list: Exercise[]): string[] {
 
     if (seen.has(e.id)) p('duplicate id');
     seen.add(e.id);
+
+    const shape = shapeProblems(e);
+    if (shape.length) { shape.forEach(p); continue; }
 
     if (!e.name.trim()) p('empty name');
     if (!(EXERCISE_TYPES as readonly string[]).includes(e.type)) p(`unknown type "${e.type}"`);

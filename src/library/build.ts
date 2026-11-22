@@ -47,7 +47,23 @@ function mapEquipment(raw: string | null): Equipment[] {
 }
 
 /** Database text is third-party; the app never shows an em dash, so normalise it on import. */
-const plain = (text: string) => text.replace(/\s*—\s*/g, ' - ');
+const plain = (text: string) => text.replace(/\s*\u2014\s*/g, ' - ');
+
+const CURATION_REQUIRED = ['fedbId', 'type', 'pattern', 'primary', 'secondary', 'location', 'position', 'dose'];
+const CURATION_OVERRIDABLE = ['name', 'muscles', 'equipment', 'impact', 'mechanic', 'purposes', 'instructions'];
+/** Identity and provenance always come from the database record. */
+const CURATION_FORBIDDEN = ['id', 'source', 'images', 'sourceUrl'];
+
+function curationProblems(cur: CurationEntry): string[] {
+  const out: string[] = [];
+  const keys = Object.keys(cur);
+  for (const k of CURATION_REQUIRED) if (!keys.includes(k)) out.push(`curation for "${cur.fedbId}": missing key "${k}"`);
+  for (const k of keys) {
+    if (CURATION_FORBIDDEN.includes(k)) out.push(`curation for "${cur.fedbId}": curation key "${k}" is not allowed`);
+    else if (!CURATION_REQUIRED.includes(k) && !CURATION_OVERRIDABLE.includes(k)) out.push(`curation for "${cur.fedbId}": unknown curation key "${k}"`);
+  }
+  return out;
+}
 
 function fromFedb(record: FedbEntry, cur: CurationEntry): Exercise {
   const { fedbId: _fedbId, ...overrides } = cur;
@@ -77,6 +93,8 @@ export function buildLibrary(fedb: FedbEntry[], curation: CurationEntry[], custo
   const out: Exercise[] = [];
 
   for (const cur of curation) {
+    const keyProblems = curationProblems(cur);
+    if (keyProblems.length) { problems.push(...keyProblems); continue; }
     const record = records.get(cur.fedbId);
     if (!record) { problems.push(`unknown fedb id "${cur.fedbId}"`); continue; }
     out.push(fromFedb(record, cur));

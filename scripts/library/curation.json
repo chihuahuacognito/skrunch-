@@ -3040,7 +3040,7 @@
       "gym",
       "home"
     ],
-    "position": "standing",
+    "position": "floor",
     "dose": {
       "format": "reps",
       "min": 5,
@@ -3264,8 +3264,7 @@
     "primary": [],
     "secondary": [],
     "location": [
-      "gym",
-      "home"
+      "gym"
     ],
     "position": "floor",
     "dose": {
@@ -3280,8 +3279,7 @@
     "primary": [],
     "secondary": [],
     "location": [
-      "gym",
-      "home"
+      "gym"
     ],
     "position": "floor",
     "dose": {
@@ -3301,8 +3299,7 @@
     "primary": [],
     "secondary": [],
     "location": [
-      "gym",
-      "home"
+      "gym"
     ],
     "position": "floor",
     "dose": {
@@ -3354,8 +3351,7 @@
     "primary": [],
     "secondary": [],
     "location": [
-      "gym",
-      "home"
+      "gym"
     ],
     "position": "floor",
     "dose": {
@@ -3435,8 +3431,7 @@
     "primary": [],
     "secondary": [],
     "location": [
-      "gym",
-      "home"
+      "gym"
     ],
     "position": "floor",
     "dose": {
@@ -3455,8 +3450,7 @@
     "primary": [],
     "secondary": [],
     "location": [
-      "gym",
-      "home"
+      "gym"
     ],
     "position": "floor",
     "dose": {

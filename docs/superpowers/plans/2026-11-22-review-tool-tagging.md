@@ -286,7 +286,7 @@ git commit -m "feat(review): muscles/type/purpose dropdowns, import, new-since-i
 - [ ] **Step 2: Verify**
 
 Run: `grep -n "stability\|target region\|superset slot" docs/superpowers/specs/2026-11-22-workout-app-design.md`
-Expected: each phrase appears at least once. Also check there are no em dashes: `grep -c "—" docs/superpowers/specs/2026-11-22-workout-app-design.md` prints 0.
+Expected: each phrase appears at least once. Also check there are no em dashes: `grep -c "-" docs/superpowers/specs/2026-11-22-workout-app-design.md` prints 0.
 
 - [ ] **Step 3: Commit**
 

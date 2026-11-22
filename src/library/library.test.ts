@@ -42,5 +42,9 @@ test('conditioning has at least 6 options, 3 of them low-impact', () => {
 test('at least 5 stability items', () =>
   expect(lib.filter(e => e.type === 'stability').length).toBeGreaterThanOrEqual(5));
 
-test('home location only on mobility, stretch and stability', () =>
-  expect(lib.filter(e => e.location.includes('home') && !['mobility', 'stretch', 'stability'].includes(e.type)).map(e => e.id)).toEqual([]));
+// Owner's decision: home sessions are mobility and stretching only, with no equipment.
+test('home location only on no-equipment mobility and stretch', () =>
+  expect(lib.filter(e => e.location.includes('home') && (!['mobility', 'stretch'].includes(e.type) || e.equipment.length > 0)).map(e => e.id)).toEqual([]));
+
+test('inchworm is floor work, so it never lands in a desk reset', () =>
+  expect(lib.find(e => e.id === 'Inchworm')?.position).toBe('floor'));

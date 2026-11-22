@@ -50,4 +50,17 @@ test('reps range must be ordered and positive', () =>
   expect(validateLibrary([{ ...ok(), dose: { format: 'reps', min: 12, max: 8 } }]).join()).toMatch(/reps range/));
 
 test('no em dash anywhere in text fields', () =>
-  expect(validateLibrary([{ ...ok(), name: 'Bench — flat' }]).join()).toMatch(/em dash/));
+  expect(validateLibrary([{ ...ok(), name: 'Bench \u2014 flat' }]).join()).toMatch(/em dash/));
+
+test('missing fields are flagged by name', () => {
+  const { impact: _impact, ...rest } = ok();
+  expect(validateLibrary([rest as unknown as Exercise]).join()).toMatch(/missing field "impact"/);
+});
+
+test('unknown dose format and source are flagged', () => {
+  expect(validateLibrary([{ ...ok(), dose: { format: 'sets' } } as unknown as Exercise]).join()).toMatch(/unknown dose format "sets"/);
+  expect(validateLibrary([{ ...ok(), source: 'web' } as unknown as Exercise]).join()).toMatch(/unknown source "web"/);
+});
+
+test('unknown fields are flagged', () =>
+  expect(validateLibrary([{ ...ok(), secundary: [] } as unknown as Exercise]).join()).toMatch(/unknown field "secundary"/));

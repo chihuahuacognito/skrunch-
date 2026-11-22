@@ -77,3 +77,13 @@ test('em dashes in database text become plain dashes', () => {
   expect(ex.name).toBe('Bench - Flat');
   expect(ex.instructions).toEqual(['Lie down - then press.']);
 });
+
+test('a curation entry cannot override id, source or images', () => {
+  const bad = { ...curBench, id: 'Leg_Press', source: 'instagram' } as unknown as CurationEntry;
+  expect(() => buildLibrary([fedbBench], [bad], [])).toThrow(/curation key "id" is not allowed/);
+});
+
+test('an unknown curation key fails the build', () => {
+  const typo = { ...curBench, secundary: ['chest'] } as unknown as CurationEntry;
+  expect(() => buildLibrary([fedbBench], [typo], [])).toThrow(/unknown curation key "secundary"/);
+});
