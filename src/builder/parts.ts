@@ -30,7 +30,7 @@ export function fitsPlace(e: Exercise, place: Place): boolean {
 }
 
 export function plain(e: Exercise, sets: number, restSeconds: number, dose = e.dose): PlannedExercise {
-  return { exerciseId: e.id, sets, dose, rir: null, restSeconds, weight: null, progressed: false };
+  return { exerciseId: e.id, slot: null, sets, dose, rir: null, restSeconds, weight: null, progressed: false };
 }
 
 /** Pool items ordered by hash for the day, unused and fitting the place. */

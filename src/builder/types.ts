@@ -1,4 +1,4 @@
-import type { Dose, Exercise } from '../library/types';
+import type { BudgetMuscle, Dose, Exercise, Pattern } from '../library/types';
 
 export type CheckIn = 'good' | 'ok' | 'wrecked';
 export type Place = 'gym' | 'home';
@@ -28,8 +28,14 @@ export interface FocusOption { focus: FocusId; dose: SessionDose }
 
 export type BlockKind =
   | 'warmup' | 'main' | 'superset' | 'finisher' | 'intervals' | 'zone2' | 'core' | 'mobility' | 'stability' | 'cooldown';
+export type SlotKind = 'main' | 'superset';
+/** The selection a strength item filled: Plan 4 rebuilds its swap list from this. */
+export interface Slot { kind: SlotKind; patterns?: Pattern[]; muscle?: BudgetMuscle; key: string }
+
 export interface PlannedExercise {
   exerciseId: string;
+  /** Null for warm-up, finisher, cool-down, mobility and stability items. */
+  slot: Slot | null;
   sets: number;
   dose: Dose;
   rir: [number, number] | null;

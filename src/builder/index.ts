@@ -5,5 +5,6 @@ export { nextLoad } from './prescribe';
 export { rankFocuses } from './rank';
 export { rankCandidates } from './select';
 export { buildSession } from './session';
+export { swapCandidates } from './swap';
 export { weeklyVolume } from './volume';
 export type * from './types';

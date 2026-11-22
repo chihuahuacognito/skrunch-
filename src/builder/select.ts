@@ -1,9 +1,10 @@
 import type { BudgetMuscle, Exercise, Pattern } from '../library/types';
 import { daysBetween } from './dates';
 import { PATTERN_MUSCLES } from './focus';
-import type { FocusId, History, Place } from './types';
+import type { FocusId, History, Place, Slot } from './types';
 
-export type SlotKind = 'main' | 'superset';
+export type { Slot, SlotKind } from './types';
+
 
 export interface SelectContext {
   lib: Exercise[];
@@ -19,7 +20,6 @@ export interface SelectContext {
   deficit: Record<BudgetMuscle, number>;
 }
 
-export interface Slot { kind: SlotKind; patterns?: Pattern[]; muscle?: BudgetMuscle; key: string }
 
 /** FNV-1a 32-bit hash scaled to [0, 1): stable variety without randomness. */
 export function hash01(key: string): number {

@@ -4,7 +4,7 @@ import type { PlannedExercise } from './types';
 
 const reps = (min: number, max: number): Dose => ({ format: 'reps', min, max });
 const item = (over: Partial<PlannedExercise>): PlannedExercise =>
-  ({ exerciseId: 'x', sets: 1, dose: reps(8, 10), rir: null, restSeconds: 0, weight: null, progressed: false, ...over });
+  ({ exerciseId: 'x', slot: null, sets: 1, dose: reps(8, 10), rir: null, restSeconds: 0, weight: null, progressed: false, ...over });
 
 test('estimate sums sets, work and rest, supersets per round', () =>
   expect(estimateMinutes([

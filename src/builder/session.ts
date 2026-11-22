@@ -10,7 +10,7 @@ import { pickMainLifts } from './main';
 import { needs } from './needs';
 import { intervalFinisherAllowed, intervalsAllowed } from './rank';
 import { rankCandidates, type SelectContext } from './select';
-import type { Block, BuilderInput, FocusOption, PlannedExercise, PlannedSession } from './types';
+import type { Block, BuilderInput, FocusOption, PlannedExercise, PlannedSession, Slot } from './types';
 import { Tally } from './tally';
 
 const MAIN_REST = 150;
@@ -35,22 +35,22 @@ function buildLifting(input: BuilderInput, option: FocusOption, focus: LiftingFo
     lib: input.library, history: input.history, today: input.today, focus, place: input.place,
     used, blocked: tally.blocked(sets), deficit: needs(input),
   });
-  const plan = (e: Exercise, sets: number, kind: 'main' | 'superset', restSeconds: number): PlannedExercise => {
+  const plan = (e: Exercise, sets: number, slot: Slot, restSeconds: number): PlannedExercise => {
     used.add(e.id);
     tally.add(e, sets);
     const load = nextLoad(e, input.history, allowProgression);
-    return { exerciseId: e.id, sets, dose: prescribeReps(e.dose, kind), rir, restSeconds, weight: load.weight, progressed: load.progressed };
+    return { exerciseId: e.id, slot, sets, dose: prescribeReps(e.dose, slot.kind), rir, restSeconds, weight: load.weight, progressed: load.progressed };
   };
 
   const spec = FOCUS_SPECS[focus];
-  const main = pickMainLifts(input, focus, shape.mainSets).map(e => plan(e, shape.mainSets, 'main', MAIN_REST));
+  const main = pickMainLifts(input, focus, shape.mainSets).map(p => plan(p.e, shape.mainSets, p.slot, MAIN_REST));
 
   // Supersets: each pair takes the pool muscle that needs it most tonight, then the best partner from a different
   // group. Only muscles still under target qualify: nothing left to do means fewer pairs, not filler volume.
   const supersets: Block[] = [];
   const pairs = shape.pairs + (spec.mainSlots.length - main.length);
-  const pickFor = (m: BudgetMuscle, key: string) =>
-    rankCandidates(ctx(shape.supersetSets), { kind: 'superset', muscle: m, key })[0];
+  const ssSlot = (m: BudgetMuscle, key: string): Slot => ({ kind: 'superset', muscle: m, key });
+  const pickFor = (m: BudgetMuscle, key: string) => rankCandidates(ctx(shape.supersetSets), ssSlot(m, key))[0];
   const ranked = (muscles: readonly BudgetMuscle[]) => muscles
     .map((m, i) => ({ m, i, d: tally.setsNeeded(m) }))
     .filter(x => x.d > 0)
@@ -65,12 +65,12 @@ function buildLifting(input: BuilderInput, option: FocusOption, focus: LiftingFo
       if (first) { firstMuscle = m; break; }
     }
     if (!first || !firstMuscle) break;
-    const a = plan(first, shape.supersetSets, 'superset', 0);
+    const a = plan(first, shape.supersetSets, ssSlot(firstMuscle, `ss${p}a`), 0);
     let b: PlannedExercise | undefined;
     for (const m of order) {
       if (MUSCLE_GROUP[m] === MUSCLE_GROUP[firstMuscle]) continue;
       const e = pickFor(m, `ss${p}b`);
-      if (e) { b = plan(e, shape.supersetSets, 'superset', SUPERSET_REST); break; }
+      if (e) { b = plan(e, shape.supersetSets, ssSlot(m, `ss${p}b`), SUPERSET_REST); break; }
     }
     supersets.push({ kind: 'superset', items: b ? [a, b] : [{ ...a, restSeconds: SUPERSET_REST }] });
   }
@@ -161,13 +161,14 @@ function buildConditioning(input: BuilderInput, option: FocusOption): PlannedSes
       lib: input.library, history: input.history, today: input.today, focus: 'conditioning', place: input.place,
       used, blocked: tally.blocked(sets), deficit: needs(input),
     };
-    const e = rankCandidates(ctx, { kind: 'superset', muscle: 'core', key: `core${i}` })[0];
+    const slot: Slot = { kind: 'superset', muscle: 'core', key: `core${i}` };
+    const e = rankCandidates(ctx, slot)[0];
     if (!e) break;
     used.add(e.id);
     tally.add(e, sets);
     const load = nextLoad(e, input.history, allowProgression);
     core.push({
-      exerciseId: e.id, sets, dose: prescribeReps(e.dose, 'superset'), rir, restSeconds: CORE_REST,
+      exerciseId: e.id, slot, sets, dose: prescribeReps(e.dose, 'superset'), rir, restSeconds: CORE_REST,
       weight: load.weight, progressed: load.progressed,
     });
   }
