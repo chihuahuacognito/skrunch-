@@ -16,6 +16,7 @@
     "saved",
     "scripts",
     "jest.setup.js",
-    "babel.config.js"
+    "babel.config.js",
+    "jest"
   ]
 }

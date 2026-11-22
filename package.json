@@ -47,6 +47,9 @@
     ],
     "setupFiles": [
       "./jest.setup.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^react-native-reanimated/mock$": "<rootDir>/jest/reanimatedMock.js"
+    }
   }
 }
