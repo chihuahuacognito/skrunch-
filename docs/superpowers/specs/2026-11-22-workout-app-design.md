@@ -148,6 +148,11 @@ In share terms, chest and back take about 30-35% of sets, lower body about 25-30
 
 A training block starts at the low end of each range, adds 1 set a week per muscle, and ends with a deload week every 5-6 weeks (about half the sets, 3-4 RIR).
 
+Only **strength** items count toward this budget.
+On mobility, stretch and stability items, a muscle tag means "target region", not training volume, so a hip flexor stretch or a rotator cuff drill never inflates hip or delt volume.
+Stability work (dead bug, bird dog, Pallof press, side plank) does not count toward the core budget. Loaded core work (cable crunch, hanging leg raise) is strength and does count.
+Rationale and evidence: `docs/superpowers/specs/2026-11-22-review-tool-tagging-design.md`.
+
 ### Session template (about 60 minutes)
 
 | Part | Time | Content |
@@ -157,6 +162,9 @@ A training block starts at the low end of each range, adds 1 set a week per musc
 | Supersets | 15-18 min | 2-3 pairs of non-competing muscles, 10-20 reps, 60-90 s rest |
 | Finisher | 6-10 min | Conditioning, chosen to fit tonight's focus and the check-in |
 | Cool-down | 5-7 min | Stretch, always including back and hip flexors |
+
+Items with a purpose tag (mostly the owner's Instagram exercises) fill only the warm-up, cool-down, desk reset and the Mobility focus, never a main-lift or superset slot.
+Chest and back main work comes from the base library. Reason: the owner's saves are skewed (about 40 core, 39 hip and 31 lower-back posts, against 12 chest and 15 upper back).
 
 Conditioning and Mobility focuses use their own templates (intervals or Zone 2 blocks; flows and holds).
 Intervals are capped at 2 per week, never on the day of or the day before a Lower session, and always after lifting.
@@ -200,8 +208,17 @@ v1 does not track these.
 - **Base:** free-exercise-db (public domain, about 870 exercises, still images, muscle and equipment fields).
   Designer's call: Claude curates it down to about 150 standard gym movements plus mobility and stretching drills, and adds the fields the database lacks (movement pattern, default rep range, type, location).
   The owner may skim the curated list but is not required to review it.
-- **Owner's additions:** 30-50 exercises from his Instagram Saved posts, produced by the one-time import below.
-- Each exercise records name, primary and secondary muscles, movement pattern, type (strength / conditioning / mobility / stretch), equipment, default rep range, location (gym / home), and an optional source link.
+- **Owner's additions:** exercises from about 139 of his Instagram Saved posts (well under 100 unique exercises expected after merging), produced by the one-time import below.
+- Each exercise records name, primary and secondary muscles, movement pattern, type, purpose, equipment, default rep range, location (gym / home), position (standing / seated / floor), dose format (reps / hold / duration), and an optional source link.
+  The vocabularies, and which fields the owner tags versus Claude derives, are fixed in `docs/superpowers/specs/2026-11-22-review-tool-tagging-design.md`.
+- **Type** is one of:
+  - **Strength:** progressed by adding load or reps. Loaded core work counts here.
+  - **Conditioning:** done for heart rate or work capacity (intervals, circuits, Zone 2).
+  - **Mobility:** active movement through a range, done for reps. Goes in the warm-up.
+  - **Stretch:** a held position, 10-30 s holds, about 60 s total per stretch (ACSM, Garber 2011). Goes in the cool-down.
+  - **Stability:** low-load motor control that is not progressed by adding weight. Our own category, not ACSM's "neuromotor" type.
+- **Purpose** means "what the owner is working on", not "what this cures": hip flexors / sitting stiffness, lower back comfort, desk breaks, wrists, knees, shoulder health, plus any the owner adds.
+- The desk reset draws from items whose position is standing or seated, with no equipment.
 - The library ships bundled with the app as data. It is edited by changing the data file and rebuilding, not inside the app.
 - Designer's call: v1 does not wait for the Instagram import. It ships on the curated base library, and the library format accepts the imported exercises as a later merge.
 
@@ -209,16 +226,16 @@ v1 does not track these.
 
 A one-off job done in a Claude Code session, not a maintained pipeline:
 
-1. The owner places the official Instagram "Saved" export in the project. It contains post URLs, creator usernames and save times, but no captions.
-2. yt-dlp, using the owner's browser cookies and throttled, fetches the caption and metadata for each post without the video.
-3. Where the caption does not identify the exercises, the video is downloaded and a few still frames are extracted with ffmpeg. Claude reads the frames (on-screen text and the movement itself).
-4. Claude merges duplicates, maps each exercise to a free-exercise-db entry where one matches, and tags new ones with the library fields, keeping the source link.
-5. The result is a JSON file plus a readable review list. The owner reviews it once, removing junk and correcting tags.
-6. The reviewed file is merged into the bundled library. Downloaded videos and frames are deleted afterwards. Creators' videos are never re-hosted.
+Updated 2026-11-22 after the export arrived: it includes full captions, so no yt-dlp caption pass is needed.
 
-Risk: using cookies with yt-dlp technically breaks Instagram's terms of service. One slow pass over the owner's own saves is accepted as low risk.
-If yt-dlp fails, fall back to the owner pasting captions or skipping the posts.
-Audio transcription is skipped unless frames and captions prove insufficient.
+1. The owner placed the official Instagram "Saved" export in `saved/`. It contains post URLs, creator usernames, save times and full captions.
+2. The owner reviews every post in `saved/review.html` (built by `saved/build_review.py`): keep or discard, muscles, type and purpose tags, and the exercise names for posts whose caption doesn't list them. They export `review-decisions.json`.
+3. Claude merges duplicates, maps each exercise to a free-exercise-db entry where one matches, derives the remaining library fields (and may overrule muscles and type), keeping the source link.
+4. Only for kept posts the owner left without exercise names: the video is downloaded with yt-dlp (throttled, browser cookies) and a few still frames are extracted with ffmpeg for Claude to read. Otherwise no vision is used.
+5. The result is merged into the bundled library. Any downloaded videos and frames are deleted afterwards. Creators' videos are never re-hosted.
+
+Risk: using cookies with yt-dlp technically breaks Instagram's terms of service. It is now only a fallback for a few posts, accepted as low risk.
+A later review of newer saves is a manual re-run of the build script on a new export, using the page's Import decisions button. There is no automation.
 
 ## Technical decisions
 
