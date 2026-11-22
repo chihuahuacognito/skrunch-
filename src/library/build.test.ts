@@ -70,3 +70,10 @@ test('build output is deterministic', () => {
   const b = JSON.stringify(buildLibrary([fedbBench], [curBench], [customBirdDog]));
   expect(a).toBe(b);
 });
+
+test('em dashes in database text become plain dashes', () => {
+  const dashed = { ...fedbBench, name: 'Bench \u2014 Flat', instructions: ['Lie down \u2014 then press.'] };
+  const [ex] = buildLibrary([dashed], [curBench], []);
+  expect(ex.name).toBe('Bench - Flat');
+  expect(ex.instructions).toEqual(['Lie down - then press.']);
+});

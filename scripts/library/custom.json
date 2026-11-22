@@ -1,1 +1,635 @@
-[]
+[
+  {
+    "id": "bird-dog",
+    "name": "Bird Dog",
+    "source": "custom",
+    "type": "stability",
+    "pattern": "core",
+    "muscles": [
+      "abdominals",
+      "lower back",
+      "glutes"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 8
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Kneel on all fours, hands under shoulders and knees under hips.",
+      "Brace your stomach and reach one arm forward and the opposite leg back until both are level with your body.",
+      "Hold for 2 seconds without letting your hips rotate.",
+      "Return slowly and switch sides. Reps are per side."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "thread-the-needle",
+    "name": "Thread the Needle",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "thoracic spine",
+      "shoulders",
+      "middle back"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 8
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Start on all fours.",
+      "Slide one arm under your body along the floor, letting your shoulder and head drop toward the mat.",
+      "Reverse the motion and reach that arm up toward the ceiling, following it with your eyes.",
+      "Move slowly through the full range. Reps are per side."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "open-book",
+    "name": "Open Book",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "thoracic spine",
+      "chest"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 8
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Lie on your side with knees bent to 90 degrees and arms straight out in front, palms together.",
+      "Keep your knees together and sweep your top arm up and over to the other side, rotating your upper back.",
+      "Pause when your arm is as close to the floor as is comfortable, then return.",
+      "Reps are per side."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "couch-stretch",
+    "name": "Couch Stretch",
+    "source": "custom",
+    "type": "stretch",
+    "pattern": null,
+    "muscles": [
+      "hip flexors",
+      "quadriceps"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 45
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Kneel with one knee close to a wall or bench and that shin running up it.",
+      "Step the other foot forward into a lunge.",
+      "Squeeze the glute of the back leg and lift your chest until you feel a stretch at the front of the hip.",
+      "Hold, breathing slowly, then switch sides."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "pigeon-stretch",
+    "name": "Pigeon Stretch",
+    "source": "custom",
+    "type": "stretch",
+    "pattern": null,
+    "muscles": [
+      "glutes",
+      "hip flexors"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 45
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "From all fours, bring one knee forward behind your wrist and angle that shin across your body.",
+      "Extend the other leg straight back.",
+      "Keep your hips square and lower your chest toward the floor until you feel the stretch in the front-leg glute.",
+      "Hold, then switch sides."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "sphinx-stretch",
+    "name": "Sphinx Stretch",
+    "source": "custom",
+    "type": "stretch",
+    "pattern": null,
+    "muscles": [
+      "lower back",
+      "abdominals"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Lie face down with elbows under your shoulders and forearms on the floor.",
+      "Press up gently, lifting your chest while your hips stay down.",
+      "Relax your lower back and glutes and breathe slowly.",
+      "Hold, then lower down."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "seated-figure-4-stretch",
+    "name": "Seated Figure-4 Stretch",
+    "source": "custom",
+    "type": "stretch",
+    "pattern": null,
+    "muscles": [
+      "glutes",
+      "lower back"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Sit near the front of a chair with both feet flat.",
+      "Cross one ankle over the opposite knee.",
+      "Keep your back long and lean forward from the hips until you feel the stretch in the crossed-leg glute.",
+      "Hold, then switch sides."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "desk-hamstring-hinge",
+    "name": "Desk Hamstring Hinge",
+    "source": "custom",
+    "type": "stretch",
+    "pattern": null,
+    "muscles": [
+      "hamstrings",
+      "lower back",
+      "lats"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Stand facing a desk and place both hands on its edge.",
+      "Step back and hinge at the hips, keeping your back flat and arms straight.",
+      "Let your chest sink until you feel the stretch along the backs of your legs and under your arms.",
+      "Hold, breathing slowly."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "seated-thoracic-rotation",
+    "name": "Seated Thoracic Rotation",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "thoracic spine",
+      "lower back"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 8
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Sit tall with feet flat and arms crossed over your chest.",
+      "Keep your hips still and rotate your upper body to one side as far as is comfortable.",
+      "Return to the middle and rotate to the other side.",
+      "Reps are per side."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "chin-tucks",
+    "name": "Chin Tucks",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "neck"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Sit or stand tall, looking straight ahead.",
+      "Glide your head straight back, making a double chin, without tilting it up or down.",
+      "Hold for 2 seconds, then relax."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "standing-back-extension",
+    "name": "Standing Back Extension",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "lower back",
+      "thoracic spine",
+      "abdominals"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Stand with feet hip-width apart and hands on your lower back.",
+      "Gently lean back, opening your chest and keeping your knees soft.",
+      "Return to standing. Keep the range small and comfortable."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "hip-90-90-switches",
+    "name": "90/90 Hip Switches",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "hip flexors",
+      "glutes",
+      "adductors"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 8
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Sit on the floor with both knees bent to 90 degrees, one leg in front and one to the side.",
+      "Keep your chest tall and rotate both knees to the other side so the legs swap positions.",
+      "Move slowly and use your hands behind you for support if needed.",
+      "Reps are per side."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "wall-slides",
+    "name": "Wall Slides",
+    "source": "custom",
+    "type": "mobility",
+    "pattern": null,
+    "muscles": [
+      "shoulders",
+      "thoracic spine",
+      "middle back"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Stand with your back and head against a wall, arms in a \"W\" with elbows and wrists touching the wall.",
+      "Slide your arms up into a \"Y\" while keeping contact with the wall.",
+      "Slide back down, squeezing your shoulder blades together."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "air-bike-intervals",
+    "name": "Air Bike Intervals",
+    "source": "custom",
+    "type": "conditioning",
+    "pattern": null,
+    "muscles": [
+      "quadriceps",
+      "glutes",
+      "shoulders"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [
+      "cardio machine"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "duration",
+      "minutes": 8
+    },
+    "impact": "low",
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Warm up for 2 minutes at an easy pace.",
+      "Alternate 20 seconds hard with 40 seconds easy.",
+      "Keep the hard efforts strong but controlled."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "burpees",
+    "name": "Burpees",
+    "source": "custom",
+    "type": "conditioning",
+    "pattern": null,
+    "muscles": [
+      "quadriceps",
+      "chest",
+      "abdominals"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "impact": "jumping",
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Squat down and place your hands on the floor.",
+      "Jump or step your feet back into a plank.",
+      "Jump or step your feet back in, then stand and jump up."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "kettlebell-swing",
+    "name": "Kettlebell Swing",
+    "source": "custom",
+    "type": "conditioning",
+    "pattern": "hinge",
+    "muscles": [
+      "glutes",
+      "hamstrings",
+      "lower back"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [
+      "kettlebell"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 15,
+      "max": 20
+    },
+    "impact": "low",
+    "mechanic": null,
+    "purposes": [],
+    "instructions": [
+      "Stand with feet a little wider than hips and the kettlebell slightly in front.",
+      "Hinge, grip it with both hands and hike it back between your legs.",
+      "Snap your hips forward to swing it to chest height, arms relaxed.",
+      "Let it fall back into the next hinge. Keep your back flat throughout."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "farmer-carry",
+    "name": "Farmer Carry",
+    "source": "custom",
+    "type": "strength",
+    "pattern": "carry",
+    "muscles": [
+      "forearms",
+      "traps",
+      "abdominals"
+    ],
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "equipment": [
+      "dumbbell"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 2,
+      "max": 4
+    },
+    "impact": null,
+    "mechanic": "compound",
+    "purposes": [],
+    "instructions": [
+      "Pick up a heavy dumbbell or kettlebell in each hand.",
+      "Stand tall with shoulders down and stomach braced.",
+      "Walk 20 to 30 metres with short, steady steps. Each length is one rep."
+    ],
+    "images": [],
+    "sourceUrl": null
+  },
+  {
+    "id": "dead-hang",
+    "name": "Dead Hang",
+    "source": "custom",
+    "type": "stability",
+    "pattern": null,
+    "muscles": [
+      "lats",
+      "shoulders",
+      "forearms"
+    ],
+    "primary": [],
+    "secondary": [],
+    "equipment": [
+      "pull-up bar"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "impact": null,
+    "mechanic": null,
+    "purposes": [
+      "shoulder health"
+    ],
+    "instructions": [
+      "Grip a pull-up bar with hands shoulder-width apart.",
+      "Lift your feet and hang with arms straight and shoulders relaxed.",
+      "Breathe slowly. Step down before your grip gives out."
+    ],
+    "images": [],
+    "sourceUrl": null
+  }
+]

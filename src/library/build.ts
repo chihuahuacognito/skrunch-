@@ -46,19 +46,22 @@ function mapEquipment(raw: string | null): Equipment[] {
   return [...mapped];
 }
 
+/** Database text is third-party; the app never shows an em dash, so normalise it on import. */
+const plain = (text: string) => text.replace(/\s*—\s*/g, ' - ');
+
 function fromFedb(record: FedbEntry, cur: CurationEntry): Exercise {
   const { fedbId: _fedbId, ...overrides } = cur;
   const mechanic = record.mechanic === 'compound' || record.mechanic === 'isolation' ? record.mechanic : null;
   return {
     id: record.id,
-    name: record.name,
+    name: plain(record.name),
     source: 'fedb',
     muscles: [...new Set([...record.primaryMuscles, ...record.secondaryMuscles])] as TagMuscle[],
     equipment: mapEquipment(record.equipment),
     impact: null,
     mechanic,
     purposes: [],
-    instructions: [...record.instructions],
+    instructions: record.instructions.map(plain),
     images: [...record.images],
     sourceUrl: null,
     ...overrides,

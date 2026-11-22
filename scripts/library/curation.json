@@ -1,1 +1,3471 @@
-[]
+[
+  {
+    "fedbId": "Barbell_Bench_Press_-_Medium_Grip",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "triceps",
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    },
+    "equipment": [
+      "barbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Dumbbell_Bench_Press",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "triceps",
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "frontDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    },
+    "equipment": [
+      "barbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Incline_Dumbbell_Press",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "frontDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Machine_Bench_Press",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "triceps",
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Leverage_Incline_Chest_Press",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "frontDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Dips_-_Chest_Version",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "triceps",
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 12
+    },
+    "equipment": [
+      "other"
+    ]
+  },
+  {
+    "fedbId": "Pushups",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "triceps",
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Push-Ups_With_Feet_Elevated",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "frontDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 15
+    },
+    "equipment": [
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Cable_Crossover",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Low_Cable_Crossover",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Dumbbell_Flyes",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Incline_Cable_Flye",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "equipment": [
+      "cable",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Butterfly",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "chest"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Wide-Grip_Lat_Pulldown",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps",
+      "midBack"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Close-Grip_Front_Lat_Pulldown",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "V-Bar_Pulldown",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps",
+      "midBack"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Underhand_Cable_Pulldowns",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Pullups",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps",
+      "midBack"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 5,
+      "max": 10
+    },
+    "equipment": [
+      "pull-up bar"
+    ]
+  },
+  {
+    "fedbId": "Chin-Up",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 5,
+      "max": 10
+    },
+    "equipment": [
+      "pull-up bar"
+    ]
+  },
+  {
+    "fedbId": "Band_Assisted_Pull-Up",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    },
+    "equipment": [
+      "pull-up bar",
+      "bands"
+    ]
+  },
+  {
+    "fedbId": "One_Arm_Lat_Pulldown",
+    "type": "strength",
+    "pattern": "pull-vertical",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Straight-Arm_Pulldown",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Rope_Straight-Arm_Pulldown",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "lats"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Seated_Cable_Rows",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps",
+      "rearDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Bent_Over_Barbell_Row",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps",
+      "rearDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    }
+  },
+  {
+    "fedbId": "One-Arm_Dumbbell_Row",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Bent_Over_Two-Dumbbell_Row",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps",
+      "rearDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "T-Bar_Row_with_Handle",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "barbell"
+    ]
+  },
+  {
+    "fedbId": "Dumbbell_Incline_Row",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "rearDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Seated_One-arm_Cable_Pulley_Rows",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Leverage_High_Row",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "rearDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Inverted_Row",
+    "type": "strength",
+    "pattern": "pull-horizontal",
+    "primary": [
+      "midBack"
+    ],
+    "secondary": [
+      "lats",
+      "biceps",
+      "rearDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "barbell"
+    ]
+  },
+  {
+    "fedbId": "Standing_Military_Press",
+    "type": "strength",
+    "pattern": "push-vertical",
+    "primary": [
+      "frontDelts"
+    ],
+    "secondary": [
+      "sideDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    }
+  },
+  {
+    "fedbId": "Dumbbell_Shoulder_Press",
+    "type": "strength",
+    "pattern": "push-vertical",
+    "primary": [
+      "frontDelts"
+    ],
+    "secondary": [
+      "sideDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Arnold_Dumbbell_Press",
+    "type": "strength",
+    "pattern": "push-vertical",
+    "primary": [
+      "frontDelts"
+    ],
+    "secondary": [
+      "sideDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Machine_Shoulder_Military_Press",
+    "type": "strength",
+    "pattern": "push-vertical",
+    "primary": [
+      "frontDelts"
+    ],
+    "secondary": [
+      "sideDelts",
+      "triceps"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Front_Dumbbell_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "frontDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Side_Lateral_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "sideDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Cable_Seated_Lateral_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "sideDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "One-Arm_Incline_Lateral_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "sideDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Lateral_Raise_-_With_Bands",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "sideDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 15,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Face_Pull",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "rearDelts"
+    ],
+    "secondary": [
+      "midBack"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Reverse_Flyes",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "rearDelts"
+    ],
+    "secondary": [
+      "midBack"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Reverse_Machine_Flyes",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "rearDelts"
+    ],
+    "secondary": [
+      "midBack"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Cable_Rear_Delt_Fly",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "rearDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Seated_Bent-Over_Rear_Delt_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "rearDelts"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Barbell_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "EZ-Bar_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Dumbbell_Bicep_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Hammer_Curls",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Incline_Dumbbell_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Preacher_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "equipment": [
+      "barbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Machine_Preacher_Curls",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Cable_Hammer_Curls_-_Rope_Attachment",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Standing_Biceps_Cable_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Concentration_Curls",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "biceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Close-Grip_Barbell_Bench_Press",
+    "type": "strength",
+    "pattern": "push-horizontal",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [
+      "chest",
+      "frontDelts"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    },
+    "equipment": [
+      "barbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Dips_-_Triceps_Version",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [
+      "chest"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 12
+    },
+    "equipment": [
+      "other"
+    ],
+    "mechanic": "compound"
+  },
+  {
+    "fedbId": "Triceps_Pushdown_-_Rope_Attachment",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Triceps_Pushdown",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Reverse_Grip_Triceps_Pushdown",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Cable_Rope_Overhead_Triceps_Extension",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "EZ-Bar_Skullcrusher",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "barbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Standing_Dumbbell_Triceps_Extension",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Tricep_Dumbbell_Kickback",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Machine_Triceps_Extension",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "triceps"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Barbell_Squat",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 5,
+      "max": 8
+    }
+  },
+  {
+    "fedbId": "Front_Squat_Clean_Grip",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 5,
+      "max": 8
+    }
+  },
+  {
+    "fedbId": "Goblet_Squat",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Hack_Squat",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Smith_Machine_Squat",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Leg_Press",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Narrow_Stance_Leg_Press",
+    "type": "strength",
+    "pattern": "squat",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Leg_Extensions",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Single-Leg_Leg_Extension",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Dumbbell_Lunges",
+    "type": "strength",
+    "pattern": "lunge",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Barbell_Walking_Lunge",
+    "type": "strength",
+    "pattern": "lunge",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Dumbbell_Rear_Lunge",
+    "type": "strength",
+    "pattern": "lunge",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Split_Squat_with_Dumbbells",
+    "type": "strength",
+    "pattern": "lunge",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Smith_Single-Leg_Split_Squat",
+    "type": "strength",
+    "pattern": "lunge",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "machine",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Dumbbell_Step_Ups",
+    "type": "strength",
+    "pattern": "lunge",
+    "primary": [
+      "quads"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "dumbbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Romanian_Deadlift",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "hamstrings"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    }
+  },
+  {
+    "fedbId": "Stiff-Legged_Dumbbell_Deadlift",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "hamstrings"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Kettlebell_One-Legged_Deadlift",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "hamstrings"
+    ],
+    "secondary": [
+      "glutes"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    }
+  },
+  {
+    "fedbId": "Barbell_Deadlift",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "glutes",
+      "hamstrings"
+    ],
+    "secondary": [
+      "quads"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 4,
+      "max": 8
+    }
+  },
+  {
+    "fedbId": "Trap_Bar_Deadlift",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "quads",
+      "glutes"
+    ],
+    "secondary": [
+      "hamstrings"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 5,
+      "max": 8
+    }
+  },
+  {
+    "fedbId": "Lying_Leg_Curls",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "hamstrings"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Seated_Leg_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "hamstrings"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Standing_Leg_Curl",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "hamstrings"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Barbell_Hip_Thrust",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [
+      "hamstrings"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "barbell",
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Pull_Through",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [
+      "hamstrings"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Hyperextensions_Back_Extensions",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [
+      "hamstrings"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    },
+    "equipment": [
+      "machine"
+    ]
+  },
+  {
+    "fedbId": "Butt_Lift_Bridge",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [
+      "hamstrings"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Single_Leg_Glute_Bridge",
+    "type": "strength",
+    "pattern": "hinge",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [
+      "hamstrings"
+    ],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "One-Legged_Cable_Kickback",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Thigh_Abductor",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "glutes"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Standing_Calf_Raises",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "calves"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Seated_Calf_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "calves"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Calf_Press_On_The_Leg_Press_Machine",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "calves"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Standing_Dumbbell_Calf_Raise",
+    "type": "strength",
+    "pattern": "isolation",
+    "primary": [
+      "calves"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Cable_Crunch",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Hanging_Leg_Raise",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 15
+    },
+    "equipment": [
+      "pull-up bar"
+    ],
+    "muscles": [
+      "abdominals",
+      "hip flexors"
+    ]
+  },
+  {
+    "fedbId": "Ab_Roller",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 12
+    },
+    "equipment": [
+      "other"
+    ]
+  },
+  {
+    "fedbId": "Ab_Crunch_Machine",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Decline_Crunch",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "equipment": [
+      "bench"
+    ]
+  },
+  {
+    "fedbId": "Cable_Reverse_Crunch",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Standing_Cable_Wood_Chop",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Reverse_Crunch",
+    "type": "strength",
+    "pattern": "core",
+    "primary": [
+      "core"
+    ],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    }
+  },
+  {
+    "fedbId": "Rowing_Stationary",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "duration",
+      "minutes": 10
+    },
+    "equipment": [
+      "cardio machine"
+    ],
+    "impact": "low"
+  },
+  {
+    "fedbId": "Bicycling_Stationary",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "duration",
+      "minutes": 15
+    },
+    "equipment": [
+      "cardio machine"
+    ],
+    "impact": "low"
+  },
+  {
+    "fedbId": "Elliptical_Trainer",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "duration",
+      "minutes": 15
+    },
+    "equipment": [
+      "cardio machine"
+    ],
+    "impact": "low"
+  },
+  {
+    "fedbId": "Walking_Treadmill",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "duration",
+      "minutes": 20
+    },
+    "equipment": [
+      "cardio machine"
+    ],
+    "impact": "low",
+    "name": "Incline Treadmill Walk"
+  },
+  {
+    "fedbId": "Stairmaster",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "duration",
+      "minutes": 10
+    },
+    "equipment": [
+      "cardio machine"
+    ],
+    "impact": "low"
+  },
+  {
+    "fedbId": "Battling_Ropes",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "duration",
+      "minutes": 5
+    },
+    "equipment": [
+      "other"
+    ],
+    "impact": "low"
+  },
+  {
+    "fedbId": "One-Arm_Kettlebell_Swings",
+    "type": "conditioning",
+    "pattern": "hinge",
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 20
+    },
+    "impact": "low"
+  },
+  {
+    "fedbId": "Mountain_Climbers",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "duration",
+      "minutes": 2
+    },
+    "impact": "low"
+  },
+  {
+    "fedbId": "Rope_Jumping",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "duration",
+      "minutes": 5
+    },
+    "equipment": [
+      "other"
+    ],
+    "impact": "jumping"
+  },
+  {
+    "fedbId": "Star_Jump",
+    "type": "conditioning",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 20
+    },
+    "impact": "jumping"
+  },
+  {
+    "fedbId": "90_90_Hamstring",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Seated_Floor_Hamstring_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Standing_Hamstring_and_Calf_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "equipment": [],
+    "muscles": [
+      "hamstrings",
+      "calves"
+    ]
+  },
+  {
+    "fedbId": "Standing_Toe_Touches",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "hamstrings",
+      "lower back"
+    ]
+  },
+  {
+    "fedbId": "Childs_Pose",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 45
+    },
+    "muscles": [
+      "lower back",
+      "lats",
+      "glutes"
+    ]
+  },
+  {
+    "fedbId": "Hug_Knees_To_Chest",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "lower back",
+      "glutes"
+    ]
+  },
+  {
+    "fedbId": "Chair_Lower_Back_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "equipment": [],
+    "muscles": [
+      "lower back",
+      "lats"
+    ]
+  },
+  {
+    "fedbId": "Kneeling_Hip_Flexor",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "hip flexors",
+      "quadriceps"
+    ]
+  },
+  {
+    "fedbId": "Standing_Hip_Flexors",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "hip flexors",
+      "quadriceps"
+    ]
+  },
+  {
+    "fedbId": "Intermediate_Hip_Flexor_and_Quad_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "equipment": [],
+    "muscles": [
+      "hip flexors",
+      "quadriceps"
+    ]
+  },
+  {
+    "fedbId": "Ankle_On_The_Knee",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "glutes",
+      "hip flexors"
+    ]
+  },
+  {
+    "fedbId": "Knee_Across_The_Body",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "glutes",
+      "lower back"
+    ]
+  },
+  {
+    "fedbId": "One_Knee_To_Chest",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "glutes",
+      "lower back"
+    ]
+  },
+  {
+    "fedbId": "Upper_Back_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "middle back",
+      "thoracic spine"
+    ]
+  },
+  {
+    "fedbId": "Spinal_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "middle back",
+      "thoracic spine",
+      "lower back"
+    ]
+  },
+  {
+    "fedbId": "Chest_And_Front_Of_Shoulder_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "equipment": [],
+    "muscles": [
+      "chest",
+      "shoulders"
+    ]
+  },
+  {
+    "fedbId": "Chair_Upper_Body_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "equipment": [],
+    "muscles": [
+      "shoulders",
+      "chest"
+    ]
+  },
+  {
+    "fedbId": "Side_Neck_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Chin_To_Chest_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Standing_Lateral_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "abdominals",
+      "lats"
+    ]
+  },
+  {
+    "fedbId": "Overhead_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "abdominals",
+      "lats",
+      "shoulders"
+    ]
+  },
+  {
+    "fedbId": "Shoulder_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Triceps_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Calf_Stretch_Hands_Against_Wall",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Quad_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "equipment": []
+  },
+  {
+    "fedbId": "Adductor_Groin",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    }
+  },
+  {
+    "fedbId": "Kneeling_Forearm_Stretch",
+    "type": "stretch",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "purposes": [
+      "wrists"
+    ]
+  },
+  {
+    "fedbId": "Worlds_Greatest_Stretch",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 4,
+      "max": 6
+    },
+    "muscles": [
+      "hamstrings",
+      "hip flexors",
+      "thoracic spine",
+      "glutes"
+    ]
+  },
+  {
+    "fedbId": "Cat_Stretch",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    },
+    "muscles": [
+      "lower back",
+      "thoracic spine"
+    ],
+    "name": "Cat-Cow"
+  },
+  {
+    "fedbId": "Arm_Circles",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Shoulder_Circles",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    }
+  },
+  {
+    "fedbId": "Standing_Hip_Circles",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    },
+    "muscles": [
+      "abductors",
+      "hip flexors",
+      "glutes"
+    ]
+  },
+  {
+    "fedbId": "Inchworm",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 5,
+      "max": 8
+    },
+    "muscles": [
+      "hamstrings",
+      "shoulders",
+      "abdominals"
+    ]
+  },
+  {
+    "fedbId": "Front_Leg_Raises",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "muscles": [
+      "hamstrings",
+      "hip flexors"
+    ],
+    "name": "Front Leg Swings"
+  },
+  {
+    "fedbId": "Side_Leg_Raises",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "muscles": [
+      "adductors",
+      "abductors"
+    ],
+    "name": "Side Leg Swings"
+  },
+  {
+    "fedbId": "Groiners",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    },
+    "muscles": [
+      "adductors",
+      "hip flexors"
+    ]
+  },
+  {
+    "fedbId": "Dynamic_Chest_Stretch",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Elbows_Back",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "muscles": [
+      "chest",
+      "thoracic spine"
+    ]
+  },
+  {
+    "fedbId": "Standing_Pelvic_Tilt",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "muscles": [
+      "lower back",
+      "hip flexors",
+      "abdominals"
+    ]
+  },
+  {
+    "fedbId": "Pelvic_Tilt_Into_Bridge",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    },
+    "muscles": [
+      "lower back",
+      "glutes"
+    ]
+  },
+  {
+    "fedbId": "Crossover_Reverse_Lunge",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 8
+    },
+    "muscles": [
+      "glutes",
+      "hip flexors",
+      "lower back"
+    ]
+  },
+  {
+    "fedbId": "Ankle_Circles",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "seated",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 10
+    }
+  },
+  {
+    "fedbId": "Wrist_Circles",
+    "type": "mobility",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 15
+    },
+    "purposes": [
+      "wrists"
+    ]
+  },
+  {
+    "fedbId": "Plank",
+    "type": "stability",
+    "pattern": "core",
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 40
+    }
+  },
+  {
+    "fedbId": "Side_Bridge",
+    "type": "stability",
+    "pattern": "core",
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 30
+    },
+    "muscles": [
+      "abdominals",
+      "glutes"
+    ],
+    "name": "Side Plank"
+  },
+  {
+    "fedbId": "Dead_Bug",
+    "type": "stability",
+    "pattern": "core",
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 6,
+      "max": 10
+    },
+    "muscles": [
+      "abdominals",
+      "hip flexors"
+    ]
+  },
+  {
+    "fedbId": "Pallof_Press",
+    "type": "stability",
+    "pattern": "core",
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 10,
+      "max": 12
+    }
+  },
+  {
+    "fedbId": "Pallof_Press_With_Rotation",
+    "type": "stability",
+    "pattern": "core",
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 8,
+      "max": 10
+    }
+  },
+  {
+    "fedbId": "Superman",
+    "type": "stability",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "hold",
+      "seconds": 20
+    },
+    "muscles": [
+      "lower back",
+      "glutes"
+    ]
+  },
+  {
+    "fedbId": "External_Rotation_with_Band",
+    "type": "stability",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "purposes": [
+      "shoulder health"
+    ]
+  },
+  {
+    "fedbId": "External_Rotation_with_Cable",
+    "type": "stability",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "purposes": [
+      "shoulder health"
+    ]
+  },
+  {
+    "fedbId": "Band_Pull_Apart",
+    "type": "stability",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym"
+    ],
+    "position": "standing",
+    "dose": {
+      "format": "reps",
+      "min": 15,
+      "max": 20
+    },
+    "muscles": [
+      "shoulders",
+      "middle back"
+    ],
+    "purposes": [
+      "shoulder health"
+    ]
+  },
+  {
+    "fedbId": "Dumbbell_Lying_Pronation",
+    "type": "stability",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "purposes": [
+      "wrists"
+    ]
+  },
+  {
+    "fedbId": "Dumbbell_Lying_Supination",
+    "type": "stability",
+    "pattern": null,
+    "primary": [],
+    "secondary": [],
+    "location": [
+      "gym",
+      "home"
+    ],
+    "position": "floor",
+    "dose": {
+      "format": "reps",
+      "min": 12,
+      "max": 15
+    },
+    "purposes": [
+      "wrists"
+    ]
+  }
+]
