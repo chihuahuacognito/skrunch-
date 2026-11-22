@@ -2,12 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * A whole-second countdown. remaining is null when idle. onDone fires once when it reaches zero,
- * never after stop() or unmount.
+ * never after stop() or unmount. It counts against the clock (an end time), not ticks, so timers the
+ * OS paused or delayed catch up instead of drifting.
  */
 export function useCountdown(onDone: () => void): { remaining: number | null; start(seconds: number): void; stop(): void } {
   const [remaining, setRemaining] = useState<number | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
-  const left = useRef(0);
+  const endsAt = useRef(0);
   const done = useRef(onDone);
   done.current = onDone;
 
@@ -19,12 +20,12 @@ export function useCountdown(onDone: () => void): { remaining: number | null; st
 
   const start = useCallback((seconds: number) => {
     if (timer.current) clearInterval(timer.current);
-    left.current = seconds;
+    endsAt.current = Date.now() + seconds * 1000;
     setRemaining(seconds);
     timer.current = setInterval(() => {
-      left.current -= 1;
-      if (left.current > 0) {
-        setRemaining(left.current);
+      const left = Math.ceil((endsAt.current - Date.now()) / 1000);
+      if (left > 0) {
+        setRemaining(left);
         return;
       }
       if (timer.current) clearInterval(timer.current);

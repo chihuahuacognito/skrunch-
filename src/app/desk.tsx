@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { useKeepAwake } from 'expo-keep-awake';
 import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +15,8 @@ const BY_ID = new Map(LIBRARY.map(e => [e.id, e]));
 
 /** The desk reset, one item at a time. Holds have a timer that moves on by itself. Nothing is saved. */
 export default function DeskScreen() {
+  // Holds run hands-free; a screen timeout would lock the phone mid-hold.
+  useKeepAwake();
   const router = useRouter();
   const today = useToday();
   const items = useMemo(() => buildDeskReset(LIBRARY, today).blocks.flatMap(b => b.items), [today]);

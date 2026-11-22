@@ -37,3 +37,13 @@ test('unmounting mid-countdown never calls onDone', async () => {
   jest.advanceTimersByTime(5000);
   expect(onDone).not.toHaveBeenCalled();
 });
+
+test('counts against the clock, so a paused timer catches up instead of drifting', async () => {
+  const onDone = jest.fn();
+  const { result } = await renderHook(() => useCountdown(onDone));
+  await act(async () => result.current.start(30));
+  // The phone slept for 20 s without firing ticks, then one tick arrives.
+  jest.setSystemTime(Date.now() + 20000);
+  await act(async () => jest.advanceTimersByTime(1000));
+  expect(result.current.remaining).toBe(9);
+});

@@ -9,6 +9,9 @@ import { LIBRARY } from '../../ui/library';
 import DeskScreen from '../../app/desk';
 
 jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
+jest.mock('expo-keep-awake', () => ({ useKeepAwake: jest.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { useKeepAwake } = require('expo-keep-awake') as { useKeepAwake: jest.Mock };
 
 const NAME = new Map(LIBRARY.map(e => [e.id, e.name]));
 const items = buildDeskReset(LIBRARY, '2026-11-22').blocks.flatMap(b => b.items);
@@ -61,4 +64,10 @@ test('done leaves the desk reset', async () => {
   for (let i = 1; i < items.length; i++) await fireEvent.press(screen.getByLabelText('Next'));
   await fireEvent.press(screen.getByLabelText('Done'));
   expect(await screen.findByText('Check-in stub')).toBeTruthy();
+});
+
+test('the screen stays awake during the desk reset', async () => {
+  await renderApp(routes, { db, initialUrl: '/desk' });
+  await screen.findByText(`1 / ${items.length}`);
+  expect(useKeepAwake).toHaveBeenCalled();
 });
