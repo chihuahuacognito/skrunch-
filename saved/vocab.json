@@ -1,0 +1,5 @@
+{
+  "muscles": ["abdominals", "abductors", "adductors", "biceps", "calves", "chest", "forearms", "glutes", "hamstrings", "lats", "lower back", "middle back", "neck", "quadriceps", "shoulders", "traps", "triceps", "hip flexors", "thoracic spine"],
+  "types": ["strength", "conditioning", "mobility", "stretch", "stability"],
+  "purposes": ["hip flexors / sitting stiffness", "lower back comfort", "desk breaks", "wrists", "knees", "shoulder health"]
+}
