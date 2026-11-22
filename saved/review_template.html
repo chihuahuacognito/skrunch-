@@ -362,12 +362,16 @@ document.getElementById('importBtn').onclick = () => document.getElementById('im
 document.getElementById('importInput').onchange = async e => {
   const file = e.target.files[0]; e.target.value = '';
   if (!file) return;
+  const previous = store;
   try {
     const parsed = L.parseImport(await file.text());
     store = L.mergeImport(store, parsed);
-    save(); render();
+    render();                    // only keep the merge if it renders
+    save();
     toast(`Imported ${parsed.records.length} posts. Your local decisions were kept where they differ.`);
   } catch (err) {
+    store = previous;
+    render();
     toast(`Could not import ${file.name}: ${err.message}. Nothing was changed.`);
   }
 };

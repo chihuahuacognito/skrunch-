@@ -68,3 +68,22 @@ test('exportRecords shape', () => {
   assert.equal(out.records[0].musclesConfirmed, false);
   assert.equal(out.records[0].decision, 'undecided');
 });
+
+test('v1 import keeps unconfirmed guesses unconfirmed', () => {
+  const p = parseImport(JSON.stringify([
+    { id: 'a', decision: 'keep', tags: ['legs', 'posture'], tagsConfirmed: false },
+    { id: 'b', decision: 'keep', tags: ['core'], tagsConfirmed: true },
+  ]));
+  const s = mergeImport(emptyStore(), p);
+  assert.ok(!('a' in s.tags.muscles) && !('a' in s.tags.purposes));
+  assert.deepEqual(s.tags.muscles.b, ['abdominals']);
+});
+
+test('parseImport rejects wrongly typed fields', () => {
+  const v2 = recs => JSON.stringify({ version: 2, vocab: { purposes: [] }, records: recs });
+  assert.throws(() => parseImport(v2([{ id: 'a', moves: 5 }])), /Not a review export/);
+  assert.throws(() => parseImport(v2([{ id: 'a', note: {} }])), /Not a review export/);
+  assert.throws(() => parseImport(v2([{ id: 'a', decision: 'maybe' }])), /Not a review export/);
+  assert.throws(() => parseImport(v2([{ id: 'a', purposes: 'knees' }])), /Not a review export/);
+  assert.throws(() => parseImport(JSON.stringify({ version: 2, vocab: { purposes: 'abc' }, records: [] })), /Not a review export/);
+});

@@ -53,3 +53,11 @@ def test_render_inlines_everything():
     html = render([{"id": "a</script>"}], {"muscles": []},
                   "D=/*DATA*/[];V=/*VOCAB*/{};/*LOGIC*/", "LOGIC_OK")
     assert "LOGIC_OK" in html and "</script>" not in html and "/*DATA*/" not in html
+
+
+def test_render_survives_html_comment_in_caption():
+    # A caption like "<!--<script>" must not switch the HTML parser into script-escape mode.
+    html = render([{"caption": "<!--<script> & >"}], {}, "<script>D=/*DATA*/[]</script>", "")
+    data = html.split("D=", 1)[1].split("</script>", 1)[0]
+    assert "<" not in data and ">" not in data and "&" not in data
+    assert json.loads(data) == [{"caption": "<!--<script> & >"}]

@@ -66,6 +66,17 @@ TEST_JS = r"""
     input.dispatchEvent(new Event('change', { bubbles: true }));
     await sleep(300);
     R.badImportToast = document.getElementById('toast').innerText.includes('Not a review export') && JSON.stringify(store.decisions) === before;
+
+    const target = ITEMS[5].id;
+    const good = new DataTransfer();
+    good.items.add(new File([JSON.stringify({ version: 2, vocab: { purposes: [] }, records: [{ id: target, decision: 'keep', moves: 'bird dog' }] })], 'good.json', { type: 'application/json' }));
+    input.files = good.files;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    await sleep(300);
+    const saved = JSON.parse(localStorage.getItem('ig-review-v2'));
+    R.goodImportApplies = store.decisions[target] === 'keep' && store.moves[target] === 'bird dog'
+      && saved.decisions[target] === 'keep' && store.importedIds.includes(target)
+      && document.getElementById('toast').innerText.includes('Imported 1 posts');
   } catch (e) {
     R.error = String(e && e.stack || e);
   }
@@ -75,7 +86,7 @@ TEST_JS = r"""
 """
 
 KEYS = ['dropdownsPresent', 'noRoleRow', 'uncollectedInMain', 'newSinceImportFilter', 'toggleKeepsVideo',
-        'shortcutBlocked', 'escapeCloses', 'purposeNoDuplicate', 'badImportToast']
+        'shortcutBlocked', 'escapeCloses', 'purposeNoDuplicate', 'badImportToast', 'goodImportApplies']
 
 
 def main():

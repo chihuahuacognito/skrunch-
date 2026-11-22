@@ -101,8 +101,10 @@ def build_items(parsed):
 
 
 def _js(value):
-    # Safe to inline inside <script>: never emit "</".
-    return json.dumps(value, ensure_ascii=False).replace('</', '<\\/')
+    # Safe to inline inside <script>: escaping < > & as \u escapes means no caption text
+    # (e.g. "</script>" or "<!--<script>") can change how the HTML parser reads the block.
+    return (json.dumps(value, ensure_ascii=False)
+            .replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026'))
 
 
 def render(items, vocab, template_html, logic_js):

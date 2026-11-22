@@ -64,14 +64,30 @@
 
   const NOT_EXPORT = () => new Error('Not a review export');
 
+  const DECISIONS = new Set(['keep', 'discard', 'undecided']);
+  const isStr = v => typeof v === 'string';
+  const isStrList = v => Array.isArray(v) && v.every(isStr);
+  const optional = (v, check) => v === undefined || v === null || check(v);
+
+  // Every field the merge reads must have the right type, or the whole file is rejected,
+  // so a bad file can never be written into saved progress.
+  function validRecord(r) {
+    return r && isStr(r.id)
+      && optional(r.decision, v => DECISIONS.has(v))
+      && optional(r.moves, isStr) && optional(r.note, isStr)
+      && optional(r.tags, isStrList)
+      && DIMS.every(d => optional(r[d], isStrList));
+  }
+
   // Accepts the v2 object export and the earlier v1 plain-array export.
   function parseImport(text) {
     let data;
     try { data = JSON.parse(text); } catch (e) { throw NOT_EXPORT(); }
-    const isRecords = a => Array.isArray(a) && a.every(r => r && typeof r.id === 'string');
+    const isRecords = a => Array.isArray(a) && a.every(validRecord);
     if (isRecords(data)) {
       const records = data.map(r => {
-        const m = mapV1Tags(r.tags);
+        // v1 exported guesses too; only tags the owner confirmed count as confirmed.
+        const m = r.tagsConfirmed === true ? mapV1Tags(r.tags) : { muscles: [], purposes: [] };
         return {
           id: r.id, decision: r.decision, moves: r.moves || '', note: r.note || '',
           muscles: m.muscles, musclesConfirmed: m.muscles.length > 0,
@@ -82,7 +98,9 @@
       return { records, purposes: [] };
     }
     if (data && data.version === 2 && isRecords(data.records)) {
-      return { records: data.records, purposes: (data.vocab && data.vocab.purposes) || [] };
+      const purposes = data.vocab && data.vocab.purposes;
+      if (!optional(purposes, isStrList)) throw NOT_EXPORT();
+      return { records: data.records, purposes: purposes || [] };
     }
     throw NOT_EXPORT();
   }
