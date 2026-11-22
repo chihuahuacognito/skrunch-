@@ -1,0 +1,11 @@
+# Personal Instagram export and anything generated from it
+saved/saved_posts.html
+saved/saved_collections.html
+saved/saved_parsed.json
+saved/review.html
+saved/review-decisions*.json
+
+# Tooling scratch
+.superpowers/
+__pycache__/
+.pytest_cache/
