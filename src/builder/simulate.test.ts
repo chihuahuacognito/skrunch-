@@ -4,7 +4,10 @@ import { BUDGET, LEGS } from './budget';
 import { addDays, daysBetween } from './dates';
 import { byId, lib } from './test-utils/fixtures';
 import { simulate } from './test-utils/simulate';
-import type { History } from './types';
+import type { CheckIn, History } from './types';
+import { FOCUS_SPECS, isLifting, type LiftingFocus } from './focus';
+import { rankFocuses } from './rank';
+import { buildSession } from './session';
 import { sessionCredit, TRAINED_CREDIT } from './volume';
 
 const START = '2026-11-01';
@@ -101,4 +104,23 @@ test('a mixed run of check-ins still respects recovery', () => {
     }
   }
   expect(addDays(START, DAYS - 1)).toBe('2026-11-28');
+});
+
+test('every lifting option the menu offers builds with all of its main lifts', () => {
+  const misses: string[] = [];
+  for (const pattern of [['good'], ['good', 'ok', 'wrecked', 'good', 'good'], ['ok', 'good']] as CheckIn[][]) {
+    const run = simulate(lib, START, 56, pattern);
+    for (let d = 0; d < 56; d++) {
+      const today = addDays(START, d);
+      const history = { ...run.history, sessions: run.history.sessions.filter(s => s.date < today) };
+      for (const checkIn of ['good', 'ok', 'wrecked'] as const) {
+        const input = { library: lib, history, today, checkIn, place: 'gym' as const };
+        for (const o of rankFocuses(input).filter(x => isLifting(x.focus))) {
+          const mains = buildSession(input, o).blocks.filter(b => b.kind === 'main').flatMap(b => b.items).length;
+          if (mains !== FOCUS_SPECS[o.focus as LiftingFocus].mainSlots.length) misses.push(`${today} ${checkIn} ${o.focus}: ${mains}`);
+        }
+      }
+    }
+  }
+  expect(misses).toEqual([]);
 });

@@ -1,20 +1,18 @@
 import type { BudgetMuscle, Exercise, TagMuscle } from '../library/types';
-import { BUDGET_MUSCLES } from '../library/vocab';
 import { blockState } from './block';
-import { BUDGET } from './budget';
 import { estimateMinutes } from './estimate';
 import { FOCUS_SPECS, isLifting, MUSCLE_GROUP, type LiftingFocus } from './focus';
 import {
   BUDGET_TO_REGION, byDay, cooldown, coverRegions, finisher, isInterval, isZone2, type PartContext, plain, warmup,
 } from './parts';
 import { nextLoad, prescribeReps, rirFor } from './prescribe';
-import { intervalFinisherAllowed, intervalsAllowed, needs, targetsFor } from './rank';
-import { unrecovered } from './recovery';
+import { pickMainLifts } from './main';
+import { needs } from './needs';
+import { intervalFinisherAllowed, intervalsAllowed } from './rank';
 import { rankCandidates, type SelectContext } from './select';
 import type { Block, BuilderInput, FocusOption, PlannedExercise, PlannedSession } from './types';
-import { setCredit, weeklyVolume, zeroVolume } from './volume';
+import { Tally } from './tally';
 
-const MAX_DIRECT_SETS_PER_SESSION = 8;
 const MAIN_REST = 150;
 const SUPERSET_REST = 75;
 
@@ -26,51 +24,12 @@ function shapeFor(option: FocusOption, deload: boolean): Shape {
   return { mainSets: 3, pairs: 2, supersetSets: 3, finisher: true };
 }
 
-/** Tracks tonight's work so caps (8 direct sets a session, the weekly ceiling) and deficits stay current. */
-class Tally {
-  direct = zeroVolume();
-  credit = zeroVolume();
-  constructor(
-    private done: Record<BudgetMuscle, number>,
-    private targets: Record<BudgetMuscle, number>,
-    private recovering: Set<BudgetMuscle>,
-    private need: Record<BudgetMuscle, number>,
-  ) {}
-
-  add(e: Exercise, sets: number) {
-    for (const m of e.primary) this.direct[m] += sets;
-    for (const [m, c] of Object.entries(setCredit(e)) as [BudgetMuscle, number][]) this.credit[m] += c * sets;
-  }
-
-  /** Muscles that cannot take `sets` more primary sets tonight. */
-  blocked(sets: number): Set<BudgetMuscle> {
-    const out = new Set(this.recovering);
-    for (const m of BUDGET_MUSCLES) {
-      if (this.direct[m] + sets > MAX_DIRECT_SETS_PER_SESSION) out.add(m);
-      if (this.done[m] + this.credit[m] + sets > BUDGET[m][1]) out.add(m);
-    }
-    return out;
-  }
-
-  /** Tonight's need (budget deficit or twice-a-week frequency) less the work already planned tonight. */
-  deficit(m: BudgetMuscle): number {
-    const t = this.targets[m];
-    return t > 0 ? Math.max(0, this.need[m] - this.credit[m] / t) : 0;
-  }
-}
-
 function buildLifting(input: BuilderInput, option: FocusOption, focus: LiftingFocus): PlannedSession {
   const { deload, calibration } = blockState(input.history, input.today);
   const shape = shapeFor(option, deload);
   const rir = rirFor(option.dose, calibration, deload);
   const allowProgression = option.dose === 'full' && input.checkIn === 'good' && !deload;
-  const targets = targetsFor(input);
-  const tally = new Tally(
-    weeklyVolume(input.library, input.history.sessions, input.today),
-    targets,
-    unrecovered(input.library, input.history.sessions, input.today),
-    needs(input),
-  );
+  const tally = Tally.for(input);
   const used = new Set<string>();
   const ctx = (sets: number): SelectContext => ({
     lib: input.library, history: input.history, today: input.today, focus, place: input.place,
@@ -84,11 +43,7 @@ function buildLifting(input: BuilderInput, option: FocusOption, focus: LiftingFo
   };
 
   const spec = FOCUS_SPECS[focus];
-  const main: PlannedExercise[] = [];
-  spec.mainSlots.forEach((patterns, i) => {
-    const e = rankCandidates(ctx(shape.mainSets), { kind: 'main', patterns, key: `main${i}` })[0];
-    if (e) main.push(plan(e, shape.mainSets, 'main', MAIN_REST));
-  });
+  const main = pickMainLifts(input, focus, shape.mainSets).map(e => plan(e, shape.mainSets, 'main', MAIN_REST));
 
   // Supersets: each pair takes the pool muscle that needs it most tonight, then the best partner from a different
   // group. Only muscles still under target qualify: nothing left to do means fewer pairs, not filler volume.
@@ -196,12 +151,7 @@ function buildConditioning(input: BuilderInput, option: FocusOption): PlannedSes
   }
 
   // Loaded core work is strength: it counts toward the core budget and respects recovery and the weekly ceiling.
-  const tally = new Tally(
-    weeklyVolume(input.library, input.history.sessions, input.today),
-    targetsFor(input),
-    unrecovered(input.library, input.history.sessions, input.today),
-    needs(input),
-  );
+  const tally = Tally.for(input);
   const sets = option.dose === 'full' && !deload ? 3 : 2;
   const rir = rirFor(option.dose, calibration, deload);
   const allowProgression = option.dose === 'full' && input.checkIn === 'good' && !deload;
