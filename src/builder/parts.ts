@@ -2,7 +2,7 @@ import type { BudgetMuscle, Exercise, TagMuscle } from '../library/types';
 import { hash01 } from './select';
 import type { Block, Place, PlannedExercise } from './types';
 
-/** What the warm-up, finisher and cool-down pickers need. Purpose-tagged items are allowed in all three. */
+/** What the part pickers need. Purpose-tagged items are allowed in warm-up and cool-down, never in a finisher. */
 export interface PartContext { lib: Exercise[]; today: string; place: Place; used: Set<string> }
 
 export const BUDGET_TO_REGION: Record<BudgetMuscle, TagMuscle> = {
@@ -20,6 +20,9 @@ const INTERVAL_REST = 45;
 /** Zone 2 = steady conditioning done for 10+ minutes; everything else in conditioning is interval work. */
 export const isZone2 = (e: Exercise) => e.type === 'conditioning' && e.dose.format === 'duration' && e.dose.minutes >= 10;
 export const isInterval = (e: Exercise) => e.type === 'conditioning' && !isZone2(e);
+
+/** Purpose-tagged items belong to warm-up, cool-down, desk reset and the Mobility focus only. */
+export const untagged = (e: Exercise) => e.purposes.length === 0;
 
 /** Fits the place: at home, no-equipment items only. */
 export function fitsPlace(e: Exercise, place: Place): boolean {
@@ -90,14 +93,14 @@ export function cooldown(ctx: PartContext, regions: TagMuscle[], count = 4): Blo
 /** An interval piece when allowed, otherwise 8 minutes of Zone 2. */
 export function finisher(ctx: PartContext, intervals: boolean): Block {
   if (intervals) {
-    const e = byDay(ctx, 'finisher-intervals', isInterval)[0];
+    const e = byDay(ctx, 'finisher-intervals', x => isInterval(x) && untagged(x))[0];
     if (e) {
       ctx.used.add(e.id);
       const sets = e.dose.format === 'duration' ? Math.max(1, Math.round(FINISHER_MINUTES / e.dose.minutes)) : 4;
       return { kind: 'finisher', items: [plain(e, sets, INTERVAL_REST)] };
     }
   }
-  const z = byDay(ctx, 'finisher-zone2', isZone2)[0];
+  const z = byDay(ctx, 'finisher-zone2', x => isZone2(x) && untagged(x))[0];
   if (!z) return { kind: 'finisher', items: [] };
   ctx.used.add(z.id);
   return { kind: 'finisher', items: [plain(z, 1, 0, { format: 'duration', minutes: FINISHER_MINUTES })] };

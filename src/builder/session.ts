@@ -3,7 +3,7 @@ import { blockState } from './block';
 import { estimateMinutes } from './estimate';
 import { FOCUS_SPECS, isLifting, MUSCLE_GROUP, type LiftingFocus } from './focus';
 import {
-  BUDGET_TO_REGION, byDay, cooldown, coverRegions, finisher, isInterval, isZone2, type PartContext, plain, warmup,
+  BUDGET_TO_REGION, byDay, cooldown, coverRegions, finisher, isInterval, isZone2, type PartContext, plain, untagged, warmup,
 } from './parts';
 import { nextLoad, prescribeReps, rirFor } from './prescribe';
 import { pickMainLifts } from './main';
@@ -123,8 +123,8 @@ function session(input: BuilderInput, option: FocusOption, blocks: Block[], inte
   };
 }
 
-function stabilityBlock(parts: PartContext, n: number): Block {
-  const items = byDay(parts, 'stability', e => e.type === 'stability').slice(0, n);
+function stabilityBlock(parts: PartContext, n: number, allowTagged: boolean): Block {
+  const items = byDay(parts, 'stability', e => e.type === 'stability' && (allowTagged || untagged(e))).slice(0, n);
   items.forEach(e => parts.used.add(e.id));
   return { kind: 'stability', items: items.map(e => plain(e, 2, STABILITY_REST)) };
 }
@@ -138,12 +138,12 @@ function buildConditioning(input: BuilderInput, option: FocusOption): PlannedSes
 
   const intervals = option.dose === 'full' && intervalsAllowed(input, 'conditioning');
   if (intervals) {
-    const picks = byDay(parts, 'intervals', isInterval).slice(0, 2);
+    const picks = byDay(parts, 'intervals', e => isInterval(e) && untagged(e)).slice(0, 2);
     picks.forEach(e => used.add(e.id));
     const setsOf = (e: Exercise) => (e.dose.format === 'duration' ? Math.max(1, Math.round(INTERVAL_PIECE_MINUTES / e.dose.minutes)) : 5);
     blocks.push({ kind: 'intervals', items: picks.map(e => plain(e, setsOf(e), INTERVAL_REST)) });
   } else {
-    const z = byDay(parts, 'zone2', isZone2)[0];
+    const z = byDay(parts, 'zone2', e => isZone2(e) && untagged(e))[0];
     if (z) {
       used.add(z.id);
       blocks.push({ kind: 'zone2', items: [plain(z, 1, 0, { format: 'duration', minutes: ZONE2_MINUTES[option.dose] })] });
@@ -171,7 +171,7 @@ function buildConditioning(input: BuilderInput, option: FocusOption): PlannedSes
       weight: load.weight, progressed: load.progressed,
     });
   }
-  blocks.push({ kind: 'core', items: core }, stabilityBlock(parts, 1), cooldown(parts, CONDITIONING_REGIONS));
+  blocks.push({ kind: 'core', items: core }, stabilityBlock(parts, 1, false), cooldown(parts, CONDITIONING_REGIONS));
   return session(input, option, blocks, intervals);
 }
 
@@ -184,14 +184,14 @@ function buildMobility(input: BuilderInput, option: FocusOption): PlannedSession
   });
   if (input.place === 'home') return session(input, option, [flow(8), cooldown(parts, MOBILITY_REGIONS, 6)], false);
 
-  const isWalk = (e: Exercise) => isZone2(e) && e.name.toLowerCase().includes('walk');
-  const z = (input.checkIn === 'wrecked' ? byDay(parts, 'zone2', isWalk)[0] : undefined) ?? byDay(parts, 'zone2', isZone2)[0];
+  const isWalk = (e: Exercise) => isZone2(e) && untagged(e) && e.name.toLowerCase().includes('walk');
+  const z = (input.checkIn === 'wrecked' ? byDay(parts, 'zone2', isWalk)[0] : undefined) ?? byDay(parts, 'zone2', e => isZone2(e) && untagged(e))[0];
   const blocks: Block[] = [];
   if (z) {
     parts.used.add(z.id);
     blocks.push({ kind: 'zone2', items: [plain(z, 1, 0, { format: 'duration', minutes: MOBILITY_ZONE2_MINUTES })] });
   }
-  blocks.push(flow(6), stabilityBlock(parts, 2), cooldown(parts, MOBILITY_REGIONS, 5));
+  blocks.push(flow(6), stabilityBlock(parts, 2, true), cooldown(parts, MOBILITY_REGIONS, 5));
   return session(input, option, blocks, false);
 }
 

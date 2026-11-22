@@ -56,3 +56,27 @@ test('every session fits the hour', () => {
       expect(s.blocks.every(b => b.items.length > 0)).toBe(true);
     }
 });
+
+test('purpose-tagged items stay out of Conditioning and lifting finishers (warm-up, cool-down, desk reset and Mobility only)', () => {
+  const tagged = lib
+    .filter(e => e.type === 'stability' || e.type === 'conditioning')
+    .map(e => ({ ...e, id: `ig-${e.id}`, purposes: ['wrists' as const] }));
+  const withTagged = [...lib, ...tagged];
+  const ids: string[] = [];
+  for (const date of ['2026-11-18', '2026-11-19', '2026-11-20', '2026-11-21', '2026-11-22']) {
+    const c = buildSession(input({ library: withTagged, today: date }), { focus: 'conditioning', dose: 'full' });
+    const z = buildSession(input({ library: withTagged, today: date, checkIn: 'ok' }), { focus: 'conditioning', dose: 'reduced' });
+    const l = buildSession(input({ library: withTagged, today: date }), { focus: 'chest-back', dose: 'full' });
+    for (const s of [c, z, l]) ids.push(...s.blocks.filter(b => !['warmup', 'cooldown'].includes(b.kind)).flatMap(b => b.items.map(i => i.exerciseId)));
+  }
+  expect(ids.filter(id => id.startsWith('ig-'))).toEqual([]);
+});
+
+test('the Mobility Zone 2 block never uses a purpose-tagged machine', () => {
+  const tagged = lib.filter(e => e.type === 'conditioning').map(e => ({ ...e, id: `ig-${e.id}`, purposes: ['knees' as const] }));
+  for (const date of ['2026-11-18', '2026-11-19', '2026-11-20', '2026-11-21', '2026-11-22'])
+    for (const checkIn of ['good', 'wrecked'] as const) {
+      const s = buildSession(input({ library: [...lib, ...tagged], today: date, checkIn }), { focus: 'mobility', dose: 'full' });
+      expect(s.blocks.filter(b => b.kind === 'zone2').flatMap(b => b.items.map(i => i.exerciseId)).filter(id => id.startsWith('ig-'))).toEqual([]);
+    }
+});
