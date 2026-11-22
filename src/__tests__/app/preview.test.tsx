@@ -1,11 +1,11 @@
 import { fireEvent, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
-import { saveCheckIn } from '../store/history';
-import { migrate } from '../store/schema';
-import type { SqlDb } from '../store/sql';
-import { nodeDb } from '../store/test-utils/nodeDb';
-import { renderApp } from '../test-utils/renderApp';
-import PreviewScreen from './preview';
+import { saveCheckIn } from '../../store/history';
+import { migrate } from '../../store/schema';
+import type { SqlDb } from '../../store/sql';
+import { nodeDb } from '../../store/test-utils/nodeDb';
+import { renderApp } from '../../test-utils/renderApp';
+import PreviewScreen from '../../app/preview';
 
 const TODAY = '2026-11-22';
 let db: SqlDb;

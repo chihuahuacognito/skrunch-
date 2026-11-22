@@ -1,13 +1,13 @@
 import { fireEvent, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
-import { checkInFor, saveCheckIn } from '../store/history';
-import { migrate } from '../store/schema';
-import type { SqlDb } from '../store/sql';
-import { nodeDb } from '../store/test-utils/nodeDb';
-import { renderApp } from '../test-utils/renderApp';
-import CheckInScreen from './index';
+import { checkInFor, saveCheckIn } from '../../store/history';
+import { migrate } from '../../store/schema';
+import type { SqlDb } from '../../store/sql';
+import { nodeDb } from '../../store/test-utils/nodeDb';
+import { renderApp } from '../../test-utils/renderApp';
+import CheckInScreen from '../../app/index';
 
-jest.mock('../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
+jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
 
 const TODAY = '2026-11-22';
 let db: SqlDb;

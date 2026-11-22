@@ -1,14 +1,14 @@
 import { act, fireEvent, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
-import { buildDeskReset } from '../builder';
-import { migrate } from '../store/schema';
-import type { SqlDb } from '../store/sql';
-import { nodeDb } from '../store/test-utils/nodeDb';
-import { renderApp } from '../test-utils/renderApp';
-import { LIBRARY } from '../ui/library';
-import DeskScreen from './desk';
+import { buildDeskReset } from '../../builder';
+import { migrate } from '../../store/schema';
+import type { SqlDb } from '../../store/sql';
+import { nodeDb } from '../../store/test-utils/nodeDb';
+import { renderApp } from '../../test-utils/renderApp';
+import { LIBRARY } from '../../ui/library';
+import DeskScreen from '../../app/desk';
 
-jest.mock('../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
+jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
 
 const NAME = new Map(LIBRARY.map(e => [e.id, e.name]));
 const items = buildDeskReset(LIBRARY, '2026-11-22').blocks.flatMap(b => b.items);

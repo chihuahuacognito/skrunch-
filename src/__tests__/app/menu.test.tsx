@@ -1,15 +1,15 @@
 import { fireEvent, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
-import type { BuilderInput, CheckIn, Place } from '../builder';
-import { saveCheckIn } from '../store/history';
-import { migrate } from '../store/schema';
-import type { SqlDb } from '../store/sql';
-import { nodeDb } from '../store/test-utils/nodeDb';
-import { renderApp } from '../test-utils/renderApp';
-import { LIBRARY } from '../ui/library';
-import MenuScreen, { menuItems } from './menu';
+import type { BuilderInput, CheckIn, Place } from '../../builder';
+import { saveCheckIn } from '../../store/history';
+import { migrate } from '../../store/schema';
+import type { SqlDb } from '../../store/sql';
+import { nodeDb } from '../../store/test-utils/nodeDb';
+import { renderApp } from '../../test-utils/renderApp';
+import { LIBRARY } from '../../ui/library';
+import MenuScreen, { menuItems } from '../../app/menu';
 
-jest.mock('../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
+jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
 
 const TODAY = '2026-11-22';
 const LIFTING = ['chest-back', 'lower', 'shoulders-arms', 'full-body', 'conditioning'];
