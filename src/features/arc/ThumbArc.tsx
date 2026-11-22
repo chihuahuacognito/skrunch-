@@ -5,8 +5,8 @@ import Animated, { useAnimatedStyle, useReducedMotion, useSharedValue, type Shar
 import { scheduleOnRN } from 'react-native-worklets';
 import { impact, tick } from '../../haptics';
 import { tokens } from '../../theme/tokens';
-import { initArc, reduceArc, type ArcState } from './arcMachine';
-import { bowX, layoutCenters, nearestIndex, scaleFor, type ArcEdge } from './geometry';
+import { initArc, reduceArc, type ArcInput, type ArcState } from './arcMachine';
+import { arcLayout, bowX, nearestIndex, scaleFor, type ArcEdge } from './geometry';
 
 export type ArcItem = { id: string; label: string; hint?: string; accent: string };
 
@@ -34,9 +34,8 @@ export function ThumbArc({
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [focused, setFocused] = useState(-1);
 
-  const bandTop = size.height * (1 - A.bandFraction);
-  const bandH = size.height * A.bandFraction;
-  const centers = useMemo(() => layoutCenters(items.length, bandTop, bandH), [items.length, bandTop, bandH]);
+  const { bandTop, bandH, centers } = useMemo(() => arcLayout(items.length, size.height, A), [items.length, size.height]);
+  const headerH = size.height * (1 - A.bandFraction);
   const cancelX = edge === 'right' ? size.width * A.cancelFraction : size.width * (1 - A.cancelFraction);
 
   const thumbY = useSharedValue(-1); // -1 = no sweep in progress
@@ -51,7 +50,7 @@ export function ThumbArc({
     latest.current.onSelect(id);
   }, []);
 
-  const sample = useCallback((kind: 'down' | 'engage' | 'move' | 'up', x: number, y: number) => {
+  const sample = useCallback((kind: ArcInput['kind'], x: number, y: number) => {
     const l = latest.current;
     const r = reduceArc(machine.current, { kind, x, y }, { cancelX: l.cancelX, edge: l.edge });
     machine.current = r.state;
@@ -86,9 +85,10 @@ export function ThumbArc({
           thumbY.value = e.y;
           scheduleOnRN(sample, 'move', e.x, e.y);
         })
-        .onFinalize(e => {
+        // success is false when the gesture failed or the system cancelled it (back gesture, app switch).
+        .onFinalize((e, success) => {
           thumbY.value = -1;
-          scheduleOnRN(sample, 'up', e.x, e.y);
+          scheduleOnRN(sample, success ? 'up' : 'cancel', e.x, e.y);
         }),
     [sample, thumbY],
   );
@@ -107,7 +107,7 @@ export function ThumbArc({
   return (
     <GestureDetector gesture={pan}>
       <View style={styles.root} onLayout={onLayout} testID="thumb-arc">
-        {header ? <View style={[styles.header, { height: bandTop }]}>{header}</View> : null}
+        {header ? <View style={[styles.header, { height: headerH }]}>{header}</View> : null}
         {items.map((item, i) => (
           <ArcRow
             key={item.id}

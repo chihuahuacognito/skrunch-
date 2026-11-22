@@ -21,7 +21,8 @@ export const tokens = {
   },
   arc: {
     itemHeight: 56, // tap target height of one arc item
-    bandFraction: 0.8, // the item band fills the lower 80% of the arc area (thumb reach)
+    bandFraction: 0.8, // items may use the lower 80% of the arc area; the top 20% is the header
+    maxGap: 96, // at most this far apart, so a short list stays low in thumb reach
     arcDepth: 26, // inward bow (px) at the band middle
     restOpacity: 0.55, // resting item opacity (focused -> 1)
     cancelFraction: 0.3, // releasing inboard of this fraction of the width cancels a sweep

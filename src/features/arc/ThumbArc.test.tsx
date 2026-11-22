@@ -2,7 +2,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import { fireGestureHandler, getByGestureTestId } from 'react-native-gesture-handler/jest-utils';
-import { layoutCenters } from './geometry';
+import { tokens } from '../../theme/tokens';
+import { arcLayout } from './geometry';
 import { ThumbArc, type ArcItem } from './ThumbArc';
 
 jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
@@ -12,7 +13,7 @@ const items: ArcItem[] = [
   { id: 'b', label: 'Beta', accent: '#0f0' },
   { id: 'c', label: 'Gamma', accent: '#00f' },
 ];
-const [c0, , c2] = layoutCenters(3, 800 * 0.2, 800 * 0.8);
+const [c0, , c2] = arcLayout(3, 800, tokens.arc).centers;
 
 async function setup() {
   const onSelect = jest.fn();
@@ -60,4 +61,15 @@ test('a sweep released inboard selects nothing', async () => {
 test('renders the header', async () => {
   await setup();
   expect(screen.getByText('Header here')).toBeTruthy();
+});
+
+test('a sweep the system cancels selects nothing', async () => {
+  const onSelect = await setup();
+  await act(async () => fireGestureHandler(getByGestureTestId('thumb-arc-pan'), [
+    { state: State.BEGAN, x: 380, y: c0 },
+    { state: State.ACTIVE, x: 380, y: c0 },
+    { state: State.ACTIVE, x: 380, y: c2 },
+    { state: State.CANCELLED, x: 380, y: c2 },
+  ]));
+  expect(onSelect).not.toHaveBeenCalled();
 });

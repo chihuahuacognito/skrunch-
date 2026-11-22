@@ -7,7 +7,8 @@ import type { ArcEdge } from './geometry';
 
 export type { ArcEdge };
 export type ArcConfig = { cancelX: number; edge: ArcEdge };
-export type ArcInput = { kind: 'down' | 'engage' | 'move' | 'up'; x: number; y: number };
+// 'cancel' is the system taking the touch (Android back gesture, app switch): it never selects.
+export type ArcInput = { kind: 'down' | 'engage' | 'move' | 'up' | 'cancel'; x: number; y: number };
 export type ArcState = { active: boolean; engaged: boolean; x: number; y: number };
 export type ArcEvent = { type: 'select'; y: number } | { type: 'cancel' } | null;
 
@@ -29,6 +30,9 @@ export function reduceArc(state: ArcState, input: ArcInput, cfg: ArcConfig): { s
     case 'move':
       if (!state.active || !state.engaged) return { state, event: null };
       return { state: { ...state, x: input.x, y: input.y }, event: null };
+    case 'cancel':
+      if (!state.active) return { state, event: null };
+      return { state: initArc(), event: { type: 'cancel' } };
     case 'up': {
       if (!state.active) return { state, event: null };
       const event: ArcEvent = state.engaged && onArcSide(input.x, cfg) ? { type: 'select', y: input.y } : { type: 'cancel' };

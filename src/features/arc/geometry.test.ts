@@ -1,5 +1,5 @@
 // Ported from langocard (git 90816d2^: src/features/arc/arc.test.ts, src/features/home/magnify.test.ts).
-import { bowX, layoutCenters, nearestIndex, scaleFor } from './geometry';
+import { arcLayout, bowX, layoutCenters, nearestIndex, scaleFor } from './geometry';
 
 describe('bowX', () => {
   // band spans y in [100, 300], middle 200, arcDepth 30
@@ -37,4 +37,13 @@ describe('layoutCenters', () => {
   it('spreads items across the height from the top', () => expect(layoutCenters(3, 10, 200)).toEqual([10, 110, 210]));
   it('centers a single item', () => expect(layoutCenters(1, 10, 200)).toEqual([110]));
   it('returns [] for zero items', () => expect(layoutCenters(0, 0, 200)).toEqual([]));
+});
+
+describe('arcLayout', () => {
+  const at = (count: number) => arcLayout(count, 800, { itemHeight: 56, bandFraction: 0.8, maxGap: 96 });
+  it('keeps the last item a full row above the bottom edge', () => expect(at(3).centers[2]).toBe(744));
+  it('clusters a few items at the bottom, in thumb reach', () => expect(at(2).centers).toEqual([648, 744]));
+  it('never places items above the band top', () => expect(at(12).centers[0]).toBeGreaterThanOrEqual(160));
+  it('a single item sits at the bottom slot', () => expect(at(1).centers).toEqual([744]));
+  it('reports the band the items span, for the bow', () => expect(at(3)).toMatchObject({ bandTop: 552, bandH: 192 }));
 });

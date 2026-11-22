@@ -43,3 +43,22 @@ export function bowX(centerY: number, railTop: number, railHeight: number, arcDe
   const mag = arcDepth * (1 - t * t);
   return edge === 'right' ? -mag : mag;
 }
+
+/**
+ * Where the arc's items sit in an area `height` tall. The last item's center is one full row above the
+ * bottom edge, so it never hangs off the area (or under the nav bar) even when magnified. Items are spaced
+ * at most maxGap apart, so a short list stays low in thumb reach, and never rise above the top
+ * (1 - bandFraction) of the area, which belongs to the header.
+ */
+export function arcLayout(
+  count: number,
+  height: number,
+  cfg: { itemHeight: number; bandFraction: number; maxGap: number },
+): { bandTop: number; bandH: number; centers: number[] } {
+  const bottom = height - cfg.itemHeight;
+  const topLimit = height * (1 - cfg.bandFraction);
+  const gap = count > 1 ? Math.min(Math.max(0, bottom - topLimit) / (count - 1), cfg.maxGap) : 0;
+  const bandH = gap * (count - 1);
+  const bandTop = bottom - bandH;
+  return { bandTop, bandH, centers: layoutCenters(count, bandTop, bandH) };
+}

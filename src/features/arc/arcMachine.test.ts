@@ -39,3 +39,11 @@ test('up without down does nothing', () =>
 
 test('engage without down does nothing', () =>
   expect(reduceArc(initArc(), e(300, 200), cfg)).toEqual({ state: initArc(), event: null }));
+
+test('a system cancel mid-sweep (back gesture, app switch) never selects', () =>
+  expect(run([d(300, 200), e(300, 200), m(310, 260), { kind: 'cancel', x: 310, y: 260 }])).toEqual({ type: 'cancel' }));
+
+test('after a cancel the machine is idle again', () => {
+  const r = reduceArc({ active: true, engaged: true, x: 310, y: 260 }, { kind: 'cancel', x: 310, y: 260 }, cfg);
+  expect(r.state).toEqual(initArc());
+});
