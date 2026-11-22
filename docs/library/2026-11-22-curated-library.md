@@ -7,6 +7,7 @@
 Generated from `src/library/library.json` (rebuild with `npm run library`). Skimming this is optional.
 
 Only strength exercises count toward the weekly set budget. "Budget muscles" are those counts (primary, then secondary at half weight).
+Home sessions use only no-equipment mobility and stretches (marked "yes" under Home).
 
 ## Strength (110)
 
@@ -155,7 +156,7 @@ Only strength exercises count toward the weekly set budget. "Budget muscles" are
 | Elbows Back | chest, thoracic spine | none | standing | 10-12 reps | yes |
 | Front Leg Swings | hamstrings, hip flexors | none | standing | 10-12 reps | yes |
 | Groiners | adductors, hip flexors | none | floor | 6-10 reps | yes |
-| Inchworm | hamstrings, shoulders, abdominals | none | standing | 5-8 reps | yes |
+| Inchworm | hamstrings, shoulders, abdominals | none | floor | 5-8 reps | yes |
 | Open Book | thoracic spine, chest | none | floor | 6-8 reps | yes |
 | Pelvic Tilt Into Bridge | lower back, glutes | none | floor | 10-12 reps | yes |
 | Seated Thoracic Rotation | thoracic spine, lower back | none | seated | 6-8 reps | yes |
@@ -212,14 +213,14 @@ Only strength exercises count toward the weekly set budget. "Budget muscles" are
 |---|---|---|---|---|---|
 | Band Pull Apart | shoulders, middle back | bands | standing | 15-20 reps |  |
 | Dead Hang | lats, shoulders, forearms | pull-up bar | standing | 30 s hold |  |
-| Dumbbell Lying Pronation | forearms | dumbbell | floor | 12-15 reps | yes |
-| Dumbbell Lying Supination | forearms | dumbbell | floor | 12-15 reps | yes |
+| Dumbbell Lying Pronation | forearms | dumbbell | floor | 12-15 reps |  |
+| Dumbbell Lying Supination | forearms | dumbbell | floor | 12-15 reps |  |
 | External Rotation with Band | shoulders | bands | standing | 12-15 reps |  |
 | External Rotation with Cable | shoulders | cable | standing | 12-15 reps |  |
-| Superman | lower back, glutes | none | floor | 20 s hold | yes |
-| Bird Dog | abdominals, lower back, glutes | none | floor | 6-8 reps | yes |
-| Dead Bug | abdominals, hip flexors | none | floor | 6-10 reps | yes |
+| Superman | lower back, glutes | none | floor | 20 s hold |  |
+| Bird Dog | abdominals, lower back, glutes | none | floor | 6-8 reps |  |
+| Dead Bug | abdominals, hip flexors | none | floor | 6-10 reps |  |
 | Pallof Press | abdominals, chest, shoulders, triceps | cable | standing | 10-12 reps |  |
 | Pallof Press With Rotation | abdominals, chest, shoulders, triceps | cable | standing | 8-10 reps |  |
-| Plank | abdominals | none | floor | 40 s hold | yes |
-| Side Plank | abdominals, glutes | none | floor | 30 s hold | yes |
+| Plank | abdominals | none | floor | 40 s hold |  |
+| Side Plank | abdominals, glutes | none | floor | 30 s hold |  |
