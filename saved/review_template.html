@@ -15,12 +15,13 @@
 }}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;height:100vh;display:flex;flex-direction:column}
-header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+header{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
 header h1{font-size:15px;margin:0 8px 0 0}
-.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg button{border:0;background:transparent;color:var(--muted);padding:5px 10px;cursor:pointer;font:inherit}
 .seg button.on{background:var(--ink);color:var(--bg)}
 .stats{color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+#toast{color:var(--hint);font-size:13px}
 .btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit}
 .btn:hover{border-color:var(--muted)}
 main{flex:1;display:flex;min-height:0}
@@ -30,41 +31,48 @@ main{flex:1;display:flex;min-height:0}
 #list .dot{width:8px;height:8px;border-radius:50%;flex:none;border:1px solid var(--muted)}
 #list .dot.keep{background:var(--keep);border-color:var(--keep)}
 #list .dot.discard{background:var(--drop);border-color:var(--drop)}
+#list .dot.need{box-shadow:0 0 0 2px var(--hint)}
 #list .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #list .o{color:var(--muted);font-size:12px;flex:none}
 #view{flex:1;overflow-y:auto;padding:20px 24px}
-.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px}
 .meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:10px}
 .meta .owner{font-weight:600;font-size:16px}
 .meta .m{color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.chip{border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:12px;color:var(--muted)}
-.chip.c{color:var(--ink)}
+.chip{border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:12px;color:var(--ink)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.chip.guess{background:transparent;color:var(--accent);border:1px dashed var(--accent)}
 .flag{background:var(--hint-bg);color:var(--hint);border-radius:8px;padding:6px 10px;margin-bottom:10px;font-size:13px}
-.actions{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.actions{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
 .actions .btn{padding:9px 16px;font-weight:600}
 .actions .k.on{background:var(--keep-bg);border-color:var(--keep);color:var(--keep)}
 .actions .d.on{background:var(--drop-bg);border-color:var(--drop);color:var(--drop)}
 kbd{font:11px ui-monospace,monospace;border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-left:6px;color:var(--muted)}
+.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 0 5px;display:flex;gap:8px;align-items:baseline}
+.lbl em{text-transform:none;letter-spacing:0;font-style:normal}
+.dd-head{display:flex;gap:6px;align-items:flex-start}
+.dd-toggle{flex:1;display:flex;flex-wrap:wrap;gap:5px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:6px 30px 6px 8px;min-height:34px;cursor:pointer;font:inherit;position:relative}
+.dd-toggle::after{content:"▾";position:absolute;right:10px;top:7px;color:var(--muted)}
+.dd.open .dd-toggle{border-color:var(--accent)}
+.dd-toggle .none{color:var(--muted);font-size:13px}
+.dd-ok{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:8px;padding:6px 8px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.dd-ok:hover{border-color:var(--accent);color:var(--accent)}
+.dd-panel{margin-top:4px;border:1px solid var(--accent);border-radius:8px;background:var(--panel);padding:6px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2px 8px;max-height:280px;overflow-y:auto}
+.dd-panel label{display:flex;gap:6px;align-items:center;padding:3px 4px;border-radius:5px;cursor:pointer;font-size:13px}
+.dd-panel label:hover{background:var(--bg)}
+.dd-panel input[type=checkbox]{accent-color:var(--accent)}
+.dd-new{grid-column:1/-1;margin-top:4px;background:var(--bg);color:var(--ink);border:1px dashed var(--line);border-radius:6px;padding:5px 8px;font:inherit;font-size:13px}
+.badge{border-radius:8px;padding:5px 10px;font-size:13px;margin:14px 0 6px}
+.badge.ok{background:var(--keep-bg);color:var(--keep)}
+.badge.need{background:var(--hint-bg);color:var(--hint)}
 textarea{width:100%;min-height:54px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;resize:vertical;margin-bottom:12px}
-.cap{white-space:pre-wrap;word-wrap:break-word;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;max-height:none}
+textarea.moves{min-height:70px}
+.cap{white-space:pre-wrap;word-wrap:break-word;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
 .embed{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-height:200px;display:flex;align-items:center;justify-content:center}
 .embed iframe{width:100%;height:720px;border:0;display:block;background:#fff}
 .embed .off{color:var(--muted);padding:30px;text-align:center}
 .help{color:var(--muted);font-size:12px;margin-top:14px}
-.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 5px;display:flex;gap:8px;align-items:baseline}
-.lbl em{text-transform:none;letter-spacing:0;font-style:normal}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px;line-height:1.5;cursor:pointer}
-.tag:hover{border-color:var(--muted)}
-.tag.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-.tag.on.guess{background:transparent;color:var(--accent);border:1px dashed var(--accent)}
-.tagin{border:1px dashed var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:2px 10px;font:inherit;font-size:12px;line-height:1.5;width:130px}
-.badge{border-radius:8px;padding:5px 10px;font-size:13px;margin:12px 0 6px}
-.badge.ok{background:var(--keep-bg);color:var(--keep)}
-.badge.need{background:var(--hint-bg);color:var(--hint)}
-textarea.moves{min-height:70px}
-#list .dot.need{box-shadow:0 0 0 2px var(--hint)}
 a{color:var(--accent)}
 .empty{color:var(--muted);text-align:center;margin-top:80px}
 @media (max-width:900px){
@@ -81,6 +89,9 @@ a{color:var(--accent)}
   <div class="seg" id="groupSeg"></div>
   <div class="seg" id="statusSeg"></div>
   <span class="stats" id="stats"></span>
+  <span id="toast" role="status"></span>
+  <button class="btn" id="importBtn" title="Load an earlier review-decisions.json">Import decisions</button>
+  <input type="file" id="importInput" accept=".json,application/json" hidden>
   <button class="btn" id="exportBtn" title="Download your decisions as JSON">Export decisions</button>
 </header>
 <main>
@@ -88,35 +99,56 @@ a{color:var(--accent)}
   <section id="view"></section>
 </main>
 <script id="data" type="application/json">/*DATA*/[]</script>
+<script>/*LOGIC*/</script>
 <script>
 const ITEMS = JSON.parse(document.getElementById('data').textContent);
-const KEY = 'ig-review-v1';
-const MUSCLES = /*MUSCLES*/[];
-const ROLES = ['desk reset','warm-up','cool-down','gym','home','finisher'];
-const store = { decisions:{}, notes:{}, tags:{}, moves:{}, custom:[], group:'fitness', status:'all', embed:true, cur:null };
-try { Object.assign(store, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+const VOCAB = /*VOCAB*/{};
+const L = window.ReviewLogic;
+const KEY = 'ig-review-v2', OLD_KEY = 'ig-review-v1';
+const DIM_LABEL = { muscles: 'Muscles', types: 'Type', purposes: 'Purpose' };
+
+function loadStore(){
+  try {
+    const v2 = localStorage.getItem(KEY);
+    if (v2) return Object.assign(L.emptyStore(), JSON.parse(v2));
+    const v1 = localStorage.getItem(OLD_KEY);   // left in place as a backup
+    if (v1) return L.migrateV1(JSON.parse(v1));
+  } catch (e) {}
+  return L.emptyStore();
+}
+let store = loadStore();
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} };
+save();
+
+let openDim = null;            // which dropdown is open (UI only, not saved)
+let refocusNew = false;
 
 const GROUPS = [['fitness','Workout collections'],['uncollected','No collection'],['other','Other collections'],['all','All']];
-const STATUSES = [['all','Any'],['undecided','Undecided'],['keep','Kept'],['discard','Discarded'],['needs','Kept, moves missing']];
+const STATUSES = [['all','Any'],['undecided','Undecided'],['keep','Kept'],['discard','Discarded'],['needs','Kept, moves missing'],['new','New since last import']];
+const statusOf = i => store.decisions[i.id] || 'undecided';
 const needsMoves = i => store.decisions[i.id]==='keep' && !i.listed && !(store.moves[i.id]||'').trim();
-const tagsOf = i => store.tags[i.id] ?? i.tags;
-const confirmed = i => i.id in store.tags;
+const purposeList = () => [...new Set([...VOCAB.purposes, ...store.extraPurposes])];
+const optionsFor = dim => dim==='purposes' ? purposeList() : VOCAB[dim];
+const matchesStatus = i => {
+  switch (store.status) {
+    case 'all': return true;
+    case 'needs': return needsMoves(i);
+    case 'new': return !store.importedIds.includes(i.id);
+    default: return statusOf(i)===store.status;
+  }
+};
+const visible = () => ITEMS.filter(i => (store.group==='all' || i.group===store.group) && matchesStatus(i));
 
-function seg(el, opts, key){
-  el.innerHTML = '';
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+function seg(node, opts, key){
+  node.innerHTML = '';
   for (const [v,label] of opts){
-    const b = document.createElement('button');
-    b.textContent = label + (key==='group' ? ` (${ITEMS.filter(i=>v==='all'||i.group===v).length})` : '');
-    b.className = store[key]===v ? 'on' : '';
-    b.onclick = () => { store[key]=v; save(); render(); };
-    el.appendChild(b);
+    const b = el('button', store[key]===v ? 'on' : '', label + (key==='group' ? ` (${ITEMS.filter(i=>v==='all'||i.group===v).length})` : ''));
+    b.onclick = () => { store[key]=v; openDim=null; save(); render(); };
+    node.appendChild(b);
   }
 }
-const statusOf = i => store.decisions[i.id] || 'undecided';
-const visible = () => ITEMS.filter(i =>
-  (store.group==='all' || i.group===store.group) &&
-  (store.status==='all' || (store.status==='needs' ? needsMoves(i) : statusOf(i)===store.status)));
 
 function render(){
   seg(document.getElementById('groupSeg'), GROUPS, 'group');
@@ -132,21 +164,16 @@ function render(){
   const list = document.getElementById('list');
   list.innerHTML = '';
   for (const i of vis){
-    const row = document.createElement('div');
-    if (i.id===store.cur) row.className = 'cur';
-    const dot = document.createElement('span'); dot.className = 'dot ' + statusOf(i) + (needsMoves(i) ? ' need' : '');
-    const t = document.createElement('span'); t.className = 't';
-    t.textContent = (i.caption.split('\n').find(l=>l.trim()) || '(no caption)');
-    const o = document.createElement('span'); o.className = 'o'; o.textContent = i.owner;
-    row.append(dot, t, o);
-    row.onclick = () => { store.cur = i.id; save(); render(); };
+    const row = el('div', i.id===store.cur ? 'cur' : '');
+    row.append(el('span', 'dot ' + statusOf(i) + (needsMoves(i) ? ' need' : '')),
+               el('span', 't', i.caption.split('\n').find(l=>l.trim()) || '(no caption)'),
+               el('span', 'o', i.owner));
+    row.onclick = () => { store.cur = i.id; openDim=null; save(); render(); };
     list.appendChild(row);
   }
   list.querySelector('.cur')?.scrollIntoView({block:'nearest'});
   renderView(vis);
 }
-
-function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
 
 // What is on screen now. The video column is only rebuilt when the post or the
 // video toggle changes, so tagging or deciding never reloads the Instagram embed.
@@ -171,6 +198,68 @@ function renderView(vis){
   shown = { id:i.id, embed:store.embed, left };
 }
 
+function setTags(i, dim, values){ store.tags[dim][i.id] = [...new Set(values)]; save(); render(); }
+
+function addPurpose(i, query){
+  const list = purposeList();
+  const m = L.matchPurpose(query, list);
+  let value = m.exact || m.matches[0];          // existing values win over creating near-duplicates
+  if (!value){
+    value = query.trim().toLowerCase().replace(/\s+/g,' ');
+    if (!value) return;
+    store.extraPurposes.push(value);
+  }
+  refocusNew = true;
+  const cur = L.tagsOf(i, store, 'purposes').values;
+  setTags(i, 'purposes', cur.includes(value) ? cur : [...cur, value]);
+}
+
+function dropdown(i, dim){
+  const t = L.tagsOf(i, store, dim);
+  const box = el('div', 'dd' + (openDim===dim ? ' open' : ''));
+  box.dataset.dim = dim;
+  const lbl = el('div','lbl', DIM_LABEL[dim]);
+  if (!t.confirmed && t.values.length) lbl.appendChild(el('em', null, 'dashed = my guess from the caption'));
+  box.appendChild(lbl);
+
+  const head = el('div','dd-head');
+  const tog = el('button','dd-toggle'); tog.type = 'button';
+  if (t.values.length) for (const v of t.values) tog.appendChild(el('span', 'chip ' + (t.confirmed ? 'on' : 'guess'), v));
+  else tog.appendChild(el('span','none', 'none, click to choose'));
+  tog.onclick = () => { openDim = openDim===dim ? null : dim; render(); };
+  head.appendChild(tog);
+  if (!t.confirmed && t.values.length){
+    const ok = el('button','dd-ok','✓ guess is right'); ok.type = 'button';
+    ok.onclick = () => setTags(i, dim, t.values);
+    head.appendChild(ok);
+  }
+  box.appendChild(head);
+
+  if (openDim===dim){
+    const panel = el('div','dd-panel');
+    const labels = [];
+    for (const v of optionsFor(dim)){
+      const lab = el('label');
+      const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = v; cb.checked = t.values.includes(v);
+      cb.onchange = () => setTags(i, dim, cb.checked ? [...t.values, v] : t.values.filter(x=>x!==v));
+      lab.append(cb, document.createTextNode(v));
+      panel.appendChild(lab); labels.push([v, lab]);
+    }
+    if (dim==='purposes'){
+      const inp = el('input','dd-new'); inp.placeholder = 'Type to filter, Enter to pick or add a new purpose';
+      inp.oninput = () => {
+        const ok = new Set(L.matchPurpose(inp.value, labels.map(x=>x[0])).matches);
+        for (const [v, lab] of labels) lab.style.display = ok.has(v) ? '' : 'none';
+      };
+      inp.onkeydown = e => { if (e.key==='Enter'){ e.preventDefault(); addPurpose(i, inp.value); } };
+      panel.appendChild(inp);
+      if (refocusNew){ refocusNew = false; queueMicrotask(() => inp.focus()); }
+    }
+    box.appendChild(panel);
+  }
+  return box;
+}
+
 function buildLeft(i, vis){
   const idx = vis.indexOf(i);
   const left = el('div');
@@ -182,7 +271,7 @@ function buildLeft(i, vis){
   left.appendChild(meta);
 
   const chips = el('div','chips');
-  for (const c of (i.collections.length ? i.collections : ['no collection'])) chips.appendChild(el('span','chip c',c));
+  for (const c of (i.collections.length ? i.collections : ['no collection'])) chips.appendChild(el('span','chip',c));
   left.appendChild(chips);
 
   if (i.note) left.appendChild(el('div','flag','Possible duplicate: '+i.note));
@@ -197,7 +286,7 @@ function buildLeft(i, vis){
   act.append(kb, db, ub);
   left.appendChild(act);
 
-  left.appendChild(tagSection(i));
+  for (const dim of L.DIMS) left.appendChild(dropdown(i, dim));
 
   left.appendChild(el('div', 'badge ' + (i.listed ? 'ok' : 'need'),
     i.listed ? 'Caption lists the moves. Typing them is optional.' : 'Caption is vague. Type the moves you see in the video.'));
@@ -212,7 +301,7 @@ function buildLeft(i, vis){
   left.appendChild(ta);
 
   left.appendChild(el('div','cap', i.caption || '(no caption)'));
-  left.appendChild(el('p','help','Shortcuts: ← → or J/L move · K keep · D discard · U clear · V toggle video · shortcuts pause while typing · everything auto-saves in this browser'));
+  left.appendChild(el('p','help','Shortcuts: ← → or J/L move · K keep · D discard · U clear · V toggle video · Esc closes a dropdown · shortcuts pause while typing or while a dropdown is open · everything auto-saves in this browser'));
   return left;
 }
 
@@ -229,56 +318,10 @@ function buildEmbed(i){
   return emb;
 }
 
-let refocusTagInput = false;
-function setTags(i, list){ store.tags[i.id] = [...new Set(list)]; save(); render(); }
-function toggleTag(i, t){
-  const cur = tagsOf(i);
-  setTags(i, cur.includes(t) ? cur.filter(x=>x!==t) : [...cur, t]);
-}
-function tagRow(i, label, names, hint){
-  const frag = document.createDocumentFragment();
-  const l = el('div','lbl',label); if (hint) l.appendChild(el('em',null,hint));
-  frag.appendChild(l);
-  const row = el('div','tags');
-  const cur = tagsOf(i), guess = !confirmed(i);
-  for (const t of names){
-    const b = el('button','tag' + (cur.includes(t) ? ' on' : '') + (guess && MUSCLES.includes(t) ? ' guess' : ''), t);
-    b.onclick = () => toggleTag(i, t);
-    row.appendChild(b);
-  }
-  frag.appendChild(row);
-  return [frag, row];
-}
-function tagSection(i){
-  const box = el('div');
-  const g = !confirmed(i) && i.tags.length;
-  const [mFrag, mRow] = tagRow(i, 'Muscles', MUSCLES, g ? 'dashed = my guess from the caption; click any tag to confirm or fix' : '');
-  if (g){
-    const ok = el('button','tag','✓ guess is right');
-    ok.onclick = () => setTags(i, tagsOf(i));
-    mRow.appendChild(ok);
-  }
-  box.appendChild(mFrag);
-  box.appendChild(tagRow(i, 'Role', ROLES)[0]);
-  const [frag, row] = tagRow(i, 'Your tags', store.custom, 'type and press Enter to add a new one');
-  const inp = el('input','tagin'); inp.placeholder = '+ new tag';
-  inp.onkeydown = e => {
-    if (e.key !== 'Enter') return;
-    const t = inp.value.trim().toLowerCase(); if (!t) return;
-    if (!store.custom.includes(t) && !MUSCLES.includes(t) && !ROLES.includes(t)) store.custom.push(t);
-    refocusTagInput = true;
-    setTags(i, [...tagsOf(i), t]);
-  };
-  row.appendChild(inp);
-  if (refocusTagInput){ refocusTagInput = false; queueMicrotask(() => inp.focus()); }
-  box.appendChild(frag);
-  return box;
-}
-
 function move(d){
   const vis = visible(); const n = vis.findIndex(i=>i.id===store.cur);
   const nx = vis[Math.min(vis.length-1, Math.max(0, n+d))];
-  if (nx){ store.cur = nx.id; save(); render(); }
+  if (nx){ store.cur = nx.id; openDim = null; save(); render(); }
 }
 function decide(val){
   const vis = visible(); const n = vis.findIndex(i=>i.id===store.cur);
@@ -286,12 +329,13 @@ function decide(val){
   if (val) store.decisions[store.cur]=val; else delete store.decisions[store.cur];
   // advance to the next post in the current filter (it may drop out of an "Undecided" view)
   const after = vis.slice(n+1).find(i=>visible().includes(i)) || visible()[0];
-  if (val && after) store.cur = after.id;
+  if (val && after){ store.cur = after.id; openDim = null; }
   save(); render();
 }
 
 document.addEventListener('keydown', e => {
-  if (e.target.tagName==='TEXTAREA' || e.target.tagName==='INPUT') return;
+  if (e.key==='Escape' && openDim){ openDim = null; render(); e.preventDefault(); return; }
+  if (openDim || e.target.tagName==='TEXTAREA' || e.target.tagName==='INPUT') return;
   const k = e.key.toLowerCase();
   if (k==='arrowright'||k==='l') move(1);
   else if (k==='arrowleft'||k==='j') move(-1);
@@ -303,11 +347,33 @@ document.addEventListener('keydown', e => {
   e.preventDefault();
 });
 
+// Clicking anywhere outside an open dropdown closes it.
+document.addEventListener('click', e => {
+  if (openDim && !e.target.closest('.dd')){ openDim = null; render(); }
+});
+
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById('toast'); t.textContent = msg;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.textContent = ''; }, 6000);
+}
+
+document.getElementById('importBtn').onclick = () => document.getElementById('importInput').click();
+document.getElementById('importInput').onchange = async e => {
+  const file = e.target.files[0]; e.target.value = '';
+  if (!file) return;
+  try {
+    const parsed = L.parseImport(await file.text());
+    store = L.mergeImport(store, parsed);
+    save(); render();
+    toast(`Imported ${parsed.records.length} posts. Your local decisions were kept where they differ.`);
+  } catch (err) {
+    toast(`Could not import ${file.name}: ${err.message}. Nothing was changed.`);
+  }
+};
+
 document.getElementById('exportBtn').onclick = () => {
-  const out = ITEMS.map(i => ({ id:i.id, url:i.url, owner:i.owner, collections:i.collections,
-    decision: store.decisions[i.id] || 'undecided',
-    tags: tagsOf(i), tagsConfirmed: confirmed(i), captionListsMoves: i.listed,
-    moves: store.moves[i.id] || '', note: store.notes[i.id] || '', caption: i.caption }));
+  const out = L.exportRecords(ITEMS, store, VOCAB);
   const blob = new Blob([JSON.stringify(out, null, 1)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'review-decisions.json'; a.click();
