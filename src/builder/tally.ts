@@ -43,6 +43,11 @@ export class Tally {
     return out;
   }
 
+  /** Sets still needed tonight: need x target, less tonight's planned credit. Chest's 12-set budget outranks core's 6. */
+  setsNeeded(m: BudgetMuscle): number {
+    return Math.max(0, this.need[m] * this.targets[m] - this.credit[m]);
+  }
+
   /** Tonight's need (0..1) less the work already planned tonight. */
   deficit(m: BudgetMuscle): number {
     const t = this.targets[m];

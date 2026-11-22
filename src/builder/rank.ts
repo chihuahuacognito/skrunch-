@@ -1,7 +1,7 @@
 import type { BudgetMuscle } from '../library/types';
 import { blockState } from './block';
 import { daysBetween } from './dates';
-import { FOCUS_SPECS, LIFTING_FOCUSES, type LiftingFocus } from './focus';
+import { FOCUS_SPECS, LIFTING_FOCUSES, type LiftingFocus, PATTERN_MUSCLES } from './focus';
 import { pickMainLifts } from './main';
 import { needs, targetsFor } from './needs';
 import { Tally } from './tally';
@@ -15,6 +15,7 @@ const MAX_INTERVALS_PER_WEEK = 2;
 const REST_AFTER_DAYS = 6;
 const REPEAT_DAYS = 4;
 const REPEAT_FACTOR = 0.5;
+const SLOT_WEIGHT = 0.5;
 
 /** Good check-in, fewer than 2 interval sessions in the rolling week, and never on a Lower day. */
 export function intervalsAllowed(input: BuilderInput, focus: FocusId): boolean {
@@ -53,7 +54,12 @@ function liftingScore(
   if (muscles.length === 0) return 0;
   // Weighted by each muscle's target, so the bigger budgets (chest 12-16) pull harder than small ones.
   const weight = muscles.reduce((a, m) => a + targets[m], 0);
-  const mean = muscles.reduce((a, m) => a + def[m] * targets[m], 0) / weight;
+  const poolNeed = muscles.reduce((a, m) => a + def[m] * targets[m], 0) / weight;
+  // A big pool dilutes one urgent muscle, so each main slot also counts its neediest own muscle.
+  const slotNeed = FOCUS_SPECS[focus].mainSlots
+    .map(patterns => Math.max(0, ...patterns.flatMap(p => PATTERN_MUSCLES[p] ?? []).filter(m => !blocked.has(m)).map(m => def[m])))
+    .reduce((a, b) => a + b, 0) / FOCUS_SPECS[focus].mainSlots.length;
+  const mean = SLOT_WEIGHT * slotNeed + (1 - SLOT_WEIGHT) * poolNeed;
   return focus === 'full-body' ? mean * FULL_BODY_FACTOR : mean;
 }
 

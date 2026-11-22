@@ -52,7 +52,7 @@ function buildLifting(input: BuilderInput, option: FocusOption, focus: LiftingFo
   const pickFor = (m: BudgetMuscle, key: string) =>
     rankCandidates(ctx(shape.supersetSets), { kind: 'superset', muscle: m, key })[0];
   const ranked = (muscles: readonly BudgetMuscle[]) => muscles
-    .map((m, i) => ({ m, i, d: tally.deficit(m) }))
+    .map((m, i) => ({ m, i, d: tally.setsNeeded(m) }))
     .filter(x => x.d > 0)
     .sort((a, b) => b.d - a.d || a.i - b.i)
     .map(x => x.m);

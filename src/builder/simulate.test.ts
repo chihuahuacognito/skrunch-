@@ -8,7 +8,7 @@ import type { CheckIn, History } from './types';
 import { FOCUS_SPECS, isLifting, type LiftingFocus } from './focus';
 import { rankFocuses } from './rank';
 import { buildSession } from './session';
-import { sessionCredit, TRAINED_CREDIT } from './volume';
+import { sessionCredit, TRAINED_CREDIT, weeklyVolume } from './volume';
 
 const START = '2026-11-01';
 const DAYS = 28;
@@ -79,6 +79,20 @@ describe('28 days of Good check-ins', () => {
       const perWeek = [1, 2, 3].map(week => [0, 1, 2, 3, 4, 5, 6].filter(i => trained.get(week * 7 + i)?.has(m) ?? false).length);
       expect({ m, everyWeek: perWeek.every(n => n >= 1) }).toEqual({ m, everyWeek: true });
       expect({ m, average: perWeek.reduce((a, b) => a + b, 0) / 3 >= 1.5 }).toEqual({ m, average: true });
+    }
+  });
+
+  // The builder manages a rolling 7-day window; calendar weeks cut that window, so one week can read up to one
+  // half-credit exercise (1.5 sets) short while the rolling total sits at the ceiling.
+  test('chest and back average at least the low end of their weekly range, and no week falls more than 1.5 sets short', () => {
+    const weeks = [1, 2, 3].map(week => {
+      const end = addDays(START, week * 7 + 6);
+      return weeklyVolume(lib, run.history.sessions.filter(s => daysBetween(addDays(START, week * 7), s.date) >= 0 && daysBetween(s.date, end) >= 0), end);
+    });
+    for (const m of ['chest', 'lats', 'midBack'] as const) {
+      const avg = weeks.reduce((a, v) => a + v[m], 0) / weeks.length;
+      expect({ m, avgAtLeastLow: avg >= BUDGET[m][0] }).toEqual({ m, avgAtLeastLow: true });
+      expect({ m, worstWeekOk: Math.min(...weeks.map(v => v[m])) >= BUDGET[m][0] - 1.5 }).toEqual({ m, worstWeekOk: true });
     }
   });
 
