@@ -5,6 +5,7 @@ import { weeklyTargets } from './budget';
 import { daysBetween } from './dates';
 import { FOCUS_SPECS, LIFTING_FOCUSES, type LiftingFocus } from './focus';
 import { unrecovered } from './recovery';
+import { isMainLift } from './select';
 import type { BuilderInput, FocusId, FocusOption, SessionDose } from './types';
 import { weeklyVolume } from './volume';
 
@@ -45,9 +46,8 @@ export function intervalsAllowed(input: BuilderInput, focus: FocusId): boolean {
 
 function hasMainCandidate(input: BuilderInput, patterns: Pattern[], blocked: Set<BudgetMuscle>): boolean {
   return input.library.some((e: Exercise) =>
-    e.type === 'strength' && e.mechanic === 'compound' && e.purposes.length === 0 && e.location.includes('gym')
-    && e.pattern !== null && patterns.includes(e.pattern) && input.history.feedback[e.id] !== 'never'
-    && e.primary.every(m => !blocked.has(m)));
+    e.type === 'strength' && e.purposes.length === 0 && e.location.includes('gym') && isMainLift(e, patterns)
+    && input.history.feedback[e.id] !== 'never' && e.primary.every(m => !blocked.has(m)));
 }
 
 function eligible(input: BuilderInput, focus: LiftingFocus, blocked: Set<BudgetMuscle>): boolean {

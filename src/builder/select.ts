@@ -1,5 +1,6 @@
 import type { BudgetMuscle, Exercise, Pattern } from '../library/types';
 import { daysBetween } from './dates';
+import { PATTERN_MUSCLES } from './focus';
 import type { FocusId, History, Place } from './types';
 
 export type SlotKind = 'main' | 'superset';
@@ -33,11 +34,18 @@ export function hash01(key: string): number {
 const CONTINUITY_DAYS = 14;
 const VARIETY_SESSIONS = 2;
 
+/** Compound lift in one of the patterns that trains that pattern's own muscle (so close-grip bench is not a chest main). */
+export function isMainLift(e: Exercise, patterns: Pattern[]): boolean {
+  if (e.mechanic !== 'compound' || e.pattern === null || !patterns.includes(e.pattern)) return false;
+  const native = PATTERN_MUSCLES[e.pattern] ?? [];
+  return e.primary.some(m => native.includes(m));
+}
+
 function eligible(ctx: SelectContext, slot: Slot, e: Exercise): boolean {
   if (e.type !== 'strength' || e.purposes.length > 0 || !e.location.includes(ctx.place)) return false;
   if (ctx.history.feedback[e.id] === 'never' || ctx.used.has(e.id)) return false;
   if (e.primary.some(m => ctx.blocked.has(m))) return false;
-  if (slot.kind === 'main') return e.mechanic === 'compound' && e.pattern !== null && (slot.patterns ?? []).includes(e.pattern);
+  if (slot.kind === 'main') return isMainLift(e, slot.patterns ?? []);
   return slot.muscle !== undefined && e.primary.includes(slot.muscle);
 }
 
