@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { CheckIn, Place } from '../builder';
 import { ThumbArc, type ArcItem } from '../features/arc/ThumbArc';
-import { localToday } from '../platform/today';
+import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
 import { checkInFor, saveCheckIn } from '../store/history';
 import { tokens } from '../theme/tokens';
@@ -24,7 +24,7 @@ export default function CheckInScreen() {
   const db = useDb();
   const router = useRouter();
   const { redo } = useLocalSearchParams<{ redo?: string }>();
-  const today = localToday();
+  const today = useToday();
   const saved = useLoad(() => checkInFor(db, today), [db, today]);
   const [place, setPlace] = useState<Place | null>(null);
 

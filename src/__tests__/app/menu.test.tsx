@@ -1,5 +1,5 @@
-import { fireEvent, screen } from '@testing-library/react-native';
-import { Text } from 'react-native';
+import { act, fireEvent, screen } from '@testing-library/react-native';
+import { AppState, Text, type AppStateStatus } from 'react-native';
 import type { BuilderInput, CheckIn, Place } from '../../builder';
 import { saveCheckIn } from '../../store/history';
 import { migrate } from '../../store/schema';
@@ -78,5 +78,20 @@ describe('screen', () => {
     await fireEvent.press(await screen.findByLabelText('Checked in OK at home. Change'));
     expect(await screen.findByText('Check-in stub')).toBeTruthy();
     expect(screen).toHaveSearchParams({ redo: '1' });
+  });
+
+  test('the menu left open overnight asks for the new day check-in', async () => {
+    const listeners: ((s: AppStateStatus) => void)[] = [];
+    jest.spyOn(AppState, 'addEventListener').mockImplementation((_t, fn) => {
+      listeners.push(fn as (s: AppStateStatus) => void);
+      return { remove: () => {} } as unknown as ReturnType<typeof AppState.addEventListener>;
+    });
+    await saveCheckIn(db, TODAY, 'good', 'gym');
+    await renderApp(routes, { db, initialUrl: '/menu' });
+    await screen.findByText('Tonight');
+    jest.setSystemTime(new Date(2026, 10, 23, 19, 0));
+    await act(async () => listeners.forEach(fn => fn('active')));
+    expect(await screen.findByText('Check-in stub')).toBeTruthy();
+    jest.restoreAllMocks();
   });
 });

@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { buildSession, rankFocuses, type BuilderInput } from '../builder';
 import { ThumbArc, type ArcItem } from '../features/arc/ThumbArc';
-import { localToday } from '../platform/today';
+import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
 import { checkInFor, loadHistory } from '../store/history';
 import { tokens } from '../theme/tokens';
@@ -27,7 +27,7 @@ export function menuItems(input: BuilderInput): ArcItem[] {
 export default function MenuScreen() {
   const db = useDb();
   const router = useRouter();
-  const today = localToday();
+  const today = useToday();
   const data = useLoad(async () => ({ checkIn: await checkInFor(db, today), history: await loadHistory(db) }), [db, today]);
 
   const items = useMemo(() => {

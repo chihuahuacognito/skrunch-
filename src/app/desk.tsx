@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { buildDeskReset } from '../builder';
 import { impact } from '../haptics';
-import { localToday } from '../platform/today';
+import { useToday } from '../ui/useToday';
 import { tokens } from '../theme/tokens';
 import { doseText } from '../ui/format';
 import { LIBRARY } from '../ui/library';
@@ -15,7 +15,7 @@ const BY_ID = new Map(LIBRARY.map(e => [e.id, e]));
 /** The desk reset, one item at a time. Holds have a timer that moves on by itself. Nothing is saved. */
 export default function DeskScreen() {
   const router = useRouter();
-  const today = localToday();
+  const today = useToday();
   const items = useMemo(() => buildDeskReset(LIBRARY, today).blocks.flatMap(b => b.items), [today]);
   const [index, setIndex] = useState(0);
   const timer = useCountdown(() => {

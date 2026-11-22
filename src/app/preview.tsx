@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { buildSession, type Block, type PlannedSession } from '../builder';
-import { localToday } from '../platform/today';
+import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
 import { checkInFor, loadHistory } from '../store/history';
 import { tokens } from '../theme/tokens';
@@ -29,7 +29,7 @@ export default function PreviewScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const option = parseOption(params.focus, params.dose);
-  const today = localToday();
+  const today = useToday();
   const data = useLoad(async () => ({ checkIn: await checkInFor(db, today), history: await loadHistory(db) }), [db, today]);
 
   const session = useMemo(() => {
