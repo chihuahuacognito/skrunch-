@@ -1,5 +1,6 @@
 import type { BudgetMuscle } from '../library/types';
 import { MUSCLE_GROUP } from './focus';
+import { rankFocuses } from './rank';
 import { buildSession } from './session';
 import { byId, emptyHistory, hist, lib, logged } from './test-utils/fixtures';
 import type { BlockKind, BuilderInput, FocusId, PlannedSession } from './types';
@@ -147,4 +148,24 @@ test.each(LIFTING)('%s warm-up drills target tonight\'s regions', f => {
     expect(drills).toHaveLength(3);
     for (const d of drills) expect(d.muscles.some(m => regions.has(m))).toBe(true);
   }
+});
+
+test('a focus offered by the menu always fills every main slot (menu and builder share one blocking rule)', () => {
+  // Glutes are near their weekly ceiling and quads and hamstrings are recovering: no leg main lift fits tonight.
+  const h = hist([
+    logged('2026-11-17', 'lower', [['Barbell_Hip_Thrust', 6]]),
+    logged('2026-11-19', 'lower', [['Pull_Through', 3]]),
+    logged('2026-11-21', 'lower', [['Barbell_Squat', 3], ['Romanian_Deadlift', 3]]),
+  ]);
+  const opts = rankFocuses(input({ history: h }));
+  for (const o of opts.filter(x => ['chest-back', 'lower', 'shoulders-arms', 'full-body'].includes(x.focus))) {
+    const s = buildSession(input({ history: h }), o);
+    expect({ focus: o.focus, mains: itemsOf(s, ['main']).length }).toEqual({ focus: o.focus, mains: 2 });
+  }
+});
+
+test('a lifting day gets an interval finisher only when Lower is already ruled out for tomorrow', () => {
+  expect(good('chest-back').intervals).toBe(false);
+  const lowerYesterday = hist([logged('2026-11-21', 'lower', [['Barbell_Squat', 3], ['Romanian_Deadlift', 3]])]);
+  expect(good('chest-back', { history: lowerYesterday }).intervals).toBe(true);
 });

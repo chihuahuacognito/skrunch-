@@ -7,7 +7,7 @@ export interface FocusSpec { mainSlots: Pattern[][]; pool: BudgetMuscle[] }
 export const FOCUS_SPECS: Record<LiftingFocus, FocusSpec> = {
   'chest-back': {
     mainSlots: [['push-horizontal'], ['pull-horizontal', 'pull-vertical']],
-    pool: ['chest', 'lats', 'midBack', 'rearDelts', 'core'],
+    pool: ['chest', 'lats', 'midBack', 'rearDelts', 'core', 'sideDelts'],
   },
   lower: {
     mainSlots: [['squat', 'lunge'], ['hinge']],
@@ -19,7 +19,7 @@ export const FOCUS_SPECS: Record<LiftingFocus, FocusSpec> = {
   },
   'full-body': {
     mainSlots: [['squat', 'hinge', 'lunge'], ['push-horizontal', 'pull-horizontal', 'pull-vertical']],
-    pool: ['chest', 'lats', 'midBack', 'quads', 'hamstrings', 'glutes', 'sideDelts', 'rearDelts', 'biceps', 'triceps', 'core', 'calves'],
+    pool: ['chest', 'lats', 'midBack', 'quads', 'hamstrings', 'glutes', 'sideDelts', 'rearDelts', 'biceps', 'triceps', 'core'],
   },
 };
 
