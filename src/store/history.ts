@@ -1,5 +1,5 @@
 import type { CheckIn, Feedback, History, LoggedExercise, LoggedSet, Place, SessionLog } from '../builder';
-import type { SqlDb, SqlParam } from './sql';
+import { inTransaction, type SqlDb, type SqlParam } from './sql';
 
 export async function saveCheckIn(db: SqlDb, date: string, value: CheckIn, place: Place): Promise<void> {
   await db.runAsync(
@@ -26,30 +26,28 @@ const num = (v: unknown): SqlParam => {
   throw new TypeError(`expected a number or null, got ${JSON.stringify(v)}`);
 };
 
+/** Inserts one logged session; the caller owns the transaction. */
+export async function insertSession(tx: SqlDb, log: SessionLog): Promise<void> {
+  const { lastInsertRowId: sessionId } = await tx.runAsync(
+    'INSERT INTO sessions (date, focus, intervals) VALUES (?, ?, ?)', log.date, log.focus, log.intervals ? 1 : 0,
+  );
+  for (const [i, ex] of log.exercises.entries()) {
+    const { lastInsertRowId: exId } = await tx.runAsync(
+      'INSERT INTO logged_exercises (session_id, position, exercise_id, target_min, target_max, chip) VALUES (?, ?, ?, ?, ?, ?)',
+      sessionId, i, ex.exerciseId, num(ex.targetMin), num(ex.targetMax), ex.chip,
+    );
+    for (const [j, set] of ex.sets.entries()) {
+      await tx.runAsync(
+        'INSERT INTO logged_sets (logged_exercise_id, position, weight, reps, seconds) VALUES (?, ?, ?, ?, ?)',
+        exId, j, num(set.weight), num(set.reps), num(set.seconds),
+      );
+    }
+  }
+}
+
 /** Saves one logged session in a single transaction: a half-written session never appears. */
 export async function saveSession(db: SqlDb, log: SessionLog): Promise<void> {
-  await db.execAsync('BEGIN');
-  try {
-    const { lastInsertRowId: sessionId } = await db.runAsync(
-      'INSERT INTO sessions (date, focus, intervals) VALUES (?, ?, ?)', log.date, log.focus, log.intervals ? 1 : 0,
-    );
-    for (const [i, ex] of log.exercises.entries()) {
-      const { lastInsertRowId: exId } = await db.runAsync(
-        'INSERT INTO logged_exercises (session_id, position, exercise_id, target_min, target_max, chip) VALUES (?, ?, ?, ?, ?, ?)',
-        sessionId, i, ex.exerciseId, num(ex.targetMin), num(ex.targetMax), ex.chip,
-      );
-      for (const [j, set] of ex.sets.entries()) {
-        await db.runAsync(
-          'INSERT INTO logged_sets (logged_exercise_id, position, weight, reps, seconds) VALUES (?, ?, ?, ?, ?)',
-          exId, j, num(set.weight), num(set.reps), num(set.seconds),
-        );
-      }
-    }
-    await db.execAsync('COMMIT');
-  } catch (e) {
-    await db.execAsync('ROLLBACK');
-    throw e;
-  }
+  await inTransaction(db, tx => insertSession(tx, log));
 }
 
 type SessionRow = { id: number; date: string; focus: SessionLog['focus']; intervals: number };

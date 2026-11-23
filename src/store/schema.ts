@@ -1,7 +1,7 @@
 import type { SqlDb } from './sql';
 
 /** Ordered migrations; index + 1 is the schema version stored in PRAGMA user_version. */
-const MIGRATIONS: string[] = [
+export const MIGRATIONS: string[] = [
   `CREATE TABLE check_ins (date TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL, place TEXT NOT NULL);
    CREATE TABLE feedback (exercise_id TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);
    CREATE TABLE sessions (id INTEGER PRIMARY KEY, date TEXT NOT NULL, focus TEXT NOT NULL, intervals INTEGER NOT NULL);
@@ -13,6 +13,8 @@ const MIGRATIONS: string[] = [
      weight REAL, reps INTEGER, seconds INTEGER);
    CREATE INDEX logged_exercises_session ON logged_exercises(session_id);
    CREATE INDEX logged_sets_exercise ON logged_sets(logged_exercise_id);`,
+  `CREATE TABLE active_workout (id INTEGER PRIMARY KEY CHECK (id = 1), date TEXT NOT NULL, state TEXT NOT NULL);
+   CREATE TABLE settings (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);`,
 ];
 
 /** Brings the database up to the latest schema. Safe to run on every launch. */

@@ -75,3 +75,10 @@ test('feedback is set, replaced and cleared', async () => {
   await setFeedback(db, 'Plank', null);
   expect((await loadHistory(db)).feedback).toEqual({});
 });
+
+test('a failed session save leaves nothing behind', async () => {
+  const bad = session('2026-11-22');
+  (bad.exercises[0].sets[1] as { weight: unknown }).weight = '62.5';
+  await expect(saveSession(db, bad)).rejects.toThrow(TypeError);
+  expect((await loadHistory(db)).sessions).toEqual([]);
+});
