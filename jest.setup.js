@@ -24,3 +24,6 @@ jest.mock('expo-notifications', () => ({
   dismissNotificationAsync: jest.fn(async () => {}),
   addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
 }));
+
+// expo-file-system's native folder picker and SAF writes, as an in-memory fake (see jest/expoFileSystemMock.js).
+jest.mock('expo-file-system', () => require('./jest/expoFileSystemMock'));

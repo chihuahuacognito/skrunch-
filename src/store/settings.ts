@@ -10,3 +10,7 @@ export async function setSetting(db: SqlDb, key: string, value: string): Promise
     'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', key, value,
   );
 }
+
+export async function deleteSetting(db: SqlDb, key: string): Promise<void> {
+  await db.runAsync('DELETE FROM settings WHERE key = ?', key);
+}

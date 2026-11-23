@@ -6,6 +6,7 @@
     "@types/jest": "30.0.0",
     "expo": "~58.0.26",
     "expo-constants": "~58.0.16",
+    "expo-file-system": "~58.0.14",
     "expo-haptics": "~58.0.8",
     "expo-keep-awake": "~58.0.4",
     "expo-linking": "~58.0.17",
