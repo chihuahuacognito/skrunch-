@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { Alert, Text } from 'react-native';
-import { buildSession, INCREMENT_KG, type PlannedSession } from '../../builder';
+import { buildSession, INCREMENT_KG, swapCandidates, type PlannedSession } from '../../builder';
 import { emptyHistory } from '../../builder/test-utils/fixtures';
 import { loadHistory, saveCheckIn } from '../../store/history';
 import { migrate } from '../../store/schema';
@@ -203,4 +203,44 @@ test('discard asks, then drops the workout', async () => {
   expect(await loadDraft(db, TODAY)).toBeNull();
   expect((await loadHistory(db)).sessions).toHaveLength(0);
   alert.mockRestore();
+});
+
+describe('exercise options', () => {
+  const mainName = NAME.get(mainItem.exerciseId)!;
+  const input = { library: LIBRARY, history: emptyHistory(), today: TODAY, checkIn: 'good' as const, place: 'gym' as const };
+
+  test('swap replaces an untouched main lift with a candidate', async () => {
+    const pick = swapCandidates(input, session, mainB, 0)[0];
+    await open(atMain(false));
+    await fireEvent.press(await screen.findByLabelText(`Options for ${mainName}`));
+    await fireEvent.press(screen.getByLabelText('Swap'));
+    await fireEvent.press(screen.getByLabelText(`Swap to ${pick.name}`));
+    expect(await screen.findByText(pick.name)).toBeTruthy();
+    expect(screen.queryByText(mainName)).toBeNull();
+    await waitFor(async () => expect((await draft()).session.blocks[mainB].items[0].exerciseId).toBe(pick.id));
+  });
+
+  test('swap is not offered once a set is done', async () => {
+    await open(atMain(true));
+    await fireEvent.press(await screen.findByLabelText('Log set 1'));
+    await fireEvent.press(screen.getByLabelText(`Options for ${mainName}`));
+    expect(screen.queryByLabelText('Swap')).toBeNull();
+    expect(screen.getByLabelText('Never again')).toBeTruthy();
+  });
+
+  test('feedback is saved, and tapping it again clears it', async () => {
+    await open(atMain(false));
+    await fireEvent.press(await screen.findByLabelText(`Options for ${mainName}`));
+    await fireEvent.press(screen.getByLabelText('Never again'));
+    await waitFor(async () => expect((await loadHistory(db)).feedback[mainItem.exerciseId]).toBe('never'));
+    expect(screen.getByLabelText('Never again')).toBeSelected();
+    await fireEvent.press(screen.getByLabelText('Never again'));
+    await waitFor(async () => expect((await loadHistory(db)).feedback[mainItem.exerciseId]).toBeUndefined());
+  });
+
+  test('an exercise without a source has no post link', async () => {
+    await open(atMain(false));
+    await fireEvent.press(await screen.findByLabelText(`Options for ${mainName}`));
+    expect(screen.queryByLabelText('Open the original post')).toBeNull();
+  });
 });

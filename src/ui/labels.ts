@@ -1,4 +1,4 @@
-import type { CheckIn, Chip, SessionDose, SessionKind } from '../builder';
+import type { CheckIn, Chip, Feedback, SessionDose, SessionKind } from '../builder';
 
 export const FOCUS_LABEL: Record<SessionKind, string> = {
   'chest-back': 'Chest / Back',
@@ -29,6 +29,8 @@ export const GUIDANCE = [
   'Zone 2: 90-150 min a week.',
   'Protein: 1.6-2.2 g per kg a day - dal, paneer, curd, soya chunks, eggs, chicken.',
 ];
+
+export const FEEDBACK_LABEL: Record<Feedback, string> = { more: 'More of this', less: 'Less of this', never: 'Never again' };
 
 export const DESK_RESET_HINT = '5-10 min stretch, no check-in';
 

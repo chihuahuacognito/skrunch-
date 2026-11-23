@@ -3,14 +3,16 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { INCREMENT_KG, type PlannedExercise } from '../builder';
+import { INCREMENT_KG, replaceItem, swapCandidates, type BuilderInput, type CheckIn, type Feedback, type History, type PlannedExercise } from '../builder';
 import { ChipRow } from '../features/workout/ChipRow';
 import { EndSheet } from '../features/workout/EndSheet';
+import { ExerciseSheet } from '../features/workout/ExerciseSheet';
 import { NumberEditor } from '../features/workout/NumberEditor';
 import { RestBanner } from '../features/workout/RestBanner';
 import { SetRow } from '../features/workout/SetRow';
 import { impact, tick as tickHaptic } from '../haptics';
 import { useDb } from '../store/DbContext';
+import { checkInFor, loadHistory, setFeedback } from '../store/history';
 import type { SqlDb } from '../store/sql';
 import { completeWorkout, discardWorkout, loadDraft, saveDraft } from '../store/workout';
 import { tokens } from '../theme/tokens';
@@ -21,7 +23,7 @@ import { useLoad } from '../ui/useLoad';
 import { useOnceUntilFocus } from '../ui/useOnceUntilFocus';
 import { useRemaining } from '../ui/useRemaining';
 import { useToday } from '../ui/useToday';
-import { canTick, reduceWorkout, stepsOf, summaryOf, type ItemRef, type WorkoutState } from '../workout';
+import { canTick, prefillSets, reduceWorkout, stepsOf, summaryOf, type ItemRef, type WorkoutState } from '../workout';
 
 const BY_ID = new Map(LIBRARY.map(e => [e.id, e]));
 const nameOf = (id: string) => BY_ID.get(id)?.name ?? id;
@@ -32,10 +34,13 @@ type Field = 'weight' | 'reps' | 'seconds';
 export default function WorkoutScreen() {
   const db = useDb();
   const today = useToday();
-  const draft = useLoad(() => loadDraft(db, today), [db, today]);
-  if (draft === undefined) return <View style={styles.root} />;
-  if (draft === null) return <Redirect href="/" />;
-  return <Workout initial={draft} />;
+  const data = useLoad(async () => {
+    const draft = await loadDraft(db, today);
+    return draft ? { draft, history: await loadHistory(db), checkIn: (await checkInFor(db, today))?.value ?? null } : null;
+  }, [db, today]);
+  if (data === undefined) return <View style={styles.root} />;
+  if (data === null) return <Redirect href="/" />;
+  return <Workout initial={data.draft} history={data.history} checkIn={data.checkIn} />;
 }
 
 /**
@@ -75,13 +80,21 @@ function rirText(rir: [number, number] | null): string | null {
   return `RIR ${rir[0] === rir[1] ? rir[0] : `${rir[0]}-${rir[1]}`}`;
 }
 
-function Workout({ initial }: { initial: WorkoutState }) {
+/** Tonight's inputs for the swap list; null without a check-in (swaps are then not offered). */
+function swapInput(state: WorkoutState, history: History, checkIn: CheckIn | null): BuilderInput | null {
+  if (!checkIn) return null;
+  return { library: LIBRARY, history, today: state.session.date, checkIn, place: state.session.place };
+}
+
+function Workout({ initial, history, checkIn }: { initial: WorkoutState; history: History; checkIn: CheckIn | null }) {
   const db = useDb();
   const router = useRouter();
   const [state, dispatch] = useReducer(reduceWorkout, initial);
   const writer = useDraftWriter(db, state);
   const once = useOnceUntilFocus();
   const [ending, setEnding] = useState(false);
+  const [options, setOptions] = useState<ItemRef | null>(null);
+  const [feedback, setFeedbackState] = useState(history.feedback);
   const [editing, setEditing] = useState<{ ref: ItemRef; set: number; field: Field } | null>(null);
   const [timing, setTiming] = useState<{ ref: ItemRef; set: number } | null>(null);
   const timingRef = useRef(timing);
@@ -153,6 +166,31 @@ function Workout({ initial }: { initial: WorkoutState }) {
     ]);
   };
 
+  const input = swapInput(state, history, checkIn);
+  const optionsItem = options ? session.blocks[options.block].items[options.item] : null;
+  const swaps = options && optionsItem?.slot && input && !state.logs[options.block][options.item].sets.some(x => x.done)
+    ? swapCandidates(input, session, options.block, options.item)
+    : null;
+  const swapTo = (exerciseId: string) => {
+    if (!options || !input) return;
+    const item = replaceItem(input, session, options.block, options.item, exerciseId).blocks[options.block].items[options.item];
+    const exercise = BY_ID.get(exerciseId)!;
+    setEditing(null);
+    dispatch({ type: 'swap', ref: options, item, sets: prefillSets(item, exercise, history) });
+    setOptions(null);
+  };
+  const giveFeedback = async (value: Feedback | null) => {
+    if (!optionsItem) return;
+    const id = optionsItem.exerciseId;
+    await setFeedback(db, id, value);
+    setFeedbackState(f => {
+      const next = { ...f };
+      if (value === null) delete next[id];
+      else next[id] = value;
+      return next;
+    });
+  };
+
   const allDone = (ref: ItemRef) => state.logs[ref.block][ref.item].sets.every(s => s.done);
   const restFrom = state.rest?.from;
   const restItem = restFrom ? session.blocks[restFrom.block]?.items[restFrom.item] : undefined;
@@ -170,6 +208,14 @@ function Workout({ initial }: { initial: WorkoutState }) {
         <View style={styles.cardHead}>
           {supersetLetter ? <Text style={styles.letter}>{`${supersetLetter}${i + 1}`}</Text> : null}
           <Text style={styles.name}>{nameOf(item.exerciseId)}</Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Options for ${nameOf(item.exerciseId)}`}
+            onPress={() => setOptions(ref)}
+            style={styles.more}
+          >
+            <Text style={styles.moreText}>···</Text>
+          </Pressable>
         </View>
         <Text style={styles.dose}>{[doseText(item.sets, item.dose), rir].filter(Boolean).join(' · ')}</Text>
         {log.sets.map((entry, set) => {
@@ -266,6 +312,14 @@ function Workout({ initial }: { initial: WorkoutState }) {
           <Text style={[styles.navText, styles.nextText]}>{last ? 'Finish' : 'Next'}</Text>
         </Pressable>
       </View>
+      <ExerciseSheet
+        exercise={optionsItem ? BY_ID.get(optionsItem.exerciseId) ?? null : null}
+        swaps={swaps}
+        feedback={optionsItem ? feedback[optionsItem.exerciseId] : undefined}
+        onSwap={swapTo}
+        onFeedback={value => void giveFeedback(value)}
+        onClose={() => setOptions(null)}
+      />
       <EndSheet visible={ending} onFinish={() => void finish()} onDiscard={discard} onClose={() => setEnding(false)} />
     </SafeAreaView>
   );
@@ -280,7 +334,9 @@ const styles = StyleSheet.create({
   endText: { color: tokens.color.accent, fontSize: tokens.font.size.body, fontWeight: '600' },
   scroll: { padding: tokens.space.lg, gap: tokens.space.lg, paddingBottom: tokens.space.xxl },
   card: { gap: tokens.space.xs },
-  cardHead: { flexDirection: 'row', alignItems: 'baseline', gap: tokens.space.sm },
+  cardHead: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.sm },
+  more: { minHeight: 44, minWidth: 44, alignItems: 'center', justifyContent: 'center' },
+  moreText: { color: tokens.color.inkDim, fontSize: tokens.font.size.lead, fontWeight: '700' },
   letter: { color: tokens.color.accent, fontSize: tokens.font.size.body, fontWeight: '700' },
   name: { flex: 1, color: tokens.color.ink, fontSize: tokens.font.size.lead, fontWeight: '700' },
   dose: { color: tokens.color.inkDim, fontSize: tokens.font.size.sub, marginBottom: tokens.space.xs },
