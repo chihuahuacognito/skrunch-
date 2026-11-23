@@ -8,6 +8,7 @@ import { ThumbArc, type ArcItem } from '../features/arc/ThumbArc';
 import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
 import { checkInFor, saveCheckIn } from '../store/history';
+import { loadDraft } from '../store/workout';
 import { tokens } from '../theme/tokens';
 import { CHECKIN_HINT, CHECKIN_LABEL, DESK_RESET_HINT, FOCUS_LABEL, dayLabel } from '../ui/labels';
 import { useLoad } from '../ui/useLoad';
@@ -26,11 +27,13 @@ export default function CheckInScreen() {
   const router = useRouter();
   const { redo } = useLocalSearchParams<{ redo?: string }>();
   const today = useToday();
-  const saved = useLoad(() => checkInFor(db, today), [db, today]);
+  const loaded = useLoad(async () => ({ draft: await loadDraft(db, today), saved: await checkInFor(db, today) }), [db, today]);
   const [place, setPlace] = useState<Place | null>(null);
   const once = useOnceUntilFocus();
 
-  if (saved === undefined) return <View style={styles.root} />;
+  if (loaded === undefined) return <View style={styles.root} />;
+  const { draft, saved } = loaded;
+  if (draft) return <Redirect href="/workout" />;
   if (saved && redo !== '1') return <Redirect href="/menu" />;
   const current: Place = place ?? saved?.place ?? 'gym';
 

@@ -1,4 +1,4 @@
-import type { CheckIn, SessionDose, SessionKind } from '../builder';
+import type { CheckIn, Chip, SessionDose, SessionKind } from '../builder';
 
 export const FOCUS_LABEL: Record<SessionKind, string> = {
   'chest-back': 'Chest / Back',
@@ -20,6 +20,8 @@ export const CHECKIN_HINT: Record<CheckIn, string> = {
 };
 
 export const DOSE_LABEL: Record<SessionDose, string> = { full: 'Full', reduced: 'Reduced', minimum: 'Minimum dose' };
+
+export const CHIP_LABEL: Record<Chip, string> = { easy: 'Easy', right: 'Right', hard: 'Hard' };
 
 export const DESK_RESET_HINT = '5-10 min stretch, no check-in';
 

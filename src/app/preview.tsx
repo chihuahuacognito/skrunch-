@@ -6,11 +6,14 @@ import { buildSession, type Block, type PlannedSession } from '../builder';
 import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
 import { checkInFor, loadHistory } from '../store/history';
+import { loadDraft, saveDraft } from '../store/workout';
 import { tokens } from '../theme/tokens';
 import { blockTitle, doseText, parseOption, weightText } from '../ui/format';
 import { FOCUS_LABEL } from '../ui/labels';
 import { LIBRARY } from '../ui/library';
 import { useLoad } from '../ui/useLoad';
+import { useOnceUntilFocus } from '../ui/useOnceUntilFocus';
+import { startWorkout } from '../workout';
 
 const NAME = new Map(LIBRARY.map(e => [e.id, e.name]));
 
@@ -31,6 +34,7 @@ export default function PreviewScreen() {
   const option = parseOption(params.focus, params.dose);
   const today = useToday();
   const data = useLoad(async () => ({ checkIn: await checkInFor(db, today), history: await loadHistory(db) }), [db, today]);
+  const once = useOnceUntilFocus();
 
   const session = useMemo(() => {
     if (!option || !data?.checkIn) return null;
@@ -54,6 +58,19 @@ export default function PreviewScreen() {
     );
   }
 
+  const history = data.history;
+  // A workout already in progress today is resumed, never replaced.
+  const start = async () => {
+    if (!once.claim()) return;
+    try {
+      if (!(await loadDraft(db, today))) await saveDraft(db, startWorkout(session, LIBRARY, history, Date.now()));
+    } catch (e) {
+      once.release();
+      throw e;
+    }
+    router.replace('/workout');
+  };
+
   let supersetIndex = 0;
   return (
     <SafeAreaView style={styles.root}>
@@ -71,10 +88,9 @@ export default function PreviewScreen() {
         })}
       </ScrollView>
       <View style={styles.footer}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Start" disabled style={[styles.start, styles.startDisabled]}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Start" onPress={start} style={styles.start}>
           <Text style={styles.startText}>Start</Text>
         </Pressable>
-        <Text style={styles.caption}>Logging arrives in the next update</Text>
       </View>
     </SafeAreaView>
   );
@@ -116,11 +132,9 @@ const styles = StyleSheet.create({
   name: { flex: 1, color: tokens.color.ink, fontSize: tokens.font.size.body },
   dose: { color: tokens.color.ink, fontSize: tokens.font.size.body, fontVariant: ['tabular-nums'] },
   weight: { color: tokens.color.inkDim, fontSize: tokens.font.size.sub, minWidth: 56, textAlign: 'right' },
-  footer: { padding: tokens.space.lg, gap: tokens.space.xs, borderTopColor: tokens.color.line, borderTopWidth: 1 },
+  footer: { padding: tokens.space.lg, borderTopColor: tokens.color.line, borderTopWidth: 1 },
   start: { minHeight: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.accent },
-  startDisabled: { opacity: 0.4 },
   startText: { color: tokens.color.bg, fontSize: tokens.font.size.body, fontWeight: '700' },
-  caption: { color: tokens.color.inkDim, fontSize: tokens.font.size.sub, textAlign: 'center' },
   rest: { justifyContent: 'center', alignItems: 'center', gap: tokens.space.xl, padding: tokens.space.lg },
   restText: { color: tokens.color.ink, fontSize: tokens.font.size.lead, textAlign: 'center' },
   secondary: { minHeight: 44, justifyContent: 'center', paddingHorizontal: tokens.space.lg },

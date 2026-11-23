@@ -1,4 +1,4 @@
-import { blockTitle, doseText, parseOption, weightText } from './format';
+import { blockTitle, clock, doseText, parseOption, secondsText, weightText } from './format';
 
 test('reps dose text', () => {
   expect(doseText(3, { format: 'reps', min: 6, max: 10 })).toBe('3 × 6-10');
@@ -33,4 +33,13 @@ test('weight text', () => {
   expect(weightText(62.5)).toBe('62.5 kg');
   expect(weightText(0)).toBe('Bodyweight');
   expect(weightText(null)).toBeNull();
+});
+
+test('clock and seconds text', () => {
+  expect(clock(150)).toBe('2:30');
+  expect(clock(9)).toBe('0:09');
+  expect(clock(0)).toBe('0:00');
+  expect(secondsText(30)).toBe('30 s');
+  expect(secondsText(480)).toBe('8 min');
+  expect(secondsText(90)).toBe('90 s');
 });

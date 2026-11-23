@@ -5,6 +5,11 @@ import { migrate } from '../../store/schema';
 import type { SqlDb } from '../../store/sql';
 import { nodeDb } from '../../store/test-utils/nodeDb';
 import { renderApp } from '../../test-utils/renderApp';
+import { buildSession } from '../../builder';
+import { emptyHistory } from '../../builder/test-utils/fixtures';
+import { loadDraft, saveDraft } from '../../store/workout';
+import { LIBRARY } from '../../ui/library';
+import { reduceWorkout, startWorkout } from '../../workout';
 import PreviewScreen from '../../app/preview';
 
 const TODAY = '2026-11-22';
@@ -21,6 +26,7 @@ const routes = {
   index: () => <Text>Check-in stub</Text>,
   menu: () => <Text>Menu stub</Text>,
   preview: PreviewScreen,
+  workout: () => <Text>Workout stub</Text>,
 };
 
 test('a chest/back preview lists its blocks and minutes', async () => {
@@ -56,8 +62,20 @@ test('rest shows the rest message and goes back to the menu', async () => {
   expect(await screen.findByText('Menu stub')).toBeTruthy();
 });
 
-test('start waits for the next update', async () => {
+test('start begins the workout', async () => {
   await renderApp(routes, { db, initialUrl: '/preview?focus=lower&dose=full' });
-  expect(await screen.findByLabelText('Start')).toBeDisabled();
-  expect(screen.getByText('Logging arrives in the next update')).toBeTruthy();
+  await fireEvent.press(await screen.findByLabelText('Start'));
+  expect(await screen.findByText('Workout stub')).toBeTruthy();
+  expect(screen).toHavePathname('/workout');
+  expect((await loadDraft(db, TODAY))?.session.focus).toBe('lower');
+});
+
+test('start resumes an existing workout instead of replacing it', async () => {
+  const s = buildSession({ library: LIBRARY, history: emptyHistory(), today: TODAY, checkIn: 'good', place: 'gym' }, { focus: 'chest-back', dose: 'full' });
+  const ticked = reduceWorkout(startWorkout(s, LIBRARY, emptyHistory(), 0), { type: 'tick', ref: { block: 0, item: 0 }, set: 0, now: 1 });
+  await saveDraft(db, ticked);
+  await renderApp(routes, { db, initialUrl: '/preview?focus=lower&dose=full' });
+  await fireEvent.press(await screen.findByLabelText('Start'));
+  expect(await screen.findByText('Workout stub')).toBeTruthy();
+  expect(await loadDraft(db, TODAY)).toEqual(ticked);
 });

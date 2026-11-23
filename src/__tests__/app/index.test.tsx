@@ -5,6 +5,11 @@ import { migrate } from '../../store/schema';
 import type { SqlDb } from '../../store/sql';
 import { nodeDb } from '../../store/test-utils/nodeDb';
 import { renderApp } from '../../test-utils/renderApp';
+import { buildSession } from '../../builder';
+import { emptyHistory } from '../../builder/test-utils/fixtures';
+import { saveDraft } from '../../store/workout';
+import { LIBRARY } from '../../ui/library';
+import { startWorkout } from '../../workout';
 import CheckInScreen from '../../app/index';
 
 jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
@@ -22,6 +27,7 @@ const routes = {
   index: CheckInScreen,
   menu: () => <Text>Menu stub</Text>,
   desk: () => <Text>Desk stub</Text>,
+  workout: () => <Text>Workout stub</Text>,
 };
 
 test('first open shows the check-in', async () => {
@@ -71,4 +77,12 @@ test('a second tap while the first check-in is still saving is ignored', async (
   await act(async () => release());
   await screen.findByText('Menu stub');
   expect(await checkInFor(db, TODAY)).toEqual({ value: 'ok', place: 'gym' });
+});
+
+test('a workout in progress opens straight into it', async () => {
+  const s = buildSession({ library: LIBRARY, history: emptyHistory(), today: TODAY, checkIn: 'good', place: 'gym' }, { focus: 'lower', dose: 'full' });
+  await saveDraft(db, startWorkout(s, LIBRARY, emptyHistory(), 0));
+  await renderApp(routes, { db });
+  expect(await screen.findByText('Workout stub')).toBeTruthy();
+  expect(screen).toHavePathname('/workout');
 });

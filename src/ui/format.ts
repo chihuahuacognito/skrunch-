@@ -33,6 +33,17 @@ export function weightText(weight: number | null): string | null {
   return weight === 0 ? 'Bodyweight' : `${weight} kg`;
 }
 
+/** 150 -> '2:30'. */
+export function clock(seconds: number): string {
+  const s = Math.max(0, Math.round(seconds));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+/** 30 -> '30 s', 480 -> '8 min'; whole minutes read as minutes. */
+export function secondsText(seconds: number): string {
+  return seconds >= 60 && seconds % 60 === 0 ? `${seconds / 60} min` : `${seconds} s`;
+}
+
 const FOCUSES: readonly FocusId[] = ['chest-back', 'lower', 'shoulders-arms', 'full-body', 'conditioning', 'mobility', 'rest'];
 const DOSES: readonly SessionDose[] = ['full', 'reduced', 'minimum'];
 
