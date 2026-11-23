@@ -1,5 +1,5 @@
-import { nextLoad, prescribeReps, rirFor } from './prescribe';
-import { BENCH, byId, emptyHistory, hist } from './test-utils/fixtures';
+import { lastLog, nextLoad, prescribeReps, rirFor } from './prescribe';
+import { BENCH, byId, emptyHistory, hist, logged } from './test-utils/fixtures';
 import type { Chip, History } from './types';
 import type { Exercise } from '../library/types';
 
@@ -63,4 +63,14 @@ test('a set logged in seconds never counts as reaching a rep target', () => {
   const h = histWith(bench, { reps: 10, targetMax: 10, weight: 60, chip: null });
   h.sessions[0].exercises[0].sets = h.sessions[0].exercises[0].sets.map(s => ({ ...s, reps: null, seconds: 30 }));
   expect(nextLoad(bench, h, true)).toEqual({ weight: 60, progressed: false });
+});
+
+test('lastLog returns the most recent logged entry with sets', () => {
+  const h = hist([
+    logged('2026-11-10', 'chest-back', [[BENCH, 3]], { weight: 50 }),
+    logged('2026-11-14', 'chest-back', [[BENCH, 3]], { weight: 55 }),
+    logged('2026-11-16', 'chest-back', [[BENCH, 0]], { weight: 70 }),
+  ]);
+  expect(lastLog(BENCH, h)?.sets[0].weight).toBe(55);
+  expect(lastLog('nope', h)).toBeNull();
 });

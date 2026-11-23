@@ -34,6 +34,11 @@ function logsOf(id: string, history: History): LoggedExercise[] {
     .flatMap(({ s }) => s.exercises.filter(x => x.exerciseId === id && x.sets.length > 0));
 }
 
+/** The most recent logged entry of an exercise with at least one set, or null. */
+export function lastLog(exerciseId: string, history: History): LoggedExercise | null {
+  return logsOf(exerciseId, history)[0] ?? null;
+}
+
 /**
  * Double progression. Every set at the top of the range (and the last-set chip not "hard") adds the smallest step;
  * "easy" on the last two sessions also progresses. Otherwise last time's working weight. Blank on first appearance;
