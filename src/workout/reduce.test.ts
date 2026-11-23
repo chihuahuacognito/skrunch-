@@ -119,3 +119,15 @@ test('go clamps to the steps', () => {
   expect(run(start(), { type: 'go', step: 999 }).step).toBe(steps.length - 1);
   expect(run(start(), { type: 'go', step: -3 }).step).toBe(0);
 });
+
+test('a loaded lift weight, or a reps count, cannot be cleared', () => {
+  const w = run(start(), tick(MAIN, 0));
+  expect(reduceWorkout(w, { type: 'edit', ref: MAIN, set: 0, field: 'weight', value: null })).toBe(w);
+  expect(reduceWorkout(w, { type: 'edit', ref: MAIN, set: 1, field: 'reps', value: null })).toBe(w);
+});
+
+test('timed sets cannot lose their seconds', () => {
+  const coolB = s.blocks.findIndex(b => b.kind === 'cooldown');
+  const w = start();
+  expect(reduceWorkout(w, { type: 'edit', ref: { block: coolB, item: 0 }, set: 0, field: 'seconds', value: null })).toBe(w);
+});

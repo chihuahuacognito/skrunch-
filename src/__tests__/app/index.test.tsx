@@ -1,4 +1,5 @@
-import { act, fireEvent, screen } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import * as Notifications from 'expo-notifications';
 import { Text } from 'react-native';
 import { checkInFor, saveCheckIn } from '../../store/history';
 import { migrate } from '../../store/schema';
@@ -85,4 +86,14 @@ test('a workout in progress opens straight into it', async () => {
   await renderApp(routes, { db });
   expect(await screen.findByText('Workout stub')).toBeTruthy();
   expect(screen).toHavePathname('/workout');
+});
+
+test('opening with no workout in progress clears any leftover rest notification', async () => {
+  const mocked = Notifications as unknown as Record<string, jest.Mock>;
+  mocked.dismissNotificationAsync.mockClear();
+  mocked.cancelScheduledNotificationAsync.mockClear();
+  await renderApp(routes, { db });
+  await screen.findByLabelText('Good');
+  await waitFor(() => expect(mocked.dismissNotificationAsync).toHaveBeenCalledWith('rest-live'));
+  expect(mocked.cancelScheduledNotificationAsync).toHaveBeenCalledWith('rest-end');
 });

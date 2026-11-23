@@ -1,6 +1,9 @@
 import { act, fireEvent, screen } from '@testing-library/react-native';
 import { AppState, Text, type AppStateStatus } from 'react-native';
-import type { BuilderInput, CheckIn, Place } from '../../builder';
+import { buildSession, type BuilderInput, type CheckIn, type Place } from '../../builder';
+import { emptyHistory } from '../../builder/test-utils/fixtures';
+import { saveDraft } from '../../store/workout';
+import { startWorkout } from '../../workout';
 import { saveCheckIn } from '../../store/history';
 import { migrate } from '../../store/schema';
 import type { SqlDb } from '../../store/sql';
@@ -59,7 +62,16 @@ describe('screen', () => {
     menu: MenuScreen,
     preview: () => <Text>Preview stub</Text>,
     desk: () => <Text>Desk stub</Text>,
+    workout: () => <Text>Workout stub</Text>,
   };
+
+  test('a workout in progress opens instead of the menu', async () => {
+    await saveCheckIn(db, TODAY, 'good', 'gym');
+    const s = buildSession({ library: LIBRARY, history: emptyHistory(), today: TODAY, checkIn: 'good', place: 'gym' }, { focus: 'lower', dose: 'full' });
+    await saveDraft(db, startWorkout(s, LIBRARY, emptyHistory(), 0));
+    await renderApp(routes, { db, initialUrl: '/menu' });
+    expect(await screen.findByText('Workout stub')).toBeTruthy();
+  });
 
   test('without a check-in today the menu sends you to check in', async () => {
     await renderApp(routes, { db, initialUrl: '/menu' });

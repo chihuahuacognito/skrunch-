@@ -24,7 +24,8 @@ test('a main-lift rest names the next set', () => {
 });
 
 test('a set with no weight yet names only the reps', () => {
-  const w = run(atMain(), { type: 'tick', ref: MAIN, set: 0, now: 1000 }, { type: 'edit', ref: MAIN, set: 1, field: 'weight', value: null });
+  const w = run(atMain(), { type: 'tick', ref: MAIN, set: 0, now: 1000 });
+  w.logs[mainB][0].sets[1].weight = null; // a loaded lift seen for the first time
   expect(restNotice(w, names, clockText)?.body).toBe(`Next: ${mainName} · set 2 · 8 reps`);
 });
 

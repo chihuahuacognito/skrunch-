@@ -63,6 +63,10 @@ export function reduceWorkout(state: WorkoutState, action: WorkoutAction): Worko
       const log = logOf(state, action.ref);
       if (!log?.sets[action.set]) return state;
       const { field, value } = action;
+      // A blank field would be saved as a set with no weight, reps or time: a loaded lift keeps its weight, and a
+      // reps or timed set keeps its count.
+      const item = itemOf(state, action.ref)!;
+      if (value === null && (field !== 'weight' || item.slot !== null)) return state;
       return withSets(state, action.ref, log, log.sets.map((x, i) =>
         i === action.set || (field === 'weight' && i > action.set && !x.done) ? { ...x, [field]: value } : x));
     }

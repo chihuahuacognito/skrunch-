@@ -1,7 +1,7 @@
-import { Redirect, useRouter } from 'expo-router';
+import { Redirect, useFocusEffect, useRouter } from 'expo-router';
 import { useKeepAwake } from 'expo-keep-awake';
-import { useEffect, useReducer, useRef, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { Alert, BackHandler, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { INCREMENT_KG, replaceItem, swapCandidates, type BuilderInput, type CheckIn, type Feedback, type History, type PlannedExercise } from '../builder';
 import { ChipRow } from '../features/workout/ChipRow';
@@ -103,6 +103,14 @@ function Workout({ initial, history, checkIn }: { initial: WorkoutState; history
   const once = useOnceUntilFocus();
   const [ending, setEnding] = useState(false);
   const [options, setOptions] = useState<ItemRef | null>(null);
+  // Back (button or edge swipe) never drops out of a workout silently: it asks how to end it.
+  useFocusEffect(useCallback(() => {
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      setEnding(true);
+      return true;
+    });
+    return () => sub.remove();
+  }, []));
   const [feedback, setFeedbackState] = useState(history.feedback);
   const [editing, setEditing] = useState<{ ref: ItemRef; set: number; field: Field } | null>(null);
   const [timing, setTiming] = useState<{ ref: ItemRef; set: number } | null>(null);

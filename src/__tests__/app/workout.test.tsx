@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as Notifications from 'expo-notifications';
-import { Alert, Text } from 'react-native';
+import { Alert, BackHandler, Text } from 'react-native';
 import { buildSession, INCREMENT_KG, swapCandidates, type PlannedSession } from '../../builder';
 import { emptyHistory } from '../../builder/test-utils/fixtures';
 import { loadHistory, saveCheckIn } from '../../store/history';
@@ -249,6 +249,25 @@ describe('exercise options', () => {
 describe('rest notifications', () => {
   const mocked = Notifications as unknown as Record<string, jest.Mock>;
 
+  test('an action tapped while the app was closed is applied when it opens', async () => {
+    mocked.getLastNotificationResponseAsync.mockResolvedValueOnce(
+      { actionIdentifier: 'complete', notification: { date: 3, request: { identifier: 'rest-end' } } });
+    await open(atMain(true));
+    expect(await screen.findByLabelText('Set 1 done')).toBeTruthy();
+  });
+
+  test('a rest that ran out while the app was closed leaves no notice behind', async () => {
+    const w = atMain(true);
+    w.logs[mainB][0].sets[0].done = true;
+    await saveDraft(db, { ...w, rest: { endsAt: Date.now() - 60_000, seconds: 150, from: { block: mainB, item: 0 } } });
+    mocked.scheduleNotificationAsync.mockClear();
+    mocked.dismissNotificationAsync.mockClear();
+    await renderApp(routes, { db, initialUrl: '/workout' });
+    await screen.findByLabelText('Set 1 done');
+    await waitFor(() => expect(mocked.dismissNotificationAsync).toHaveBeenCalledWith('rest-live'));
+    expect(mocked.scheduleNotificationAsync).not.toHaveBeenCalled();
+  });
+
   test('a long rest shows the notification', async () => {
     await open(atMain(true));
     mocked.scheduleNotificationAsync.mockClear();
@@ -274,9 +293,21 @@ describe('rest notifications', () => {
     await open(atMain(true));
     await screen.findByLabelText('Log set 1');
     const listener = mocked.addNotificationResponseReceivedListener.mock.calls.at(-1)![0];
-    await act(async () => listener({ actionIdentifier: 'complete' }));
+    await act(async () => listener({ actionIdentifier: 'complete', notification: { date: 1, request: { identifier: 'rest-end' } } }));
     expect(screen.getByLabelText('Set 1 done')).toBeTruthy();
-    await act(async () => listener({ actionIdentifier: 'skip' }));
+    await act(async () => listener({ actionIdentifier: 'skip', notification: { date: 2, request: { identifier: 'rest-end' } } }));
     expect(screen.queryByLabelText('Skip')).toBeNull();
   });
+});
+
+test('the back gesture opens the end sheet instead of leaving', async () => {
+  const add = jest.spyOn(BackHandler, 'addEventListener');
+  await open(fresh());
+  await screen.findByLabelText('End');
+  const handler = add.mock.calls.filter(c => c[0] === 'hardwareBackPress').at(-1)![1];
+  let handled: boolean | null | undefined;
+  await act(async () => { handled = handler(undefined as never); });
+  expect(handled).toBe(true);
+  expect(screen.getByLabelText('Finish and save')).toBeTruthy();
+  add.mockRestore();
 });

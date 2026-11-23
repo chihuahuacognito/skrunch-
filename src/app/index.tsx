@@ -7,6 +7,7 @@ import type { CheckIn, Place } from '../builder';
 import { ThumbArc, type ArcItem } from '../features/arc/ThumbArc';
 import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
+import { clearRest } from '../notify/rest';
 import { checkInFor, saveCheckIn } from '../store/history';
 import { loadDraft } from '../store/workout';
 import { tokens } from '../theme/tokens';
@@ -27,7 +28,12 @@ export default function CheckInScreen() {
   const router = useRouter();
   const { redo } = useLocalSearchParams<{ redo?: string }>();
   const today = useToday();
-  const loaded = useLoad(async () => ({ draft: await loadDraft(db, today), saved: await checkInFor(db, today) }), [db, today]);
+  const loaded = useLoad(async () => {
+    const draft = await loadDraft(db, today);
+    // No workout in progress (none, or last night's was just settled): a rest notice left by a killed app is stale.
+    if (!draft) void clearRest().catch(e => console.warn('clearing the rest notification failed', e));
+    return { draft, saved: await checkInFor(db, today) };
+  }, [db, today]);
   const [place, setPlace] = useState<Place | null>(null);
   const once = useOnceUntilFocus();
 

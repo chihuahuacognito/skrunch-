@@ -8,6 +8,7 @@ import { ThumbArc, type ArcItem } from '../features/arc/ThumbArc';
 import { useToday } from '../ui/useToday';
 import { useDb } from '../store/DbContext';
 import { checkInFor, loadHistory } from '../store/history';
+import { loadDraft } from '../store/workout';
 import { tokens } from '../theme/tokens';
 import { CHECKIN_LABEL, DESK_RESET_HINT, DOSE_LABEL, FOCUS_LABEL } from '../ui/labels';
 import { LIBRARY } from '../ui/library';
@@ -30,7 +31,11 @@ export default function MenuScreen() {
   const router = useRouter();
   const today = useToday();
   const once = useOnceUntilFocus();
-  const data = useLoad(async () => ({ checkIn: await checkInFor(db, today), history: await loadHistory(db) }), [db, today]);
+  const data = useLoad(async () => ({
+    draft: await loadDraft(db, today),
+    checkIn: await checkInFor(db, today),
+    history: await loadHistory(db),
+  }), [db, today]);
 
   const items = useMemo(() => {
     if (!data?.checkIn) return [];
@@ -38,6 +43,8 @@ export default function MenuScreen() {
   }, [data, today]);
 
   if (data === undefined) return <View style={styles.root} />;
+  // Tonight's workout is already under way: picking another focus would only resume it.
+  if (data.draft) return <Redirect href="/workout" />;
   if (!data.checkIn) return <Redirect href="/" />;
   const { value, place } = data.checkIn;
 
