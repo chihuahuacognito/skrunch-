@@ -11,6 +11,7 @@ import { NumberEditor } from '../features/workout/NumberEditor';
 import { RestBanner } from '../features/workout/RestBanner';
 import { SetRow } from '../features/workout/SetRow';
 import { impact, tick as tickHaptic } from '../haptics';
+import { clearRest, onRestAction, showRest } from '../notify/rest';
 import { useDb } from '../store/DbContext';
 import { checkInFor, loadHistory, setFeedback } from '../store/history';
 import type { SqlDb } from '../store/sql';
@@ -23,10 +24,18 @@ import { useLoad } from '../ui/useLoad';
 import { useOnceUntilFocus } from '../ui/useOnceUntilFocus';
 import { useRemaining } from '../ui/useRemaining';
 import { useToday } from '../ui/useToday';
+import { restNotice } from '../workout/notice';
 import { canTick, prefillSets, reduceWorkout, stepsOf, summaryOf, type ItemRef, type WorkoutState } from '../workout';
 
 const BY_ID = new Map(LIBRARY.map(e => [e.id, e]));
 const nameOf = (id: string) => BY_ID.get(id)?.name ?? id;
+const NAMES = new Map(LIBRARY.map(e => [e.id, e.name]));
+const pad = (n: number) => String(n).padStart(2, '0');
+/** Local 24-hour clock time, as the notification shows it. */
+const timeOfDay = (ms: number) => {
+  const d = new Date(ms);
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
 const same = (a: ItemRef, b: ItemRef) => a.block === b.block && a.item === b.item;
 type Field = 'weight' | 'reps' | 'seconds';
 
@@ -112,6 +121,20 @@ function Workout({ initial, history, checkIn }: { initial: WorkoutState; history
     dispatch({ type: 'restEnd' });
   });
 
+  // The rest notification follows the rest: shown or replaced when it starts or moves, cleared when it ends.
+  const restEndsAt = state.rest?.endsAt;
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  useEffect(() => {
+    const notice = restNotice(stateRef.current, NAMES, timeOfDay);
+    void (notice ? showRest(notice) : clearRest()).catch(e => console.warn('rest notification failed', e));
+  }, [restEndsAt]);
+  useEffect(() => onRestAction(action => {
+    if (action === 'complete') dispatch({ type: 'completeNext', now: Date.now() });
+    else if (action === 'plus15') dispatch({ type: 'restPlus', seconds: 15 });
+    else dispatch({ type: 'restEnd' });
+  }), []);
+
   const { session } = state;
   const steps = stepsOf(session);
   const step = steps[state.step];
@@ -146,7 +169,9 @@ function Workout({ initial, history, checkIn }: { initial: WorkoutState; history
     countdown.stop();
     try {
       await writer.close();
-      router.replace(await change() as '/');
+      const to = await change();
+      await clearRest().catch(e => console.warn('clearing the rest notification failed', e));
+      router.replace(to as '/');
     } catch (e) {
       writer.reopen();
       once.release();

@@ -1,4 +1,5 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import * as Notifications from 'expo-notifications';
 import { Alert, Text } from 'react-native';
 import { buildSession, INCREMENT_KG, swapCandidates, type PlannedSession } from '../../builder';
 import { emptyHistory } from '../../builder/test-utils/fixtures';
@@ -242,5 +243,40 @@ describe('exercise options', () => {
     await open(atMain(false));
     await fireEvent.press(await screen.findByLabelText(`Options for ${mainName}`));
     expect(screen.queryByLabelText('Open the original post')).toBeNull();
+  });
+});
+
+describe('rest notifications', () => {
+  const mocked = Notifications as unknown as Record<string, jest.Mock>;
+
+  test('a long rest shows the notification', async () => {
+    await open(atMain(true));
+    mocked.scheduleNotificationAsync.mockClear();
+    await fireEvent.press(await screen.findByLabelText('Log set 1'));
+    await waitFor(() => expect(mocked.scheduleNotificationAsync).toHaveBeenCalledWith(
+      expect.objectContaining({ identifier: 'rest-end', trigger: expect.objectContaining({ date: Date.now() + 150_000 }) })));
+  });
+
+  test('finishing cancels the rest notifications', async () => {
+    await open(atMain(true));
+    await fireEvent.press(await screen.findByLabelText('Log set 1'));
+    mocked.cancelScheduledNotificationAsync.mockClear();
+    mocked.dismissNotificationAsync.mockClear();
+    await fireEvent.press(screen.getByLabelText('End'));
+    await fireEvent.press(screen.getByLabelText('Finish and save'));
+    expect(await screen.findByText('Saved')).toBeTruthy();
+    expect(mocked.cancelScheduledNotificationAsync).toHaveBeenCalledWith('rest-end');
+    expect(mocked.dismissNotificationAsync).toHaveBeenCalledWith('rest-live');
+  });
+
+  test('a notification action completes the next set', async () => {
+    mocked.addNotificationResponseReceivedListener.mockClear();
+    await open(atMain(true));
+    await screen.findByLabelText('Log set 1');
+    const listener = mocked.addNotificationResponseReceivedListener.mock.calls.at(-1)![0];
+    await act(async () => listener({ actionIdentifier: 'complete' }));
+    expect(screen.getByLabelText('Set 1 done')).toBeTruthy();
+    await act(async () => listener({ actionIdentifier: 'skip' }));
+    expect(screen.queryByLabelText('Skip')).toBeNull();
   });
 });

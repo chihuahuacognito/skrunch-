@@ -3,6 +3,7 @@ import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 import type { ReactNode } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { setupRestNotifications } from '../notify/rest';
 import { DbProvider } from '../store/DbContext';
 import { migrate } from '../store/schema';
 import { tokens } from '../theme/tokens';
@@ -11,6 +12,8 @@ import { tokens } from '../theme/tokens';
 function ExpoDb({ children }: { children: ReactNode }) {
   return <DbProvider db={useSQLiteContext()}>{children}</DbProvider>;
 }
+
+void setupRestNotifications().catch(e => console.warn('notification setup failed', e));
 
 export default function RootLayout() {
   return (

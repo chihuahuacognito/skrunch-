@@ -9,3 +9,18 @@ jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock
 // Reanimated 4.7.1's own mock crashes under jest-expo; package.json maps 'react-native-reanimated/mock'
 // to jest/reanimatedMock.js.
 jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
+
+// expo-notifications has no native module under jest. Every call the app makes resolves; tests read the mocks.
+jest.mock('expo-notifications', () => ({
+  AndroidImportance: { LOW: 4, DEFAULT: 5, HIGH: 6 },
+  SchedulableTriggerInputTypes: { DATE: 'date' },
+  setNotificationHandler: jest.fn(),
+  setNotificationChannelAsync: jest.fn(async () => null),
+  setNotificationCategoryAsync: jest.fn(async () => ({})),
+  getPermissionsAsync: jest.fn(async () => ({ granted: true, canAskAgain: true })),
+  requestPermissionsAsync: jest.fn(async () => ({ granted: true, canAskAgain: true })),
+  scheduleNotificationAsync: jest.fn(async () => 'id'),
+  cancelScheduledNotificationAsync: jest.fn(async () => {}),
+  dismissNotificationAsync: jest.fn(async () => {}),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+}));
