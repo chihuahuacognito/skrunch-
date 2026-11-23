@@ -1,8 +1,8 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { Text } from 'react-native';
+import { Alert, Text } from 'react-native';
 import { buildSession, INCREMENT_KG, type PlannedSession } from '../../builder';
 import { emptyHistory } from '../../builder/test-utils/fixtures';
-import { saveCheckIn } from '../../store/history';
+import { loadHistory, saveCheckIn } from '../../store/history';
 import { migrate } from '../../store/schema';
 import type { SqlDb } from '../../store/sql';
 import { nodeDb } from '../../store/test-utils/nodeDb';
@@ -11,6 +11,7 @@ import { renderApp } from '../../test-utils/renderApp';
 import { LIBRARY } from '../../ui/library';
 import { startWorkout, stepsOf, type WorkoutState } from '../../workout';
 import CheckInScreen from '../../app/index';
+import SummaryScreen from '../../app/summary';
 import WorkoutScreen from '../../app/workout';
 
 jest.mock('../../haptics', () => ({ tick: jest.fn(), impact: jest.fn() }));
@@ -34,7 +35,7 @@ beforeEach(async () => {
 });
 afterEach(() => jest.useRealTimers());
 
-const routes = { index: () => <Text>Check-in stub</Text>, workout: WorkoutScreen };
+const routes = { index: () => <Text>Check-in stub</Text>, workout: WorkoutScreen, summary: SummaryScreen };
 const fresh = (): WorkoutState => startWorkout(session, LIBRARY, emptyHistory(), Date.now());
 /** A draft on the main lift, with its weight already known when weighed is true. */
 const atMain = (weighed: boolean): WorkoutState => {
@@ -129,4 +130,77 @@ test('reopening the app resumes the workout', async () => {
 test('no draft sends you back to check in', async () => {
   await renderApp(routes, { db, initialUrl: '/workout' });
   expect(await screen.findByText('Check-in stub')).toBeTruthy();
+});
+
+/** The last step, with the first warm-up set already done so there is something to save. */
+const atEnd = (): WorkoutState => {
+  const w = fresh();
+  w.logs[0][0].sets[0].done = true;
+  return { ...w, step: steps.length - 1 };
+};
+
+test('finishing saves the session and shows the summary', async () => {
+  await open(atEnd());
+  await fireEvent.press(await screen.findByLabelText('Finish'));
+  expect(await screen.findByText('Saved')).toBeTruthy();
+  expect(screen.getByText(/^\d+ min · 1 sets · 1 exercises$/)).toBeTruthy();
+  expect((await loadHistory(db)).sessions).toHaveLength(1);
+  expect(await loadDraft(db, TODAY)).toBeNull();
+});
+
+test('finishing twice saves one session', async () => {
+  // Transactions wait on a gate, so the screen is still showing when the second tap lands.
+  let gated = false;
+  let release!: () => void;
+  const gate = new Promise<void>(r => (release = r));
+  const slow: SqlDb = { ...db, execAsync: async sql => { if (gated) await gate; return db.execAsync(sql); } };
+  await saveDraft(db, atEnd());
+  await renderApp(routes, { db: slow, initialUrl: '/workout' });
+  const finish = await screen.findByLabelText('Finish');
+  gated = true;
+  await fireEvent.press(finish);
+  await fireEvent.press(finish);
+  await act(async () => release());
+  expect(await screen.findByText('Saved')).toBeTruthy();
+  expect(screen).toHavePathname('/summary');
+  expect((await loadHistory(db)).sessions).toHaveLength(1);
+});
+
+test('a tick just before finishing is saved with the session', async () => {
+  await open(atMain(true));
+  await fireEvent.press(await screen.findByLabelText('Log set 1'));
+  await fireEvent.press(screen.getByLabelText('End'));
+  await fireEvent.press(screen.getByLabelText('Finish and save'));
+  expect(await screen.findByText('Saved')).toBeTruthy();
+  expect(await loadDraft(db, TODAY)).toBeNull();
+  expect((await loadHistory(db)).sessions[0].exercises[0].sets).toHaveLength(1);
+});
+
+test('finishing with nothing ticked saves nothing', async () => {
+  await open({ ...fresh(), step: steps.length - 1 });
+  await fireEvent.press(await screen.findByLabelText('Finish'));
+  expect(await screen.findByText('Check-in stub')).toBeTruthy();
+  expect((await loadHistory(db)).sessions).toHaveLength(0);
+  expect(await loadDraft(db, TODAY)).toBeNull();
+});
+
+test('keep going closes the end sheet', async () => {
+  await open(fresh());
+  await fireEvent.press(await screen.findByLabelText('End'));
+  await fireEvent.press(screen.getByLabelText('Keep going'));
+  expect(screen.queryByLabelText('Finish and save')).toBeNull();
+});
+
+test('discard asks, then drops the workout', async () => {
+  const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  await open(atEnd());
+  await fireEvent.press(await screen.findByLabelText('End'));
+  await fireEvent.press(screen.getByLabelText('Discard workout'));
+  expect(alert).toHaveBeenCalledWith("Discard tonight's workout?", 'Nothing will be saved.', expect.any(Array));
+  const buttons = alert.mock.calls[0][2]!;
+  await act(async () => buttons.find(b => b.text === 'Discard')!.onPress!());
+  expect(await screen.findByText('Check-in stub')).toBeTruthy();
+  expect(await loadDraft(db, TODAY)).toBeNull();
+  expect((await loadHistory(db)).sessions).toHaveLength(0);
+  alert.mockRestore();
 });
