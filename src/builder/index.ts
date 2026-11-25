@@ -9,3 +9,4 @@ export { cardioWeek, groupStatus, recencyOf, tonightSummary, type GroupStatus, t
 export { cardioPicks, pickGroup, type CardPick } from './pick';
 export { isBodyweight, isHit, targetFor, type Role, type Target } from './target';
 export { isInterval, isZone2 } from './parts';
+export { trainingDaysList, type TrainingDay } from './days';
