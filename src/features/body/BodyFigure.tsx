@@ -9,7 +9,7 @@ const MIN_HIT_PX = 44;
 
 /**
  * Front and back figures. Colour = recency, fill height = sets vs target, a dashed outline for never trained,
- * the selected group outlined. Every segment is a tap target of at least 44 x 44 px.
+ * the selected group outlined. Each segment is its own tap target; small ones get a 44 x 44 px margin underneath.
  */
 export function BodyFigure({ status, selected, onSelect, width = 130 }: {
   status: Record<GroupId, GroupStatus>; selected: GroupId | null; onSelect(g: GroupId): void; width?: number;
@@ -70,13 +70,14 @@ function Figure({ side, status, selected, onSelect, width }: {
           </G>
         );
       })}
-      {indexed.map(r => {
+      {/* Enlarged margins for small segments sit underneath, so they only catch taps beside a segment. */}
+      {indexed.filter(r => r.bounds.w < hit || r.bounds.h < hit).map(r => {
         const w = Math.max(r.bounds.w, hit);
         const h = Math.max(r.bounds.h, hit);
         return (
           <Rect
-            key={`hit-${r.group}-${r.k}`}
-            testID={`hit-${side}-${r.group}-${r.k}`}
+            key={`grow-${r.group}-${r.k}`}
+            testID={`grow-${side}-${r.group}-${r.k}`}
             x={r.bounds.x + r.bounds.w / 2 - w / 2}
             y={r.bounds.y + r.bounds.h / 2 - h / 2}
             width={w}
@@ -86,6 +87,16 @@ function Figure({ side, status, selected, onSelect, width }: {
           />
         );
       })}
+      {/* Each visible segment is its own target, on top: a tap on the shoulder cap always opens Shoulders. */}
+      {indexed.map(r => (
+        <Path
+          key={`hit-${r.group}-${r.k}`}
+          testID={`hit-${side}-${r.group}-${r.k}`}
+          d={r.path}
+          fill="transparent"
+          onPress={() => onSelect(r.group)}
+        />
+      ))}
     </Svg>
   );
 }

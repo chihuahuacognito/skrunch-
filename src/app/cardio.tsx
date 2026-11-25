@@ -104,7 +104,7 @@ export default function CardioScreen() {
         exercise={detail ? BY_ID.get(detail) ?? null : null}
         history={history}
         feedback={detail ? history.feedback[detail] : undefined}
-        onFeedback={() => {}}
+        onFeedback={v => detail && void api.setFeedback(detail, v)}
         onClose={() => setDetail(null)}
       />
     </SafeAreaView>

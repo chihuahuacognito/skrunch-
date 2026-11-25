@@ -39,10 +39,10 @@ async function exerciseRow(tx: SqlDb, sessionId: number, exerciseId: string, met
   return r.lastInsertRowId;
 }
 
-const insertSet = (tx: SqlDb, exId: number, position: number, s: LoggedSet) =>
+const insertSet = (tx: SqlDb, exId: number, position: number, s: LoggedSet, at: number) =>
   tx.runAsync(
-    'INSERT INTO logged_sets (logged_exercise_id, position, weight, reps, seconds) VALUES (?, ?, ?, ?, ?)',
-    exId, position, s.weight, s.reps, s.seconds,
+    'INSERT INTO logged_sets (logged_exercise_id, position, weight, reps, seconds, logged_at) VALUES (?, ?, ?, ?, ?, ?)',
+    exId, position, s.weight, s.reps, s.seconds, at,
   );
 
 async function setCount(tx: SqlDb, date: string, exerciseId: string): Promise<number> {
@@ -55,12 +55,14 @@ async function setCount(tx: SqlDb, date: string, exerciseId: string): Promise<nu
 }
 
 /** Logs set number `index` (0-based) of tonight's exercise. False, and nothing written, unless it is the next open set. */
-export async function appendSet(db: SqlDb, date: string, exerciseId: string, set: LoggedSet, meta: LogMeta, index: number): Promise<boolean> {
+export async function appendSet(
+  db: SqlDb, date: string, exerciseId: string, set: LoggedSet, meta: LogMeta, index: number, at: number = Date.now(),
+): Promise<boolean> {
   let written = false;
   await inTransaction(db, async tx => {
     if ((await setCount(tx, date, exerciseId)) !== index) return;
     const exId = await exerciseRow(tx, await daySession(tx, date, meta.intervals), exerciseId, meta);
-    await insertSet(tx, exId, index, set);
+    await insertSet(tx, exId, index, set, at);
     written = true;
   });
   return written;
@@ -81,7 +83,9 @@ async function remove(tx: SqlDb, date: string, exerciseId: string): Promise<void
 }
 
 /** Replaces tonight's sets of one exercise (Edit). No sets removes the exercise. */
-export async function replaceSets(db: SqlDb, date: string, exerciseId: string, sets: LoggedSet[], meta: LogMeta): Promise<void> {
+export async function replaceSets(
+  db: SqlDb, date: string, exerciseId: string, sets: LoggedSet[], meta: LogMeta, at: number = Date.now(),
+): Promise<void> {
   await inTransaction(db, async tx => {
     if (sets.length === 0) {
       await remove(tx, date, exerciseId);
@@ -89,11 +93,21 @@ export async function replaceSets(db: SqlDb, date: string, exerciseId: string, s
     }
     const exId = await exerciseRow(tx, await daySession(tx, date, meta.intervals), exerciseId, meta);
     await tx.runAsync('DELETE FROM logged_sets WHERE logged_exercise_id = ?', exId);
-    for (const [i, s] of sets.entries()) await insertSet(tx, exId, i, s);
+    for (const [i, s] of sets.entries()) await insertSet(tx, exId, i, s, at);
   });
 }
 
 /** Undo: tonight's sets of one exercise go, and the day's session row goes with its last exercise. */
 export async function removeExercise(db: SqlDb, date: string, exerciseId: string): Promise<void> {
   await inTransaction(db, tx => remove(tx, date, exerciseId));
+}
+
+/** First and last set time (ms) per training day, for History's minutes. Days logged before v4 have no times. */
+export async function dayTimes(db: SqlDb): Promise<Record<string, { first: number; last: number }>> {
+  const rows = await db.getAllAsync<{ date: string; first: number; last: number }>(
+    'SELECT d.date AS date, MIN(s.logged_at) AS first, MAX(s.logged_at) AS last FROM logged_sets s ' +
+    'JOIN logged_exercises x ON x.id = s.logged_exercise_id JOIN sessions d ON d.id = x.session_id ' +
+    'WHERE s.logged_at IS NOT NULL GROUP BY d.date',
+  );
+  return Object.fromEntries(rows.map(r => [r.date, { first: r.first, last: r.last }]));
 }

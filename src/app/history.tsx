@@ -7,6 +7,8 @@ import { saveToFolder } from '../backup/saveFile';
 import { setText } from '../features/exercise/text';
 import { useTonight } from '../features/tonight/useTonight';
 import { useDb } from '../store/DbContext';
+import { dayTimes } from '../store/log';
+import { useLoad } from '../ui/useLoad';
 import { tokens } from '../theme/tokens';
 import { dayLabel } from '../ui/labels';
 import { LIBRARY } from '../ui/library';
@@ -26,7 +28,8 @@ function setsLine(sets: LoggedSet[]): string {
 /** Training days, newest first; tap a day for its exercises. The one-tap export lives here. Read-only. */
 export default function HistoryScreen() {
   const db = useDb();
-  const { ready, input, today } = useTonight();
+  const { ready, input, today, history } = useTonight();
+  const times = useLoad(() => dayTimes(db), [db, history]);
   const days = useMemo(() => trainingDaysList(input), [input]);
   const [open, setOpen] = useState<string | null>(null);
   const [exported, setExported] = useState<ExportState>({ kind: 'idle' });
@@ -53,9 +56,11 @@ export default function HistoryScreen() {
         ) : days.map(d => {
           const groups = d.groups.map(g => GROUP_LABEL[g]).join(', ') || 'Cardio';
           const expanded = open === d.date;
+          const t = times?.[d.date];
+          const minutes = t ? Math.round((t.last - t.first) / 60_000) : 0;
           return (
             <Panel key={d.date} onPress={() => setOpen(expanded ? null : d.date)} style={styles.day}>
-              <Text style={styles.dayText}>{`${dayLabel(d.date)} · ${groups} · ${d.sets} ${d.sets === 1 ? 'set' : 'sets'}`}</Text>
+              <Text style={styles.dayText}>{`${dayLabel(d.date)} · ${groups} · ${d.sets} ${d.sets === 1 ? 'set' : 'sets'}${minutes > 0 ? ` · ${minutes} min` : ''}`}</Text>
               {expanded ? d.exercises.map((x, i) => (
                 <Text key={`${x.exerciseId}-${i}`} style={styles.sub}>{`${NAMES.get(x.exerciseId) ?? x.exerciseId} · ${setsLine(x.sets)}`}</Text>
               )) : null}

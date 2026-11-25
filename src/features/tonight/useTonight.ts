@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { CardPick, GroupId, GroupInput, History, LoggedSet, Target } from '../../builder';
+import type { CardPick, Feedback, GroupId, GroupInput, History, LoggedSet, Target } from '../../builder';
 import type { TonightState } from '../../tonight';
 
 export interface TonightApi {
@@ -24,6 +24,8 @@ export interface TonightApi {
   doneSets(exerciseId: string): LoggedSet[];
   /** True once per app launch: Home uses it to reopen the last group only on launch. */
   claimReopen(): boolean;
+  /** Saves More / Less / Never (null clears) and reloads history, so picks and More ordering follow at once. */
+  setFeedback(exerciseId: string, value: Feedback | null): Promise<void>;
 }
 
 export const TonightContext = createContext<TonightApi | null>(null);

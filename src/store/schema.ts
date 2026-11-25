@@ -16,6 +16,7 @@ export const MIGRATIONS: string[] = [
   `CREATE TABLE active_workout (id INTEGER PRIMARY KEY CHECK (id = 1), date TEXT NOT NULL, state TEXT NOT NULL);
    CREATE TABLE settings (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);`,
   `ALTER TABLE logged_exercises ADD COLUMN planned_sets INTEGER;`,
+  `ALTER TABLE logged_sets ADD COLUMN logged_at INTEGER;`,
 ];
 
 /** Brings the database up to the latest schema. Safe to run on every launch. */

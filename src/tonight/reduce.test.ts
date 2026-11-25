@@ -9,7 +9,7 @@ const open = (group: 'quads' | 'chest', cards: CardPick[], now: number): Tonight
 
 test('the empty state', () => {
   expect(empty).toEqual({
-    version: 2, date: '2026-11-25', rest: null, opened: [], cards: {}, promoted: {}, lastGroup: null, lastActionAt: null, firstSetAt: null,
+    version: 2, date: '2026-11-25', rest: null, lastRest: null, opened: [], cards: {}, promoted: {}, lastGroup: null, lastActionAt: null, firstSetAt: null,
   });
 });
 

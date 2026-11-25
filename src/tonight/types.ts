@@ -7,6 +7,8 @@ export interface TonightState {
   version: 2;
   date: string;
   rest: Rest | null;
+  /** The exercise of the latest rest; kept after the rest ends, so "Complete set" on the Rest over alert still knows it. */
+  lastRest: Omit<Rest, 'endsAt' | 'seconds'> | null;
   opened: GroupId[];
   /** Frozen when a group is first opened tonight, so cards never reshuffle mid-session. */
   cards: Partial<Record<GroupId, CardPick[]>>;
@@ -23,4 +25,6 @@ export type TonightAction =
   | { type: 'logged'; now: number }
   | { type: 'restStart'; rest: Omit<Rest, 'endsAt'>; now: number }
   | { type: 'restPlus'; seconds: number }
-  | { type: 'restEnd' };
+  | { type: 'restEnd' }
+  /** The exercise was completed, emptied or undone: its rest (running or last) no longer applies. */
+  | { type: 'forgetRest'; exerciseId: string };

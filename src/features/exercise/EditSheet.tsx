@@ -58,7 +58,8 @@ export function EditSheet({ visible, mode, title, initial, showWeight, weightSte
     // Reset only when the sheet opens.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
-  const valid = (!showWeight || (v.weight !== null && v.weight >= 0)) && (mode === 'weight' || v.reps !== null || v.minutes !== null);
+  // A loaded lift needs a real weight: 0 kg would lock it to bodyweight for good.
+  const valid = (!showWeight || (v.weight !== null && v.weight > 0)) && (mode === 'weight' || v.reps !== null || v.minutes !== null);
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.scrim} onPress={onClose} accessibilityElementsHidden importantForAccessibility="no">

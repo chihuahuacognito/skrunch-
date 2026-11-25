@@ -25,7 +25,8 @@ export async function loadTonight(db: SqlDb, today: string): Promise<TonightStat
   const row = await db.getFirstAsync<{ date: string; state: string }>('SELECT date, state FROM active_workout WHERE id = 1');
   if (!row) return emptyTonight(today);
   const s = parse(row.state);
-  if (s && row.date === today && s.date === today) return s;
+  // States saved before lastRest existed read it as null.
+  if (s && row.date === today && s.date === today) return { ...s, lastRest: s.lastRest ?? null };
   await db.runAsync('DELETE FROM active_workout');
   return emptyTonight(today);
 }

@@ -114,7 +114,8 @@ test('Edit to 2 sets of 7 replaces tonight sets and keeps the dots at 2', async 
   await open();
   await press('edit-Barbell_Squat');
   await fireEvent.changeText(await screen.findByLabelText('Reps'), '7');
-  await fireEvent.press(screen.getByLabelText('Fewer sets'));
+  await fireEvent.press(screen.getByLabelText('More sets'));
+  await fireEvent.press(screen.getByLabelText('More sets'));
   await fireEvent.press(screen.getByText('Save'));
   await flush();
   expect(await tonight('Barbell_Squat')).toEqual(sets(2, 60, 7));
@@ -164,4 +165,30 @@ test('the photo opens the detail sheet with instructions and feedback', async ()
   await press('photo-Barbell_Squat');
   expect(await screen.findByText('More of this')).toBeTruthy();
   expect(screen.getByText('Last 5')).toBeTruthy();
+});
+
+test('a loaded lift cannot be saved at 0 kg', async () => {
+  await open();
+  const fresh = cardIds().find(id => within(screen.getByTestId(`exercise-card-${id}`)).queryByText(/set weight/))!;
+  await press(`dot-${fresh}-0`);
+  await fireEvent.changeText(await screen.findByLabelText('Weight'), '0');
+  expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+});
+
+test('a loaded lift logged at 0 kg before still shows its weight field in Edit', async () => {
+  await saveSession(db, day('2026-11-20', 'Leg_Press', sets(3, 0, 10), 10));
+  await open();
+  expect(cardIds()[0]).toBe('Leg_Press');
+  await press('edit-Leg_Press');
+  expect(await screen.findByLabelText('Weight')).toBeTruthy();
+});
+
+test('Edit before any set starts at 0 sets done, so saving does not mark the exercise completed', async () => {
+  await open();
+  await press('edit-Barbell_Squat');
+  await fireEvent.changeText(await screen.findByLabelText('Reps'), '7');
+  await fireEvent.press(screen.getByText('Save'));
+  await flush();
+  expect(await tonight('Barbell_Squat')).toEqual([]);
+  expect(screen.queryByText(/^Completed ·/)).toBeNull();
 });

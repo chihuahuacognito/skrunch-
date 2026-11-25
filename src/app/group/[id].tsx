@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  GROUP_LABEL, GROUP_MUSCLES, GROUPS, INCREMENT_KG, groupCredit, groupStatus, lastLogBefore, pickGroup, tonightSummary,
-  type CardPick, type Feedback, type GroupId, type GroupStatus, type LoggedSet, type Target,
+  GROUP_LABEL, GROUP_MUSCLES, GROUPS, INCREMENT_KG, groupCredit, isBodyweight, groupStatus, lastLogBefore, pickGroup, tonightSummary,
+  type CardPick, type GroupId, type GroupStatus, type LoggedSet, type Target,
 } from '../../builder';
 import { daysBetween } from '../../builder/dates';
 import { BUDGET_TO_REGION, warmup } from '../../builder/parts';
@@ -16,8 +16,6 @@ import { RestPanel } from '../../features/exercise/RestPanel';
 import { lastText, targetText } from '../../features/exercise/text';
 import { TonightBar } from '../../features/exercise/TonightBar';
 import { useTonight } from '../../features/tonight/useTonight';
-import { useDb } from '../../store/DbContext';
-import { setFeedback } from '../../store/history';
 import { tokens } from '../../theme/tokens';
 import { setsText } from '../../ui/labels';
 import { LIBRARY } from '../../ui/library';
@@ -61,12 +59,10 @@ export default function GroupScreen() {
 
 function Group({ group }: { group: GroupId }) {
   const router = useRouter();
-  const db = useDb();
   const api = useTonight();
   const { input, state, today, history } = api;
   const [editing, setEditing] = useState<Editing | null>(null);
   const [detail, setDetail] = useState<string | null>(null);
-  const [feedback, setFeedbackState] = useState(history.feedback);
 
   const status = useMemo(() => groupStatus(input)[group], [input, group]);
   const summary = useMemo(() => tonightSummary(input), [input]);
@@ -108,9 +104,11 @@ function Group({ group }: { group: GroupId }) {
     weight: editDone[0]?.weight ?? editTarget.weight ?? (editExercise?.equipment[0] === 'barbell' ? 20 : 10),
     reps: editTarget.reps === null ? null : editDone[0]?.reps ?? editTarget.reps,
     minutes: editTarget.minutes === null ? null : editDone[0]?.seconds ? Math.round(editDone[0].seconds / 60) : editTarget.minutes,
-    sets: editDone.length || editTarget.sets,
+    // Sets done tonight so far: opening Edit before any set and saving must not mark the exercise completed.
+    sets: editDone.length,
   } : { weight: null, reps: null, minutes: null, sets: 0 };
-  const showWeight = !!editTarget && (editTarget.needsWeight || (editTarget.weight !== null && editTarget.weight > 0));
+  // Loaded lifts always show their weight, even one once saved at 0 kg; bodyweight lifts never do.
+  const showWeight = !!editExercise && !isBodyweight(editExercise);
   const save = (v: EditValues) => {
     if (!editing || !editTarget) return;
     const { id } = editing;
@@ -123,16 +121,6 @@ function Group({ group }: { group: GroupId }) {
     }
     const set: LoggedSet = { weight: showWeight ? v.weight : editTarget.weight, reps: v.reps, seconds: v.minutes === null ? null : v.minutes * 60 };
     void api.edit(id, Array.from({ length: v.sets }, () => set), editTarget, false);
-  };
-
-  const giveFeedback = async (id: string, value: Feedback | null) => {
-    await setFeedback(db, id, value);
-    setFeedbackState(f => {
-      const next = { ...f };
-      if (value === null) delete next[id];
-      else next[id] = value;
-      return next;
-    });
   };
 
   const home = () => (router.canGoBack() ? router.back() : router.replace('/'));
@@ -210,8 +198,8 @@ function Group({ group }: { group: GroupId }) {
         exercise={detail ? BY_ID.get(detail) ?? null : null}
         group={group}
         history={history}
-        feedback={detail ? feedback[detail] : undefined}
-        onFeedback={v => detail && void giveFeedback(detail, v)}
+        feedback={detail ? history.feedback[detail] : undefined}
+        onFeedback={v => detail && void api.setFeedback(detail, v)}
         onClose={() => setDetail(null)}
       />
     </SafeAreaView>

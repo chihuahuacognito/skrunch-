@@ -1,6 +1,6 @@
 import type { LoggedSet } from '../builder';
 import { loadHistory } from './history';
-import { appendSet, removeExercise, replaceSets, type LogMeta } from './log';
+import { appendSet, dayTimes, removeExercise, replaceSets, type LogMeta } from './log';
 import { migrate } from './schema';
 import type { SqlDb } from './sql';
 import { nodeDb } from './test-utils/nodeDb';
@@ -74,4 +74,14 @@ test('an interval log marks the day session intervals', async () => {
   await appendSet(db, D, 'Barbell_Squat', set60x6, meta, 0);
   await appendSet(db, D, 'burpees', { weight: null, reps: 8, seconds: null }, { ...meta, intervals: true }, 0);
   expect((await loadHistory(db)).sessions[0].intervals).toBe(true);
+});
+
+test('sets carry the time they were logged; dayTimes gives each day its first and last set', async () => {
+  await appendSet(db, D, 'Barbell_Squat', set60x6, meta, 0, 1_000_000);
+  await appendSet(db, D, 'Barbell_Squat', set60x6, meta, 1, 1_000_000 + 34 * 60_000);
+  await replaceSets(db, '2026-11-24', 'Leg_Press', [set60x6], meta, 5_000);
+  expect(await dayTimes(db)).toEqual({
+    [D]: { first: 1_000_000, last: 1_000_000 + 34 * 60_000 },
+    '2026-11-24': { first: 5_000, last: 5_000 },
+  });
 });

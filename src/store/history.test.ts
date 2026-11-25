@@ -78,6 +78,6 @@ test('planned sets round-trip and old rows read as null', async () => {
   expect('checkIns' in h).toBe(false);
 });
 
-test('migration v3 leaves user_version at 3', async () => {
-  expect((await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version'))?.user_version).toBe(3);
+test('migrations leave user_version at 4 (v3 planned sets, v4 set times)', async () => {
+  expect((await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version'))?.user_version).toBe(4);
 });

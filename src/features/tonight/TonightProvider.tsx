@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  pickGroup, targetFor, type CardPick, type GroupId, type GroupInput, type History, type LoggedSet, type Role, type Target,
+  pickGroup, targetFor, type CardPick, type Feedback, type GroupId, type GroupInput, type History, type LoggedSet, type Role, type Target,
 } from '../../builder';
 import { isInterval } from '../../builder/parts';
 import { impact, tick } from '../../haptics';
 import { clearRest, onRestAction, showRest } from '../../notify/rest';
 import { useDb } from '../../store/DbContext';
-import { loadHistory } from '../../store/history';
+import { loadHistory, setFeedback as saveFeedback } from '../../store/history';
 import { appendSet, removeExercise, replaceSets, type LogMeta } from '../../store/log';
 import { loadTonight, saveTonight } from '../../store/tonight';
 import { emptyTonight, reduceTonight, restNotice, type TonightAction, type TonightState } from '../../tonight';
@@ -83,7 +83,8 @@ export function TonightProvider({ children }: { children: ReactNode }) {
     return 'accessory';
   }, []);
   const doneSets = useCallback((id: string): LoggedSet[] =>
-    history.sessions.filter(s => s.date === today).flatMap(s => s.exercises).filter(x => x.exerciseId === id).flatMap(x => x.sets),
+    // Only the day's 'free' row, as appendSet counts: an old focus row for today must not shift the dot index.
+    history.sessions.filter(s => s.date === today && s.focus === 'free').flatMap(s => s.exercises).filter(x => x.exerciseId === id).flatMap(x => x.sets),
   [history, today]);
 
   // From history before tonight, so the target never moves mid-session. A first-time lift takes the weight chosen
@@ -98,6 +99,11 @@ export function TonightProvider({ children }: { children: ReactNode }) {
   doneRef.current = doneSets;
 
   const reload = useCallback(async () => setHistory(await loadHistory(db)), [db]);
+
+  const setFeedback = useCallback((id: string, value: Feedback | null) => run(async () => {
+    await saveFeedback(db, id, value);
+    await reload();
+  }), [db, run, reload]);
 
   const logDot = useCallback((id: string, index: number, target: Target, intervals: boolean) => run(async () => {
     const written = await appendSet(db, today, id, setOf(target), meta(target, intervals), index);
@@ -117,18 +123,20 @@ export function TonightProvider({ children }: { children: ReactNode }) {
     for (let i = done; i < target.sets; i++) await appendSet(db, today, id, setOf(target), meta(target, intervals), i);
     tick();
     dispatch({ type: 'logged', now: Date.now() });
+    dispatch({ type: 'forgetRest', exerciseId: id });
     await reload();
   }), [db, today, run, dispatch, reload]);
 
   const edit = useCallback((id: string, sets: LoggedSet[], target: Target, intervals: boolean) => run(async () => {
     await replaceSets(db, today, id, sets, meta(target, intervals));
     dispatch({ type: 'logged', now: Date.now() });
+    if (sets.length === 0 || sets.length >= target.sets) dispatch({ type: 'forgetRest', exerciseId: id });
     await reload();
   }), [db, today, run, dispatch, reload]);
 
   const undo = useCallback((id: string) => run(async () => {
     await removeExercise(db, today, id);
-    if (stateRef.current.rest?.exerciseId === id) dispatch({ type: 'restEnd' });
+    dispatch({ type: 'forgetRest', exerciseId: id });
     await reload();
   }), [db, today, run, dispatch, reload]);
 
@@ -178,7 +186,8 @@ export function TonightProvider({ children }: { children: ReactNode }) {
     return onRestAction(action => {
       if (action === 'plus15') return dispatch({ type: 'restPlus', seconds: 15 });
       if (action === 'skip') return dispatch({ type: 'restEnd' });
-      const rest = stateRef.current.rest;
+      // The running rest, or the one that just ended: Complete set usually comes from the Rest over alert.
+      const rest = stateRef.current.rest ?? stateRef.current.lastRest;
       if (!rest) return;
       const target = targetRef.current(rest.exerciseId);
       const done = doneRef.current(rest.exerciseId).length;
@@ -189,7 +198,7 @@ export function TonightProvider({ children }: { children: ReactNode }) {
   }, [ready, dispatch]);
 
   const api: TonightApi = {
-    ready, today, history, state, input, openGroup, promote, targetOf, logDot, complete, edit, undo, restPlus, restSkip, doneSets, claimReopen,
+    ready, today, history, state, input, openGroup, promote, targetOf, logDot, complete, edit, undo, restPlus, restSkip, doneSets, claimReopen, setFeedback,
   };
   return <TonightContext.Provider value={api}>{children}</TonightContext.Provider>;
 }

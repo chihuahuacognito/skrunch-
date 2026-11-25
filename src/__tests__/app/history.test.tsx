@@ -1,5 +1,6 @@
 import { act, fireEvent, screen } from '@testing-library/react-native';
 import { saveSession } from '../../store/history';
+import { appendSet } from '../../store/log';
 import { migrate } from '../../store/schema';
 import type { SqlDb } from '../../store/sql';
 import { nodeDb } from '../../store/test-utils/nodeDb';
@@ -48,4 +49,11 @@ test('export saves through the remembered folder and shows the file name', async
   await flush();
   expect(await screen.findByText('Saved workout-history-2026-11-25.json')).toBeTruthy();
   expect(JSON.parse(__fake.folders.get(__fake.PICKED)!.get('workout-history-2026-11-25.json')!).sessions).toHaveLength(1);
+});
+
+test('a day row shows its minutes from the first to the last set', async () => {
+  await appendSet(db, '2026-11-25', 'Barbell_Squat', { weight: 60, reps: 6, seconds: null }, { plannedSets: 3, targetMin: 6, targetMax: 8, intervals: false }, 0, 1_000_000);
+  await appendSet(db, '2026-11-25', 'Barbell_Squat', { weight: 60, reps: 6, seconds: null }, { plannedSets: 3, targetMin: 6, targetMax: 8, intervals: false }, 1, 1_000_000 + 34 * 60_000);
+  await renderApp({ history: HistoryScreen }, { db, initialUrl: '/history' });
+  expect(await screen.findByText('Wed 25 Nov · Quads · 2 sets · 34 min')).toBeTruthy();
 });

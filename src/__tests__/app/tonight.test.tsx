@@ -157,3 +157,56 @@ test('openGroup freezes cards: a later call returns the same list', async () => 
   expect(api.state.opened).toEqual(['quads']);
   expect(api.state.lastGroup).toBe('quads');
 });
+
+test('Complete set after "Rest over" (the rest already ended) still logs the next set', async () => {
+  await mount();
+  await act(() => api.logDot('Barbell_Squat', 0, squatTarget, false));
+  await act(async () => { jest.advanceTimersByTime(121_000); });
+  expect(api.state.rest).toBeNull();
+  const listener = mocked.addNotificationResponseReceivedListener.mock.calls.at(-1)![0];
+  await act(async () => listener({ actionIdentifier: 'complete', notification: { date: 3, request: { identifier: 'rest-end' } } } as unknown as Notifications.NotificationResponse));
+  await act(async () => { for (let i = 0; i < 30; i++) await Promise.resolve(); });
+  expect(await tonightSets('Barbell_Squat')).toHaveLength(2);
+});
+
+test('after a kill with a past endsAt, the rest end firing first does not drop the Complete set', async () => {
+  await mount();
+  await act(() => api.logDot('Barbell_Squat', 0, squatTarget, false));
+  const state = api.state;
+  await saveTonight(db, { ...state, rest: { ...state.rest!, endsAt: Date.now() - 1000 } });
+  await mount();
+  await act(async () => { jest.advanceTimersByTime(10); });
+  expect(api.state.rest).toBeNull();
+  const listener = mocked.addNotificationResponseReceivedListener.mock.calls.at(-1)![0];
+  await act(async () => listener({ actionIdentifier: 'complete', notification: { date: 4, request: { identifier: 'rest-end' } } } as unknown as Notifications.NotificationResponse));
+  await act(async () => { for (let i = 0; i < 30; i++) await Promise.resolve(); });
+  expect(await tonightSets('Barbell_Squat')).toHaveLength(2);
+});
+
+test('Completed ends that exercise rest; so does an Edit to 0 sets', async () => {
+  await mount();
+  await act(() => api.logDot('Barbell_Squat', 0, squatTarget, false));
+  await act(() => api.complete('Barbell_Squat', squatTarget, false));
+  expect(api.state.rest).toBeNull();
+  await act(() => api.logDot('Dumbbell_Lunges', 0, squatTarget, false));
+  await act(() => api.edit('Dumbbell_Lunges', [], squatTarget, false));
+  expect(api.state.rest).toBeNull();
+});
+
+test('an old focus row for today does not shift the dot count', async () => {
+  await saveSession(db, { date: '2026-11-25', focus: 'lower', intervals: false, exercises: [
+    { exerciseId: 'Barbell_Squat', targetMin: 6, targetMax: 8, chip: null, plannedSets: 3, sets: [{ weight: 50, reps: 6, seconds: null }] },
+  ] });
+  await mount();
+  expect(api.doneSets('Barbell_Squat')).toEqual([]);
+  await act(() => api.logDot('Barbell_Squat', 0, squatTarget, false));
+  expect(api.doneSets('Barbell_Squat')).toHaveLength(1);
+});
+
+test('setFeedback saves and reloads history', async () => {
+  await mount();
+  await act(() => api.setFeedback('Barbell_Squat', 'never'));
+  expect(api.history.feedback).toEqual({ Barbell_Squat: 'never' });
+  await act(() => api.setFeedback('Barbell_Squat', null));
+  expect(api.history.feedback).toEqual({});
+});
