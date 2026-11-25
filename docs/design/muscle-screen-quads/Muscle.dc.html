@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Muscle group: Quads</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}a:hover{color:inherit}
+button{font-family:inherit;border:none;margin:0;cursor:pointer;text-align:left}
+.ph{font-family:Roboto,system-ui,sans-serif;width:390px;height:844px;border-radius:28px;overflow:hidden;position:relative;box-sizing:border-box;flex-shrink:0}
+.th-d{--bg:#111318;--sc:#1D2024;--sch:#272A2F;--schh:#32353A;--on:#E2E2E9;--onv:#C4C6D0;--ol:#8E9099;--olv:#44474E;--pri:#A8C7FF;--onpri:#0B305F;--pric:#254777;--onpric:#D5E3FF;--just:#FF8F4A;--recov:#FFCF5C;--rest:#6CB0FF;--empty:#3A3E45;--errc:#93000A;--onerrc:#FFDAD6;--okc:#1F3D2E;--onokc:#B8F0CF}
+.th-l{--bg:#F9F9FF;--sc:#EDEDF4;--sch:#E1E2E8;--schh:#D9DAE0;--on:#191C20;--onv:#44474E;--ol:#74777F;--olv:#C4C6D0;--pri:#3D5F90;--onpri:#FFFFFF;--pric:#D5E3FF;--onpric:#001B3C;--just:#E8590C;--recov:#F2B300;--rest:#2F7FE0;--empty:#D3D7DE;--errc:#FFDAD6;--onerrc:#410002;--okc:#D3F2DF;--onokc:#0B3B22}
+@keyframes fa{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes fb{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+.fa{animation:fa 2.4s infinite}
+.fb{animation:fb 2.4s infinite}
+.tn{font-variant-numeric:tabular-nums}
+</style>
+</helmet>
+<div style="width: 860px; height: 884px; box-sizing: border-box; padding: 20px; display: flex; gap: 40px; background: #D6D8DE">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div class="ph {{t.cls}}" style="background: var(--bg)">
+
+<div style="position: absolute; top: 0; left: 0; right: 0; bottom: {{scrollBottom}}; overflow-y: auto; padding: 12px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px">
+
+<div style="background: var(--sc); border-radius: 20px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0">
+<span style="font-size: 30px; font-weight: 500; color: var(--on); line-height: 1.1">Quads</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--onv)"><span style="width: 10px; height: 10px; border-radius: 5px; background: var(--rest)"></span>Rested · last worked 5 days ago</span>
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="font-size: 14px; color: var(--onv)"><b class="tn" style="font-size: 18px; color: var(--on)">{{weekSets}}/10</b> sets this week</span>
+<span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: var(--errc); color: var(--onerrc)">BEHIND</span>
+</span>
+<span style="height: 6px; border-radius: 3px; background: var(--empty); display: block"><span style="display: block; height: 6px; width: {{weekW}}; background: var(--on); border-radius: 3px"></span></span>
+</div>
+
+<sc-for list="{{exercises}}" as="ex" hint-placeholder-count="3">
+<div style="background: var(--sc); border-radius: 20px; padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0">
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--onv)">{{ex.role}}</span>
+<div style="display: flex; gap: 12px; align-items: flex-start">
+<button aria-label="Enlarge {{ex.name}} demo" style="width: 96px; height: 96px; border-radius: 14px; background: var(--sch); color: var(--on); position: relative; padding: 0; flex-shrink: 0">
+<sc-if value="{{ex.isSquat}}" hint-placeholder-val="{{ true }}">
+<svg width="96" height="96" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<line x1="10" y1="76" x2="70" y2="76" stroke-width="2" opacity="0.5"></line>
+<g class="fa"><circle cx="40" cy="11" r="5"></circle><line x1="40" y1="17" x2="40" y2="44"></line><circle cx="40" cy="21" r="5" stroke-width="2.5"></circle><line x1="40" y1="44" x2="40" y2="59"></line><line x1="40" y1="59" x2="40" y2="74"></line><line x1="40" y1="74" x2="48" y2="74"></line></g>
+<g class="fb"><circle cx="47" cy="30" r="5"></circle><line x1="44" y1="36" x2="32" y2="54"></line><circle cx="44" cy="38" r="5" stroke-width="2.5"></circle><line x1="32" y1="54" x2="50" y2="56"></line><line x1="50" y1="56" x2="44" y2="74"></line><line x1="44" y1="74" x2="52" y2="74"></line></g>
+</svg>
+</sc-if>
+<sc-if value="{{ex.isLunge}}" hint-placeholder-val="{{ false }}">
+<svg width="96" height="96" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<line x1="10" y1="76" x2="70" y2="76" stroke-width="2" opacity="0.5"></line>
+<g class="fa"><circle cx="40" cy="11" r="5"></circle><line x1="40" y1="17" x2="40" y2="44"></line><line x1="40" y1="21" x2="40" y2="40"></line><rect x="36" y="40" width="8" height="5" rx="1" stroke-width="2"></rect><line x1="40" y1="44" x2="38" y2="74"></line><line x1="40" y1="44" x2="43" y2="74"></line></g>
+<g class="fb"><circle cx="40" cy="22" r="5"></circle><line x1="40" y1="28" x2="40" y2="52"></line><line x1="40" y1="32" x2="40" y2="48"></line><rect x="36" y="48" width="8" height="5" rx="1" stroke-width="2"></rect><line x1="40" y1="52" x2="55" y2="55"></line><line x1="55" y1="55" x2="55" y2="74"></line><line x1="40" y1="52" x2="31" y2="66"></line><line x1="31" y1="66" x2="19" y2="72"></line></g>
+</svg>
+</sc-if>
+<sc-if value="{{ex.isStep}}" hint-placeholder-val="{{ false }}">
+<svg width="96" height="96" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<line x1="6" y1="76" x2="74" y2="76" stroke-width="2" opacity="0.5"></line>
+<rect x="44" y="56" width="28" height="20" rx="2" stroke-width="2.5"></rect>
+<g class="fa"><circle cx="32" cy="12" r="5"></circle><line x1="32" y1="18" x2="32" y2="44"></line><line x1="32" y1="44" x2="32" y2="74"></line><line x1="32" y1="44" x2="46" y2="46"></line><line x1="46" y1="46" x2="50" y2="55"></line></g>
+<g class="fb"><circle cx="56" cy="6" r="5"></circle><line x1="56" y1="12" x2="56" y2="35"></line><line x1="56" y1="35" x2="56" y2="55"></line><line x1="56" y1="35" x2="46" y2="46"></line><line x1="46" y1="46" x2="40" y2="56"></line></g>
+</svg>
+</sc-if>
+<span style="position: absolute; right: 4px; bottom: 4px; width: 22px; height: 22px; border-radius: 6px; background: var(--sc); display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg></span>
+</button>
+<div style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<span style="font-size: 18px; font-weight: 500; color: var(--on)">{{ex.name}}</span>
+<span class="tn" style="font-size: 24px; font-weight: 700; color: var(--on)">{{ex.target}}</span>
+<span style="font-size: 13px; color: var(--onv)">{{ex.last}}</span>
+</div>
+</div>
+
+<sc-if value="{{ex.open}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; align-items: center; gap: 4px">
+<span style="font-size: 12px; font-weight: 500; color: var(--onv); margin-right: 4px">Sets</span>
+<sc-for list="{{ex.dots}}" as="d" hint-placeholder-count="3">
+<button onClick="{{d.tap}}" aria-label="{{d.label}}" style="width: 44px; height: 44px; padding: 0; background: transparent; display: flex; align-items: center; justify-content: center">
+<span class="tn" style="width: 28px; height: 28px; border-radius: 14px; box-sizing: border-box; border: 2px solid {{d.border}}; background: {{d.bg}}; color: {{d.fg}}; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{d.n}}</span>
+</button>
+</sc-for>
+<span style="font-size: 12px; color: var(--onv); flex: 1">tap = start rest</span>
+<button style="background: transparent; color: var(--pri); font-size: 14px; font-weight: 500; min-height: 44px; padding: 0 8px; display: flex; align-items: center; gap: 4px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Edit</button>
+</div>
+<button onClick="{{ex.complete}}" style="background: var(--pri); color: var(--onpri); border-radius: 28px; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 17px; font-weight: 500; text-align: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Completed</button>
+</sc-if>
+
+<sc-if value="{{ex.done}}" hint-placeholder-val="{{ false }}">
+<div style="background: var(--okc); color: var(--onokc); border-radius: 16px; padding: 6px 6px 6px 14px; display: flex; align-items: center; gap: 10px">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+<span style="flex: 1; font-size: 15px; font-weight: 500">Completed · {{ex.target}}</span>
+<button onClick="{{ex.undo}}" style="background: transparent; color: var(--onokc); border: 1px solid currentColor; border-radius: 20px; min-height: 44px; padding: 0 16px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h10a6 6 0 0 1 0 12h-3"></path></svg>Undo</button>
+</div>
+</sc-if>
+</div>
+</sc-for>
+
+<div style="background: {{enoughBg}}; color: {{enoughFg}}; border: 1px dashed var(--ol); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V4M4 4h12l-2 4 2 4H4"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 15px; font-weight: 500">About 8 sets is enough for tonight</span>
+<span class="tn" style="font-size: 13px; opacity: 0.85">Quads tonight: {{tonightQ}} sets. Anything past here is a bonus.</span>
+</span>
+</div>
+
+<button onClick="{{toggleMore}}" aria-expanded="{{more}}" style="background: var(--sc); color: var(--on); border-radius: 16px; min-height: 52px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 500; flex-shrink: 0">More exercises<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: {{moreRot}}"><path d="M6 9l6 6 6-6"></path></svg></button>
+<sc-if value="{{more}}" hint-placeholder-val="{{ false }}">
+<div style="background: var(--sc); border-radius: 16px; padding: 14px 16px; font-size: 14px; color: var(--onv); flex-shrink: 0">[Your other quad exercises]</div>
+</sc-if>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--sch); border-radius: 24px 24px 0 0; padding: 12px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 -6px 24px rgba(0,0,0,0.25)">
+<sc-if value="{{resting}}" hint-placeholder-val="{{ false }}">
+<div style="background: var(--pric); color: var(--onpric); border-radius: 20px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: 1px">REST</span>
+<span style="font-size: 14px">{{restEx}} · set {{restSet}} of 3 done</span>
+</span>
+<span class="tn" style="font-size: 44px; font-weight: 700; line-height: 1">{{restTime}}</span>
+</div>
+<span style="height: 6px; border-radius: 3px; background: rgba(127,127,127,0.35); display: block"><span style="display: block; height: 6px; width: {{restW}}; background: currentColor; border-radius: 3px"></span></span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button onClick="{{add15}}" style="background: var(--onpric); color: var(--pric); border-radius: 24px; min-height: 48px; font-size: 16px; font-weight: 500; text-align: center">+15 s</button>
+<button onClick="{{skip}}" style="background: transparent; color: var(--onpric); border: 1px solid currentColor; border-radius: 24px; min-height: 48px; font-size: 16px; font-weight: 500; text-align: center">Skip</button>
+</div>
+</div>
+</sc-if>
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="font-size: 12px; font-weight: 500; color: var(--onv)">Tonight</span>
+<button style="background: transparent; color: var(--on); border: 1px solid var(--ol); border-radius: 8px; min-height: 40px; padding: 0 14px; font-size: 14px; font-weight: 500">Back</button>
+<button aria-current="page" style="background: var(--pric); color: var(--onpric); border-radius: 8px; min-height: 40px; padding: 0 14px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Quads</button>
+<span class="tn" style="margin-left: auto; font-size: 13px; color: var(--onv)"><b style="color: var(--on)">{{tonightAll}}</b> sets · <b style="color: var(--on)">41</b> min</span>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"resting":{"editor":"boolean","default":false},"$preview":{"width":860,"height":884}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const r = props.resting ?? false;
+    this.state = r
+      ? { sets: { squat: 3, lunge: 1, step: 0 }, done: { squat: true }, rest: { ex: 'Dumbbell Lunges', set: 1, left: 84, total: 90 }, ticking: false, more: false }
+      : { sets: { squat: 0, lunge: 0, step: 0 }, done: {}, rest: null, ticking: false, more: false };
+  }
+  componentDidMount() {
+    this.iv = setInterval(() => {
+      const r = this.state.rest;
+      if (!this.state.ticking || !r) return;
+      if (r.left <= 1) this.setState({ rest: null, ticking: false });
+      else this.setState({ rest: Object.assign({}, r, { left: r.left - 1 }) });
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    const EX = [
+      { k: 'squat', role: 'MAIN LIFT', name: 'Barbell Squat', target: '3 × 6 @ 60 kg', last: 'Last: 9 days ago · 60 kg × 8', rest: 120 },
+      { k: 'lunge', role: 'ACCESSORY', name: 'Dumbbell Lunges', target: '3 × 10 @ 12 kg', last: 'Last: 16 days ago · 12 kg × 10', rest: 90 },
+      { k: 'step', role: 'ACCESSORY', name: 'Dumbbell Step Ups', target: '3 × 10', last: 'Never done', rest: 90 }
+    ];
+    const st = this.state;
+    const setSets = (k, n) => Object.assign({}, st.sets, { [k]: n });
+    const exercises = EX.map((e) => {
+      const n = st.sets[e.k];
+      const done = !!st.done[e.k];
+      return Object.assign({}, e, {
+        isSquat: e.k === 'squat', isLunge: e.k === 'lunge', isStep: e.k === 'step',
+        done, open: !done,
+        dots: [1, 2, 3].map((i) => {
+          const filled = n >= i, next = n === i - 1;
+          return {
+            n: i, label: 'Set ' + i + (filled ? ' done' : ', tap to log and start rest'),
+            bg: filled ? 'var(--pri)' : 'transparent',
+            fg: filled ? 'var(--onpri)' : next ? 'var(--pri)' : 'var(--onv)',
+            border: filled || next ? 'var(--pri)' : 'var(--ol)',
+            tap: () => this.setState({ sets: setSets(e.k, i), rest: { ex: e.name, set: i, left: e.rest, total: e.rest }, ticking: true })
+          };
+        }),
+        complete: () => this.setState({ sets: setSets(e.k, 3), done: Object.assign({}, st.done, { [e.k]: true }) }),
+        undo: () => this.setState({ sets: setSets(e.k, 0), done: Object.assign({}, st.done, { [e.k]: false }) })
+      });
+    });
+    const tonightQ = st.sets.squat + st.sets.lunge + st.sets.step;
+    const r = st.rest;
+    const fmt = (s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    return {
+      themes: [{ cls: 'th-d', dark: true }, { cls: 'th-l', dark: false }],
+      exercises, tonightQ,
+      weekSets: 3 + tonightQ, weekW: Math.min(100, (3 + tonightQ) * 10) + '%',
+      tonightAll: 6 + tonightQ,
+      enoughBg: tonightQ >= 8 ? 'var(--okc)' : 'transparent',
+      enoughFg: tonightQ >= 8 ? 'var(--onokc)' : 'var(--on)',
+      resting: !!r, scrollBottom: r ? '238px' : '76px',
+      restEx: r ? r.ex : '', restSet: r ? r.set : 0, restTime: r ? fmt(r.left) : '',
+      restW: r ? Math.round((r.left / r.total) * 100) + '%' : '0%',
+      add15: () => r && this.setState({ rest: Object.assign({}, r, { left: r.left + 15, total: r.total + 15 }) }),
+      skip: () => this.setState({ rest: null, ticking: false }),
+      more: st.more, moreRot: st.more ? 'rotate(180deg)' : 'none',
+      toggleMore: () => this.setState({ more: !st.more })
+    };
+  }
+}
+</script>
+</body>
+</html>
