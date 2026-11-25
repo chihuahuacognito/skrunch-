@@ -1,4 +1,4 @@
-import { INCREMENT_KG, lastLog, prescribeReps } from './prescribe';
+import { INCREMENT_KG, lastLog, lastLogBefore, prescribeReps } from './prescribe';
 import { BENCH, hist, logged } from './test-utils/fixtures';
 
 test('main reps clamp into 5-12, accessories into 10-15', () => {
@@ -23,4 +23,14 @@ test('lastLog returns the most recent logged entry with sets', () => {
   ]);
   expect(lastLog(BENCH, h)?.sets[0].weight).toBe(55);
   expect(lastLog('nope', h)).toBeNull();
+});
+
+test('lastLogBefore finds the latest entry before today, with its date', () => {
+  const h = hist([
+    logged('2026-11-10', 'free', [[BENCH, 3]], { weight: 50 }),
+    logged('2026-11-16', 'free', [[BENCH, 3]], { weight: 55 }),
+    logged('2026-11-25', 'free', [[BENCH, 1]], { weight: 60 }),
+  ]);
+  expect(lastLogBefore(BENCH, h, '2026-11-25')).toMatchObject({ date: '2026-11-16', log: { sets: [{ weight: 55 }, { weight: 55 }, { weight: 55 }] } });
+  expect(lastLogBefore(BENCH, h, '2026-11-10')).toBeNull();
 });

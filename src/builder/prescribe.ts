@@ -30,3 +30,15 @@ function logsOf(id: string, history: History): LoggedExercise[] {
 export function lastLog(exerciseId: string, history: History): LoggedExercise | null {
   return logsOf(exerciseId, history)[0] ?? null;
 }
+
+/** The latest logged entry of an exercise on a day before `today`, with that day. */
+export function lastLogBefore(exerciseId: string, history: History, today: string): { date: string; log: LoggedExercise } | null {
+  let best: { date: string; log: LoggedExercise } | null = null;
+  history.sessions.forEach(s => {
+    if (s.date >= today) return;
+    for (const x of s.exercises) {
+      if (x.exerciseId === exerciseId && x.sets.length > 0 && (!best || s.date >= best.date)) best = { date: s.date, log: x };
+    }
+  });
+  return best;
+}
