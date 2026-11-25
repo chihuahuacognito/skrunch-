@@ -22,7 +22,7 @@ function Check({ color, size = 22 }: { color: string; size?: number }) {
  * `timer` replaces the dots for timed work (Cardio).
  */
 export function ExerciseCard({ exerciseId, name, group, role, target, done, last, onDot, onComplete, onEdit, onUndo, onPhoto, timer }: {
-  exerciseId: string; name: string; group: GroupId; role: string; target: Target; done: LoggedSet[]; last: string;
+  exerciseId: string; name: string; group?: GroupId; role: string; target: Target; done: LoggedSet[]; last: string;
   onDot(i: number): void; onComplete(): void; onEdit(): void; onUndo(): void; onPhoto(): void; timer?: ReactNode;
 }) {
   const complete = done.length >= target.sets;
@@ -31,7 +31,7 @@ export function ExerciseCard({ exerciseId, name, group, role, target, done, last
       <Text style={styles.role}>{role}</Text>
       <View style={styles.top}>
         <Pressable testID={`photo-${exerciseId}`} accessibilityRole="button" accessibilityLabel={`Enlarge ${name} demo`} onPress={onPhoto}>
-          <ExercisePhoto exerciseId={exerciseId} size={96} group={group} />
+          <ExercisePhoto exerciseId={exerciseId} size={96} group={group} initial={group ? undefined : name[0]} />
           <View style={styles.enlarge}>
             <Svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke={tokens.color.on} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
               <Path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />

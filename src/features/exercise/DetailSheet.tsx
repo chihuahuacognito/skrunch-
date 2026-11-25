@@ -23,7 +23,7 @@ export function recentLogs(id: string, history: History, n = 5): string[] {
 
 /** Large photos, instructions, the last 5 logs, More / Less / Never, and the post link for Instagram exercises. */
 export function DetailSheet({ exercise, group, history, feedback, onFeedback, onClose }: {
-  exercise: Exercise | null; group: GroupId; history: History; feedback: Feedback | undefined;
+  exercise: Exercise | null; group?: GroupId; history: History; feedback: Feedback | undefined;
   onFeedback(v: Feedback | null): void; onClose(): void;
 }) {
   const logs = exercise ? recentLogs(exercise.id, history) : [];
@@ -36,7 +36,7 @@ export function DetailSheet({ exercise, group, history, feedback, onFeedback, on
         <View style={styles.sheet}>
           <ScrollView contentContainerStyle={styles.body}>
             <View style={styles.photo}>
-              <ExercisePhoto exerciseId={exercise.id} size={240} group={group} />
+              <ExercisePhoto exerciseId={exercise.id} size={240} group={group} initial={exercise.name[0]} />
             </View>
             <Text style={styles.title}>{exercise.name}</Text>
             {exercise.instructions.map((line, i) => <Text key={i} style={styles.line}>{line}</Text>)}

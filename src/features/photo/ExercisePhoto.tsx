@@ -10,10 +10,10 @@ const FADE_MS = 140;
 
 /**
  * The library's start and end photo, alternating like a slow GIF. Still (start photo) when animate is false, Reduce
- * Motion is on, or the app is in the background. Exercises without photos show the group's initial.
+ * Motion is on, or the app is in the background. Exercises without photos show the group's (or the given) initial.
  */
-export function ExercisePhoto({ exerciseId, size, group, animate = true }: {
-  exerciseId: string; size: number; group: GroupId; animate?: boolean;
+export function ExercisePhoto({ exerciseId, size, group, initial, animate = true }: {
+  exerciseId: string; size: number; group?: GroupId; initial?: string; animate?: boolean;
 }) {
   const frames = EXERCISE_IMAGES[exerciseId];
   const [frame, setFrame] = useState<0 | 1>(0);
@@ -51,7 +51,7 @@ export function ExercisePhoto({ exerciseId, size, group, animate = true }: {
   if (!frames) {
     return (
       <View testID="photo-placeholder" style={[styles.well, box, styles.center]}>
-        <Text style={styles.initial}>{GROUP_LABEL[group][0]}</Text>
+        <Text style={styles.initial}>{initial ?? (group ? GROUP_LABEL[group][0] : '')}</Text>
       </View>
     );
   }

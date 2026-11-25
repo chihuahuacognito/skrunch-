@@ -4,11 +4,13 @@ import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { buildDeskReset } from '../builder';
+import { ExercisePhoto } from '../features/photo/ExercisePhoto';
 import { impact } from '../haptics';
 import { useToday } from '../ui/useToday';
 import { tokens } from '../theme/tokens';
 import { doseText } from '../ui/format';
 import { LIBRARY } from '../ui/library';
+import { Panel } from '../ui/Panel';
 import { useCountdown } from '../ui/useCountdown';
 
 const BY_ID = new Map(LIBRARY.map(e => [e.id, e]));
@@ -39,10 +41,13 @@ export default function DeskScreen() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.top}>
-        <Text style={styles.kicker}>Desk reset</Text>
+        <Text style={styles.kicker}>DESK RESET</Text>
         <Text style={styles.count}>{`${index + 1} / ${items.length}`}</Text>
       </View>
-      <View style={styles.body}>
+      <Panel style={styles.body}>
+        <View style={styles.photo}>
+          <ExercisePhoto exerciseId={item.exerciseId} size={200} initial={exercise?.name[0]} />
+        </View>
         <Text style={styles.name}>{exercise?.name ?? item.exerciseId}</Text>
         <Text style={styles.dose}>{doseText(item.sets, item.dose)}</Text>
         {exercise?.instructions.slice(0, 2).map((line, i) => (
@@ -62,7 +67,7 @@ export default function DeskScreen() {
             </Pressable>
           )
         ) : null}
-      </View>
+      </Panel>
       <View style={styles.nav}>
         <Pressable
           accessibilityRole="button"
@@ -87,12 +92,13 @@ export default function DeskScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: tokens.color.bg, padding: tokens.space.lg },
-  top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  kicker: { color: tokens.color.pri, fontSize: tokens.font.size.sub, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
+  root: { flex: 1, backgroundColor: tokens.color.bg, padding: tokens.space.md, gap: tokens.space.md },
+  top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 4 },
+  kicker: { color: tokens.color.onv, fontSize: tokens.font.size.label, fontWeight: '700', letterSpacing: 1 },
   count: { color: tokens.color.onv, fontSize: tokens.font.size.body, fontVariant: ['tabular-nums'] },
-  body: { flex: 1, justifyContent: 'center', gap: tokens.space.md },
-  name: { color: tokens.color.on, fontSize: tokens.font.size.title, fontWeight: '700' },
+  body: { flex: 1, justifyContent: 'center', gap: tokens.space.md, paddingHorizontal: tokens.space.lg },
+  photo: { alignItems: 'center' },
+  name: { color: tokens.color.on, fontSize: tokens.font.size.title, fontWeight: '500' },
   dose: { color: tokens.color.on, fontSize: tokens.font.size.name },
   instruction: { color: tokens.color.onv, fontSize: tokens.font.size.body, lineHeight: 22 },
   timer: { color: tokens.color.on, fontSize: 72, fontWeight: '700', fontVariant: ['tabular-nums'] },
@@ -100,11 +106,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start', minHeight: 48, justifyContent: 'center', paddingHorizontal: tokens.space.lg,
     borderRadius: 24, borderColor: tokens.color.pri, borderWidth: 2,
   },
-  startHoldText: { color: tokens.color.on, fontSize: tokens.font.size.body, fontWeight: '600' },
+  startHoldText: { color: tokens.color.on, fontSize: tokens.font.size.body, fontWeight: '500' },
   nav: { flexDirection: 'row', justifyContent: 'space-between', gap: tokens.space.md },
-  navButton: { flex: 1, minHeight: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.sch },
+  navButton: { flex: 1, minHeight: 56, borderRadius: tokens.radius.pill, alignItems: 'center', justifyContent: 'center', backgroundColor: tokens.color.sch },
   hidden: { opacity: 0 },
   primary: { backgroundColor: tokens.color.pri },
-  navText: { color: tokens.color.on, fontSize: tokens.font.size.body, fontWeight: '700' },
-  primaryText: { color: tokens.color.bg },
+  navText: { color: tokens.color.on, fontSize: 17, fontWeight: '500' },
+  primaryText: { color: tokens.color.onpri },
 });
