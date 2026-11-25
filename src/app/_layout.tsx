@@ -4,13 +4,14 @@ import type { ReactNode } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { setupRestNotifications } from '../notify/rest';
+import { TonightProvider } from '../features/tonight/TonightProvider';
 import { DbProvider } from '../store/DbContext';
 import { migrate } from '../store/schema';
 import { tokens } from '../theme/tokens';
 
-/** Hands expo-sqlite's opened database to the app's DbProvider. */
+/** Hands expo-sqlite's opened database to the app's DbProvider, and tonight's state to every screen. */
 function ExpoDb({ children }: { children: ReactNode }) {
-  return <DbProvider db={useSQLiteContext()}>{children}</DbProvider>;
+  return <DbProvider db={useSQLiteContext()}><TonightProvider>{children}</TonightProvider></DbProvider>;
 }
 
 void setupRestNotifications().catch(e => console.warn('notification setup failed', e));

@@ -35,3 +35,11 @@ test('stops listening on unmount', async () => {
   await unmount();
   expect(remove).toHaveBeenCalled();
 });
+
+test('an app open in the foreground at 04:00 moves to the new day within a minute', async () => {
+  jest.setSystemTime(new Date(2026, 10, 23, 3, 59, 30));
+  const { result } = await renderHook(() => useToday());
+  expect(result.current).toBe('2026-11-22');
+  await act(async () => { jest.advanceTimersByTime(60_000); });
+  expect(result.current).toBe('2026-11-23');
+});
