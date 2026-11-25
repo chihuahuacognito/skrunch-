@@ -1,6 +1,6 @@
 import library from '../../library/library.json';
 import type { Exercise } from '../../library/types';
-import type { FocusId, History, SessionLog } from '../types';
+import type { History, SessionLog } from '../types';
 
 export const lib = library as Exercise[];
 export const BENCH = 'Barbell_Bench_Press_-_Medium_Grip';
@@ -12,7 +12,7 @@ export function byId(id: string): Exercise {
 }
 
 export function emptyHistory(): History {
-  return { sessions: [], checkIns: [], feedback: {} };
+  return { sessions: [], feedback: {} };
 }
 
 export function hist(sessions: SessionLog[], over: Partial<History> = {}): History {
@@ -21,9 +21,9 @@ export function hist(sessions: SessionLog[], over: Partial<History> = {}): Histo
 
 export function logged(
   date: string,
-  focus: FocusId,
+  focus: string,
   items: [exerciseId: string, sets: number][],
-  opts: { intervals?: boolean; reps?: number; weight?: number | null } = {},
+  opts: { intervals?: boolean; reps?: number; weight?: number | null; plannedSets?: number | null } = {},
 ): SessionLog {
   const reps = opts.reps ?? 10;
   const weight = opts.weight === undefined ? 20 : opts.weight;
@@ -32,7 +32,7 @@ export function logged(
     focus,
     intervals: opts.intervals ?? false,
     exercises: items.map(([exerciseId, sets]) => ({
-      exerciseId, targetMin: 8, targetMax: reps, chip: null,
+      exerciseId, targetMin: 8, targetMax: reps, chip: null, plannedSets: opts.plannedSets ?? null,
       sets: Array.from({ length: sets }, () => ({ weight, reps, seconds: null })),
     })),
   };

@@ -1,4 +1,4 @@
-import { blockTitle, clock, doseText, parseOption, secondsText, weightText } from './format';
+import { blockTitle, clock, doseText, secondsText, weightText } from './format';
 
 test('reps dose text', () => {
   expect(doseText(3, { format: 'reps', min: 6, max: 10 })).toBe('3 × 6-10');
@@ -10,15 +10,6 @@ test('hold and duration dose text', () => {
   expect(doseText(1, { format: 'hold', seconds: 30 })).toBe('30 s');
   expect(doseText(1, { format: 'duration', minutes: 8 })).toBe('8 min');
   expect(doseText(2, { format: 'duration', minutes: 4 })).toBe('2 × 4 min');
-});
-
-test('parseOption accepts known focus and dose only', () => {
-  expect(parseOption('lower', 'full')).toEqual({ focus: 'lower', dose: 'full' });
-  expect(parseOption('legs', 'full')).toBeNull();
-  expect(parseOption('lower', 'max')).toBeNull();
-  expect(parseOption(['lower'], 'full')).toBeNull();
-  expect(parseOption(undefined, undefined)).toBeNull();
-  expect(parseOption('desk-reset', 'full')).toBeNull();
 });
 
 test('block titles', () => {

@@ -8,3 +8,10 @@ test('the routes folder holds only screens', () => {
   const files = readdirSync(join(__dirname, '../../app'), { recursive: true }).map(String);
   expect(files.filter(f => /\.test\.|__tests__|test-utils/.test(f))).toEqual([]);
 });
+
+test('the app has exactly the redesign routes built so far', () => {
+  const files = readdirSync(join(__dirname, '../../app'), { recursive: true }).map(String)
+    .filter(f => f.endsWith('.tsx') && !f.startsWith('_'))
+    .map(f => f.split('\\').join('/').replace(/\.tsx$/, ''));
+  expect(files.sort()).toEqual(['desk', 'index']);
+});

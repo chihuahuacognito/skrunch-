@@ -22,14 +22,6 @@ test('week 6 is the deload', () =>
 test('the week after a deload is week 1 of a new block, not calibration', () =>
   expect(blockState(weekly('2026-11-01', 7), '2026-12-13')).toEqual({ week: 1, deload: false, calibration: false }));
 
-test('three wrecked check-ins in week 2 make week 3 the deload', () => {
-  const hw: History = {
-    ...weekly('2026-11-01', 3),
-    checkIns: ['2026-11-08', '2026-11-10', '2026-11-12'].map(date => ({ date, value: 'wrecked' as const })),
-  };
-  expect(blockState(hw, '2026-11-16')).toMatchObject({ week: 3, deload: true });
-});
-
 test('a 14 day gap restarts the block in calibration', () =>
   expect(blockState(weekly('2026-09-01', 5), '2026-11-22')).toEqual({ week: 1, deload: false, calibration: true }));
 

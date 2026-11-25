@@ -1,6 +1,6 @@
 import type { Dose, Equipment, Exercise } from '../library/types';
 import type { History, LoggedExercise, SessionDose } from './types';
-import type { SlotKind } from './select';
+import type { SlotKind } from './types';
 
 const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 

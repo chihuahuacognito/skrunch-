@@ -1,16 +1,5 @@
-import type { CheckIn, Feedback, History, LoggedExercise, LoggedSet, Place, SessionLog } from '../builder';
+import type { Feedback, History, LoggedExercise, LoggedSet, SessionLog } from '../builder';
 import { inTransaction, type SqlDb, type SqlParam } from './sql';
-
-export async function saveCheckIn(db: SqlDb, date: string, value: CheckIn, place: Place): Promise<void> {
-  await db.runAsync(
-    'INSERT INTO check_ins (date, value, place) VALUES (?, ?, ?) ON CONFLICT(date) DO UPDATE SET value = excluded.value, place = excluded.place',
-    date, value, place,
-  );
-}
-
-export async function checkInFor(db: SqlDb, date: string): Promise<{ value: CheckIn; place: Place } | null> {
-  return db.getFirstAsync<{ value: CheckIn; place: Place }>('SELECT value, place FROM check_ins WHERE date = ?', date);
-}
 
 /** null clears the exercise's feedback. */
 export async function setFeedback(db: SqlDb, exerciseId: string, value: Feedback | null): Promise<void> {
@@ -33,8 +22,8 @@ export async function insertSession(tx: SqlDb, log: SessionLog): Promise<void> {
   );
   for (const [i, ex] of log.exercises.entries()) {
     const { lastInsertRowId: exId } = await tx.runAsync(
-      'INSERT INTO logged_exercises (session_id, position, exercise_id, target_min, target_max, chip) VALUES (?, ?, ?, ?, ?, ?)',
-      sessionId, i, ex.exerciseId, num(ex.targetMin), num(ex.targetMax), ex.chip,
+      'INSERT INTO logged_exercises (session_id, position, exercise_id, target_min, target_max, chip, planned_sets) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      sessionId, i, ex.exerciseId, num(ex.targetMin), num(ex.targetMax), ex.chip, num(ex.plannedSets),
     );
     for (const [j, set] of ex.sets.entries()) {
       await tx.runAsync(
@@ -51,16 +40,15 @@ export async function saveSession(db: SqlDb, log: SessionLog): Promise<void> {
 }
 
 type SessionRow = { id: number; date: string; focus: SessionLog['focus']; intervals: number };
-type ExerciseRow = { id: number; session_id: number; exercise_id: string; target_min: number | null; target_max: number | null; chip: LoggedExercise['chip'] };
+type ExerciseRow = { id: number; session_id: number; exercise_id: string; target_min: number | null; target_max: number | null; chip: LoggedExercise['chip']; planned_sets: number | null };
 type SetRow = { logged_exercise_id: number; weight: number | null; reps: number | null; seconds: number | null };
 
-/** Everything the builder reads: sessions by date then save order, check-ins by date, feedback by exercise. */
+/** Everything the builder reads: sessions by date then save order, feedback by exercise. */
 export async function loadHistory(db: SqlDb): Promise<History> {
-  const [sessionRows, exerciseRows, setRows, checkIns, feedbackRows] = await Promise.all([
+  const [sessionRows, exerciseRows, setRows, feedbackRows] = await Promise.all([
     db.getAllAsync<SessionRow>('SELECT id, date, focus, intervals FROM sessions ORDER BY date, id'),
-    db.getAllAsync<ExerciseRow>('SELECT id, session_id, exercise_id, target_min, target_max, chip FROM logged_exercises ORDER BY session_id, position'),
+    db.getAllAsync<ExerciseRow>('SELECT id, session_id, exercise_id, target_min, target_max, chip, planned_sets FROM logged_exercises ORDER BY session_id, position'),
     db.getAllAsync<SetRow>('SELECT logged_exercise_id, weight, reps, seconds FROM logged_sets ORDER BY logged_exercise_id, position'),
-    db.getAllAsync<{ date: string; value: CheckIn }>('SELECT date, value FROM check_ins ORDER BY date'),
     db.getAllAsync<{ exercise_id: string; value: Feedback }>('SELECT exercise_id, value FROM feedback'),
   ]);
 
@@ -73,13 +61,12 @@ export async function loadHistory(db: SqlDb): Promise<History> {
   const exercisesBy = new Map<number, LoggedExercise[]>();
   for (const e of exerciseRows) {
     const list = exercisesBy.get(e.session_id) ?? [];
-    list.push({ exerciseId: e.exercise_id, targetMin: e.target_min, targetMax: e.target_max, chip: e.chip, sets: setsBy.get(e.id) ?? [] });
+    list.push({ exerciseId: e.exercise_id, targetMin: e.target_min, targetMax: e.target_max, chip: e.chip, plannedSets: e.planned_sets, sets: setsBy.get(e.id) ?? [] });
     exercisesBy.set(e.session_id, list);
   }
 
   return {
     sessions: sessionRows.map(s => ({ date: s.date, focus: s.focus, intervals: s.intervals === 1, exercises: exercisesBy.get(s.id) ?? [] })),
-    checkIns: checkIns.map(c => ({ date: c.date, value: c.value })),
     feedback: Object.fromEntries(feedbackRows.map(f => [f.exercise_id, f.value])),
   };
 }

@@ -9,7 +9,7 @@ const legPress = byId('Leg_Press');
 type Log = { reps: number; targetMax: number; weight: number | null; chip: Chip | null };
 const entry = (e: Exercise, date: string, l: Log) => ({
   date, focus: 'chest-back' as const, intervals: false,
-  exercises: [{ exerciseId: e.id, targetMin: 6, targetMax: l.targetMax, chip: l.chip, sets: [1, 2, 3].map(() => ({ weight: l.weight, reps: l.reps as number | null, seconds: null as number | null })) }],
+  exercises: [{ exerciseId: e.id, targetMin: 6, targetMax: l.targetMax, chip: l.chip, plannedSets: 3, sets: [1, 2, 3].map(() => ({ weight: l.weight, reps: l.reps as number | null, seconds: null as number | null })) }],
 });
 const histWith = (e: Exercise, l: Log): History => hist([entry(e, '2026-11-20', l)]);
 const twoEasy = (e: Exercise, l: Omit<Log, 'chip'>): History =>

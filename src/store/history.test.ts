@@ -1,5 +1,5 @@
 import type { SessionLog } from '../builder';
-import { checkInFor, loadHistory, saveCheckIn, saveSession, setFeedback } from './history';
+import { loadHistory, saveSession, setFeedback } from './history';
 import { migrate } from './schema';
 import type { SqlDb } from './sql';
 import { nodeDb } from './test-utils/nodeDb';
@@ -16,35 +16,16 @@ const session = (date: string, focus: SessionLog['focus'] = 'chest-back'): Sessi
   intervals: true,
   exercises: [
     {
-      exerciseId: 'Barbell_Bench_Press_-_Medium_Grip', targetMin: 6, targetMax: 10, chip: 'hard',
+      exerciseId: 'Barbell_Bench_Press_-_Medium_Grip', targetMin: 6, targetMax: 10, chip: 'hard', plannedSets: 3,
       sets: [{ weight: 60, reps: 8, seconds: null }, { weight: 62.5, reps: 6, seconds: null }],
     },
-    { exerciseId: 'Plank', targetMin: null, targetMax: null, chip: null, sets: [{ weight: null, reps: null, seconds: 30 }] },
+    { exerciseId: 'Plank', targetMin: null, targetMax: null, chip: null, plannedSets: null, sets: [{ weight: null, reps: null, seconds: 30 }] },
   ],
 });
 
 test('migrate twice is a no-op', async () => {
   await migrate(db);
-  expect(await loadHistory(db)).toEqual({ sessions: [], checkIns: [], feedback: {} });
-});
-
-test('a check-in saved today is read back, and saving again replaces it', async () => {
-  await saveCheckIn(db, '2026-11-22', 'good', 'gym');
-  expect(await checkInFor(db, '2026-11-22')).toEqual({ value: 'good', place: 'gym' });
-  await saveCheckIn(db, '2026-11-22', 'wrecked', 'home');
-  expect(await checkInFor(db, '2026-11-22')).toEqual({ value: 'wrecked', place: 'home' });
-});
-
-test('no check-in for a day reads as null', async () =>
-  expect(await checkInFor(db, '2026-11-22')).toBeNull());
-
-test('loadHistory lists check-ins by date', async () => {
-  await saveCheckIn(db, '2026-11-22', 'ok', 'gym');
-  await saveCheckIn(db, '2026-11-20', 'good', 'home');
-  expect((await loadHistory(db)).checkIns).toEqual([
-    { date: '2026-11-20', value: 'good' },
-    { date: '2026-11-22', value: 'ok' },
-  ]);
+  expect(await loadHistory(db)).toEqual({ sessions: [], feedback: {} });
 });
 
 test('a saved session round-trips through loadHistory exactly', async () => {
@@ -81,4 +62,22 @@ test('a failed session save leaves nothing behind', async () => {
   (bad.exercises[0].sets[1] as { weight: unknown }).weight = '62.5';
   await expect(saveSession(db, bad)).rejects.toThrow(TypeError);
   expect((await loadHistory(db)).sessions).toEqual([]);
+});
+
+test('planned sets round-trip and old rows read as null', async () => {
+  await saveSession(db, { date: '2026-11-25', focus: 'free', intervals: false, exercises: [
+    { exerciseId: 'Barbell_Squat', targetMin: 5, targetMax: 8, chip: null, plannedSets: 3, sets: [{ weight: 60, reps: 6, seconds: null }] },
+  ] });
+  await db.runAsync("INSERT INTO sessions (date, focus, intervals) VALUES ('2026-11-20', 'lower', 0)");
+  const id = (await db.getFirstAsync<{ id: number }>("SELECT id FROM sessions WHERE date = '2026-11-20'"))!.id;
+  await db.runAsync("INSERT INTO logged_exercises (session_id, position, exercise_id) VALUES (?, 0, 'Plank')", id);
+  const h = await loadHistory(db);
+  expect(h.sessions.map(s => s.focus)).toEqual(['lower', 'free']);
+  expect(h.sessions[0].exercises[0].plannedSets).toBeNull();
+  expect(h.sessions[1].exercises[0].plannedSets).toBe(3);
+  expect('checkIns' in h).toBe(false);
+});
+
+test('migration v3 leaves user_version at 3', async () => {
+  expect((await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version'))?.user_version).toBe(3);
 });
