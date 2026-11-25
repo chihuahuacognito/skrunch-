@@ -13,5 +13,5 @@ test('the app has exactly the redesign routes built so far', () => {
   const files = readdirSync(join(__dirname, '../../app'), { recursive: true }).map(String)
     .filter(f => f.endsWith('.tsx') && !f.startsWith('_'))
     .map(f => f.split('\\').join('/').replace(/\.tsx$/, ''));
-  expect(files.sort()).toEqual(['desk', 'index']);
+  expect(files.sort()).toEqual(['cardio', 'desk', 'group/[id]', 'history', 'index', 'stretch']);
 });

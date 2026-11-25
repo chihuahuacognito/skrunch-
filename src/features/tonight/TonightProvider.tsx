@@ -141,6 +141,12 @@ export function TonightProvider({ children }: { children: ReactNode }) {
   const promote = useCallback((group: GroupId, exerciseId: string) => dispatch({ type: 'promote', group, exerciseId }), [dispatch]);
   const restPlus = useCallback((seconds: number) => dispatch({ type: 'restPlus', seconds }), [dispatch]);
   const restSkip = useCallback(() => dispatch({ type: 'restEnd' }), [dispatch]);
+  const reopenClaimed = useRef(false);
+  const claimReopen = useCallback(() => {
+    if (reopenClaimed.current) return false;
+    reopenClaimed.current = true;
+    return true;
+  }, []);
 
   // The rest ends on its own.
   const endsAt = state.rest?.endsAt ?? null;
@@ -183,7 +189,7 @@ export function TonightProvider({ children }: { children: ReactNode }) {
   }, [ready, dispatch]);
 
   const api: TonightApi = {
-    ready, today, history, state, input, openGroup, promote, targetOf, logDot, complete, edit, undo, restPlus, restSkip, doneSets,
+    ready, today, history, state, input, openGroup, promote, targetOf, logDot, complete, edit, undo, restPlus, restSkip, doneSets, claimReopen,
   };
   return <TonightContext.Provider value={api}>{children}</TonightContext.Provider>;
 }

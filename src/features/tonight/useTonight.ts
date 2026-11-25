@@ -22,6 +22,8 @@ export interface TonightApi {
   restPlus(seconds: number): void;
   restSkip(): void;
   doneSets(exerciseId: string): LoggedSet[];
+  /** True once per app launch: Home uses it to reopen the last group only on launch. */
+  claimReopen(): boolean;
 }
 
 export const TonightContext = createContext<TonightApi | null>(null);
